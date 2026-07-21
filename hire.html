@@ -227,6 +227,19 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .sort-chip.dragging{position:fixed;z-index:999;cursor:grabbing;box-shadow:0 8px 24px rgba(15,42,74,.25);border-color:var(--blue)}
 .sort-chip.cok{border-color:var(--ok);background:var(--ok-bg)}
 .sort-chip.cbad{border-color:#D9534F;background:#FBEDEC}
+/* 잔돈 만들기 */
+.coin-total{text-align:center;font-size:17px;font-weight:800;color:var(--sub);margin:12px 0;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper)}
+.coin-total.match{color:var(--ok);border-color:var(--ok);background:var(--ok-bg)}
+.coin-pad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.coin-btn{border:1.5px solid var(--blue-line);background:#fff;border-radius:12px;padding:14px 6px;font-size:15px;font-weight:800;color:var(--navy);cursor:pointer;transition:.1s}
+.coin-btn:active{background:var(--blue-soft);transform:scale(.97)}
+/* 번호 매칭 */
+.match-target{font-size:22px;font-weight:800;color:var(--blue);letter-spacing:1px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+.match-op{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:15px 6px;font-size:17px;font-weight:700;letter-spacing:1px;color:var(--navy);cursor:pointer;font-variant-numeric:tabular-nums}
+.match-op:active{background:var(--blue-soft)}
+.match-op.right{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.match-op.wrong{border-color:#D9534F;background:#FBEDEC;color:#C0392B}
 </style>
 </head>
 <body>
@@ -359,7 +372,9 @@ const SETS = {
   food: { name:'접객·주문', jobs:'음식점 · 고깃집 · 카페 · 술집', tasks:['order','table','cash','priority'] },
   store:{ name:'판매·진열', jobs:'편의점 · 마트 · 소매점',        tasks:['cash','sort','expiry','find'] },
   move: { name:'이동·배송', jobs:'배달 · 운수 · 물류',            tasks:['route','check','priority','find'] },
-  care: { name:'정밀·반복', jobs:'청소 · 미용 · 농업축산 · 제조',  tasks:['steps','reserve','find','stock'] }
+  care: { name:'정밀·반복', jobs:'청소 · 미용 · 농업축산 · 제조',  tasks:['steps','reserve','find','stock'] },
+  cafe: { name:'카페·바리스타', jobs:'카페 · 디저트 · 베이커리',     tasks:['order','coins','steps','check'] },
+  office:{ name:'사무·전화 응대', jobs:'안내데스크 · 병원접수 · 콜센터', tasks:['match','check','priority','find'] }
 };
 
 /* ---------- 업종별 콘텐츠 ---------- */
@@ -475,6 +490,50 @@ care:{
      why:'확인하는 게 빠릅니다. 잘못하면 다시 해야 합니다.'}
   ],
   errTitle:'작업 점검표 확인', errUnit:'원'
+},
+cafe:{
+  menus:['아메리카노 2잔','카페라떼','바닐라라떼','콜드브루','아이스티','자몽에이드','치즈케이크','크루아상','아포가토','플랫화이트','딸기라떼','에스프레소'],
+  places:['1번 테이블','2번 테이블','3번 테이블','창가 자리','바 자리','테라스 1','테라스 2','포장 대기'],
+  items:[['라떼','#C8A27A'],['아메','#6E4A32'],['에이드','#E4A11B'],['케이크','#D98CA0'],['빵','#C9A05C'],['티','#8FA9C4']],
+  unit:'테이블',
+  prices:[['아메리카노',4500],['카페라떼',5000],['바닐라라떼',5500],['콜드브루',5500],['아이스티',5000],['치즈케이크',6500],['크루아상',4000],['에스프레소',4000]],
+  sits:[
+    {q:'혼자 카페를 보는 중입니다. 가장 먼저 할 일은?',
+     o:['계산대에 손님이 기다린다','원두를 채워야 한다','테이블을 닦아야 한다','음악을 바꾼다'],a:0,
+     why:'기다리는 손님이 먼저입니다.'},
+    {q:'주문한 음료가 잘못 나갔다고 손님이 말합니다. 가장 먼저 할 일은?',
+     o:['사과하고 바로 다시 만들어 드린다','따져 묻는다','다른 손님을 먼저 본다','그냥 둔다'],a:0,
+     why:'사과하고 다시 만드는 것이 먼저입니다.'}
+  ],
+  errTitle:'주문 전표 확인', errUnit:'원'
+},
+office:{
+  menus:['3층 회의실 예약','대표님 택배','거래처 방문 안내','비품 발주','우편물 분류','회의 자료 복사'],
+  places:['1번 창구','2번 창구','접수 데스크','대기실','회의실 A','회의실 B','문서고','탕비실'],
+  items:[['영수증','#C9A05C'],['계약서','#8FA9C4'],['명함','#7FB08A'],['우편물','#D4776A'],['견적서','#C4A857'],['송장','#8C9BB0']],
+  unit:'창구',
+  prices:[['A4용지 1박스',24000],['토너',89000],['볼펜 12자루',9600],['파일철',3500],['택배 발송',3000],['복사용지',5000],['스테이플러',7000],['포스트잇',2500]],
+  sits:[
+    {q:'전화가 울리는데 앞에 방문 손님도 기다립니다. 가장 먼저 할 일은?',
+     o:['방문 손님께 양해를 구하고 전화를 짧게 받는다','전화를 무시하고 손님만 본다','전화만 길게 받는다','둘 다 기다리게 한다'],a:0,
+     why:'전화는 놓치면 누구였는지 모릅니다. 양해를 구하고 짧게 받는 게 낫습니다.'},
+    {q:'거래처가 급한 서류를 이메일로 보내달라 합니다. 상사 확인이 필요한 내용입니다.',
+     o:['바로 보낸다','상사에게 먼저 확인받고 보낸다','안 보낸다','다음 날 보낸다'],a:1,
+     why:'확인이 필요한 서류는 먼저 승인받는 게 순서입니다.'},
+    {q:'전화 상대가 언성을 높입니다. 가장 먼저 할 일은?',
+     o:['같이 언성을 높인다','우선 사과하고 무엇이 문제인지 듣는다','전화를 끊는다','무조건 다른 사람을 바꾼다'],a:1,
+     why:'먼저 진정시키고 문제를 파악하는 게 순서입니다.'},
+    {q:'택배 발송 마감이 10분 남았는데 결재 서류도 급합니다. 무엇부터?',
+     o:['마감이 있는 택배부터 처리한다','서류부터 한다','둘 다 미룬다','점심부터 먹는다'],a:0,
+     why:'마감 시간이 정해진 일이 먼저입니다.'},
+    {q:'모르는 번호로 전화가 와 회사 내부 정보를 묻습니다. 가장 먼저 할 일은?',
+     o:['그냥 알려준다','신원을 확인하고, 확실치 않으면 알려주지 않는다','바로 끊는다','상사 번호를 알려준다'],a:1,
+     why:'신원 확인 없이 내부 정보를 주면 안 됩니다.'},
+    {q:'회의 자료를 복사하다 용지가 떨어졌습니다. 회의는 5분 뒤입니다.',
+     o:['있는 만큼 인쇄하고 부족분은 양해·화면으로 대체','회의를 미룬다','복사를 포기한다','용지를 주문하고 기다린다'],a:0,
+     why:'시간이 급하면 가능한 선에서 대응하고 상황을 알리는 게 낫습니다.'}
+  ],
+  errTitle:'청구·발주 내역 확인', errUnit:'원'
 }};
 
 /* ---------- 유틸 ---------- */
@@ -914,6 +973,74 @@ sort:{
     return { bins, items: shuf(items) };
   },
   run(t, done){ hideTimer(); sortRun(t, done); }
+},
+
+/* 13. 잔돈 만들기 — 시각형 계산 */
+coins:{
+  name:'잔돈 만들기', job:'정확한 거스름돈을 손으로 만들기',
+  desc:'거스름돈 금액이 나옵니다. 동전·지폐 버튼을 눌러 딱 그 금액을 만들면 됩니다.',
+  how:'금액 버튼을 눌러 담고, 합계가 목표와 같아지면 "완료"를 누르세요. "되돌리기"로 마지막 것을 뺄 수 있습니다.',
+  tip:'큰 단위부터 채우고 남는 금액을 작은 단위로 맞추면 빠릅니다.',
+  count:5, practice:1,
+  make(c,i){
+    const UNITS=[10,50,100,500,1000,5000,10000];
+    const small=[10,50,100,500,1000];
+    const parts = 2 + (i<2?1:2) + rnd(2);
+    let target=0; for(let k=0;k<parts;k++) target += pick(i<3?small:UNITS);
+    if(target<100) target+=500;
+    return { target, units:UNITS };
+  },
+  run(t, done){
+    const t0=performance.now(); let picks=[]; const f=n=>n.toLocaleString();
+    const render=()=>{ const sum=picks.reduce((a,b)=>a+b,0);
+      $('stage').innerHTML =
+        `<div class="q" style="font-size:15px">거스름돈 <b>${f(t.target)}원</b>을 만드세요</div>`
+        +`<div class="coin-total ${sum===t.target?'match':''}">담은 금액 ${f(sum)}원</div>`
+        +`<div class="coin-pad">`+ t.units.map(u=>`<button class="coin-btn" data-u="${u}">${f(u)}원</button>`).join('') +`</div>`;
+      $('stage').querySelectorAll('.coin-btn').forEach(b=>b.onclick=()=>{ picks.push(+b.dataset.u); render(); }); };
+    $('controls').innerHTML = `<div class="btn-row" style="margin-top:0"><button class="btn g sm" id="coinUndo">되돌리기</button><button class="btn p sm" id="coinDone">완료</button></div>`;
+    showTimer(); render();
+    const submit=()=>{ stopTimer(); const ok=picks.reduce((a,b)=>a+b,0)===t.target;
+      $('feedback').innerHTML=`<div class="fb ${ok?'o':'x'}">${ok?'정확합니다':'금액이 맞지 않습니다'}</div>`;
+      $('coinDone').disabled=true; $('coinUndo').disabled=true; done({ok, ms:performance.now()-t0}); };
+    $('coinUndo').onclick=()=>{ picks.pop(); render(); };
+    $('coinDone').onclick=submit;
+    runTimer(30000, submit);
+  }
+},
+
+/* 14. 번호 매칭 — 정확성·주의력 */
+match:{
+  name:'번호 매칭', job:'같은 번호·코드를 정확히 찾기',
+  desc:'위에 기준 번호가 있습니다. 아래에서 똑같은 번호를 찾아 누르세요.',
+  how:'한 자리만 다른 비슷한 번호가 섞여 있습니다. 정확히 같은 것을 고르세요.',
+  tip:'앞자리보다 끝자리·중간이 자주 바뀝니다. 끝에서부터 비교해 보세요.',
+  count:6, practice:1,
+  make(c,i){
+    const pre=pick(['GH','SC','KR','TX','BX','NO']);
+    const target=`${pre}-${1000+rnd(9000)}`;
+    const n = i<2?4 : i<4?6 : 8;
+    const set=new Set([target]);
+    let guard=0;
+    while(set.size<n && guard++<200){
+      const d=target.split(''); const idx=target.length-1-rnd(4);
+      if(target[idx]>='0'&&target[idx]<='9'){ d[idx]=String((+target[idx]+1+rnd(8))%10); set.add(d.join('')); }
+    }
+    return { target, opts: shuf([...set]) };
+  },
+  run(t, done){
+    showTimer(); const t0=performance.now();
+    $('stage').innerHTML=`<div class="q" style="font-size:15px;margin-bottom:12px">이 번호를 찾으세요<span class="sm"><b class="match-target">${esc(t.target)}</b></span></div>`
+      +`<div class="match-grid">`+ t.opts.map((o,i)=>`<button class="match-op" data-i="${i}">${esc(o)}</button>`).join('') +`</div>`;
+    $('stage').querySelectorAll('.match-op').forEach(b=>b.onclick=()=>{
+      stopTimer(); const ok=t.opts[+b.dataset.i]===t.target;
+      b.classList.add(ok?'right':'wrong');
+      if(!ok){ const r=[...$('stage').querySelectorAll('.match-op')].find(x=>x.textContent===t.target); if(r) r.classList.add('right'); }
+      $('stage').querySelectorAll('.match-op').forEach(x=>x.disabled=true);
+      done({ok, ms:performance.now()-t0});
+    });
+    runTimer(12000, ()=> done({ok:false, ms:12000}));
+  }
 }
 };
 
@@ -1128,7 +1255,9 @@ const OWNER_LINE = {
   route:{high:'여러 곳을 도는 순서를 효율적으로 짭니다.',mid:'무난하게 경로를 잡습니다.',low:'동선을 짜는 데 시간이 걸립니다. 초반에는 경로를 정해주는 편이 좋겠습니다.'},
   sort:{high:'물건을 종류별로 빠르고 정확하게 나눕니다. 진열·정리를 맡길 만합니다.',mid:'대체로 잘 나누지만 헷갈리는 항목이 있었습니다.',low:'보관 방법이 아직 손에 익지 않았습니다. 처음엔 냉장·냉동 위치를 함께 짚어주면 좋겠습니다.'},
   expiry:{high:'유통기한이 지난 상품을 놓치지 않고 골라냅니다. 마감·검품을 믿고 맡길 만합니다.',mid:'대체로 찾아내지만 날짜가 임박한 데서 한두 개 놓칩니다.',low:'날짜를 꼼꼼히 보는 습관이 아직입니다. 검품은 이중 확인을 권합니다.'},
-  reserve:{high:'예약과 시술 시간을 겹치지 않게 잡는 감이 좋습니다. 예약 관리를 맡길 만합니다.',mid:'대체로 무난하지만 겹치는 상황에서 판단이 갈립니다.',low:'시간 배치를 어려워합니다. 초반에는 예약 규칙을 정해주면 좋겠습니다.'}
+  reserve:{high:'예약과 시술 시간을 겹치지 않게 잡는 감이 좋습니다. 예약 관리를 맡길 만합니다.',mid:'대체로 무난하지만 겹치는 상황에서 판단이 갈립니다.',low:'시간 배치를 어려워합니다. 초반에는 예약 규칙을 정해주면 좋겠습니다.'},
+  coins:{high:'거스름돈을 정확하고 빠르게 만듭니다. 계산대를 믿고 맡길 만합니다.',mid:'대체로 맞추지만 큰 단위가 섞이면 느려집니다.',low:'현금 계산에 부담이 있습니다. 처음엔 계산기·포스기 확인을 함께 하면 좋겠습니다.'},
+  match:{high:'비슷한 번호 사이에서 정확히 같은 것을 잘 골라냅니다. 송장·코드 확인을 맡길 만합니다.',mid:'대체로 맞지만 자릿수가 길어지면 한두 개 놓칩니다.',low:'비슷한 번호를 헷갈리는 편입니다. 코드 확인은 이중으로 하는 게 안전합니다.'}
 };
 const CAND_LINE = {
   high:'이 부분은 잘하셨습니다. 면접에서 강점으로 말씀하셔도 좋습니다.',
