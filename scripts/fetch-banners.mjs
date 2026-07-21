@@ -85,9 +85,12 @@ async function main() {
   url.searchParams.set('crtfcKey', KEY);
   url.searchParams.set('dataType', 'json');
   url.searchParams.set('hashtags', '소상공인');
+  // pageIndex 는 필수. 이게 빠지면 유효한 키라도 API 가
+  // { reqErr: "페이지 번호를 입력해주세요." } 를 돌려준다.
+  url.searchParams.set('pageIndex', '1');
   url.searchParams.set('pageUnit', '100');
 
-  console.log('호출:', API + '?crtfcKey=***&dataType=json&hashtags=소상공인&pageUnit=100');
+  console.log('호출:', API + '?crtfcKey=***&dataType=json&hashtags=소상공인&pageIndex=1&pageUnit=100');
 
   const res = await fetch(url, { headers: { 'User-Agent': 'sajangnim-seorap/1.0', Accept: 'application/json' } });
   console.log('응답 코드:', res.status);
@@ -107,12 +110,23 @@ async function main() {
     return;
   }
 
+  // API 는 파라미터/키 오류를 HTTP 200 + { reqErr: "메시지" } 로 돌려준다.
+  // 키 이름만 찍지 말고 실제 메시지를 남겨 원인을 바로 알 수 있게 한다.
+  if (json && json.reqErr) {
+    console.error('API 오류(reqErr):', String(json.reqErr).trim());
+    console.error('기존 feed 를 그대로 둡니다.');
+    return;
+  }
+
   const raw = pickArray(json);
   console.log('수집:', raw.length, '건');
   if (!raw.length) {
     console.log('받은 데이터가 없어 기존 feed 를 유지합니다. 응답 키:', Object.keys(json ?? {}).join(', '));
     return;
   }
+
+  // 실제 응답 필드명을 한 번 찍어 toBanner() 매핑이 맞는지 눈으로 확인한다.
+  console.log('첫 항목 필드:', Object.keys(raw[0] ?? {}).join(', '));
 
   const seen = new Set();
   const feed = raw
