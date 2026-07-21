@@ -1,6 +1,6 @@
 {
   "updated": "2026-07-21",
-  "source": "manual",
+  "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
     {
@@ -28,5 +28,38 @@
       "until": "2026-12-31"
     }
   ],
-  "feed": []
+  "feed": [
+    {
+      "tag": "지원사업",
+      "tagType": "",
+      "title": "[울산] 울주군 2026년 2차 소상공인 경영환경개선 및 디지털기기 지원 사업 공고",
+      "sub": "울산광역시",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124563",
+      "until": "2026-08-04"
+    },
+    {
+      "tag": "지원사업",
+      "tagType": "",
+      "title": "[대구] 북구 2026년 하반기 소상공인 경영안정자금 지원사업 공고",
+      "sub": "대구광역시",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124560",
+      "until": "2026-08-04"
+    },
+    {
+      "tag": "지원사업",
+      "tagType": "",
+      "title": "2026년 3차 소상공인 온라인쇼핑몰 판매지원(온라인쇼핑몰ㆍ로컬상품관) 참여기업 모집 공고",
+      "sub": "중소벤처기업부",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124549",
+      "until": "2026-08-04"
+    },
+    {
+      "tag": "지원사업",
+      "tagType": "",
+      "title": "2026년 2차 소상공인 협업활성화 공동사업 공고",
+      "sub": "중소벤처기업부",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124540",
+      "until": "2026-08-04"
+    }
+  ]
 }

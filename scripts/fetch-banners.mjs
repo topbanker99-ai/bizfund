@@ -25,12 +25,41 @@ const today = () => kstDate(0);
 const clean = (s) => String(s ?? '').replace(/<[^>]*>/g, '').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
 const ymd = (s) => String(s ?? '').replace(/[^0-9]/g, '').slice(0, 8);
 
+// 신청기간은 reqstBeginEndDe 한 필드에 "시작 ~ 마감" 이 같이 들어온다.
+// (예: "2026-07-21 ~ 2026-08-05" 또는 "20260721 ~ 20260805")
+// 마감일이 필요하므로 날짜처럼 생긴 토큰 중 마지막 것을 고른다.
+// 구분자 없이 날짜가 하나뿐이면 그걸 마감일로 본다. "예산 소진시까지"
+// 처럼 날짜가 없으면 빈 값 → 노출기한은 +14일 기본값으로 처리된다.
+function endDateOf(it) {
+  const raw = String(
+    it.reqstBeginEndDe ?? it.reqstEndDe ?? it.reqstEndEnd ?? it.rceptEndDe ?? it.endDe ?? ''
+  );
+  const dates = raw.match(/\d{4}\s*[.\-/]?\s*\d{2}\s*[.\-/]?\s*\d{2}/g);
+  return dates && dates.length ? dates[dates.length - 1] : raw;
+}
+
 function daysLeft(end) {
   const m = ymd(end);
   if (m.length < 8) return null;
   const d = new Date(`${m.slice(0,4)}-${m.slice(4,6)}-${m.slice(6,8)}T23:59:59+09:00`);
   if (isNaN(d)) return null;
   return Math.ceil((d - new Date()) / 86400000);
+}
+
+// 정부 서버가 이따금 연결을 끊어 fetch 가 실패한다(로그의 "fetch failed").
+// 하루 한 번 도는 작업이 이 일시적 오류로 통째로 실패하지 않게 몇 번 다시 시도한다.
+async function fetchWithRetry(url, tries = 3) {
+  const headers = { 'User-Agent': 'sajangnim-seorap/1.0', Accept: 'application/json' };
+  for (let i = 1; i <= tries; i++) {
+    try {
+      return await fetch(url, { headers, signal: AbortSignal.timeout(20000) });
+    } catch (e) {
+      if (i === tries) throw e;
+      const wait = 2000 * i;
+      console.log(`호출 실패(${e.message}), ${wait}ms 후 재시도 ${i}/${tries - 1}`);
+      await new Promise(r => setTimeout(r, wait));
+    }
+  }
 }
 
 // 응답 모양이 바뀌어도 배열을 찾아냅니다.
@@ -49,7 +78,7 @@ function pickArray(j) {
 function toBanner(it) {
   const title = clean(it.pblancNm || it.polcyNm || it.title || it.pblancTtl);
   const org   = clean(it.jrsdInsttNm || it.excInsttNm || it.instNm || '');
-  const end   = it.reqstEndDe || it.reqstEndEnd || it.rceptEndDe || it.endDe || '';
+  const end   = endDateOf(it);
   const left  = daysLeft(end);
 
   let link = clean(it.pblancUrl || it.rceptEngnHmpgUrl || it.detailUrl || it.link || '');
@@ -92,7 +121,7 @@ async function main() {
 
   console.log('호출:', API + '?crtfcKey=***&dataType=json&hashtags=소상공인&pageIndex=1&pageUnit=100');
 
-  const res = await fetch(url, { headers: { 'User-Agent': 'sajangnim-seorap/1.0', Accept: 'application/json' } });
+  const res = await fetchWithRetry(url);
   console.log('응답 코드:', res.status);
   const text = await res.text();
 
@@ -125,8 +154,6 @@ async function main() {
     return;
   }
 
-  // 실제 응답 필드명을 한 번 찍어 toBanner() 매핑이 맞는지 눈으로 확인한다.
-  console.log('첫 항목 필드:', Object.keys(raw[0] ?? {}).join(', '));
 
   const seen = new Set();
   const feed = raw
