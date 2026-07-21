@@ -84,10 +84,12 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 
 /* 세트 선택 */
 .sets{display:grid;gap:10px;margin-top:6px}
-.set{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:17px;text-align:left;box-shadow:var(--shadow)}
+.set{display:flex;align-items:flex-start;gap:13px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:15px;text-align:left;box-shadow:var(--shadow);width:100%}
 .set.on{border-color:var(--blue);background:var(--blue-soft)}
+.set-ic{width:52px;height:52px;flex:none;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.set-tx{flex:1;min-width:0}
 .set b{display:block;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px}
-.set .jobs{font-size:12.5px;color:var(--faint);margin-bottom:9px}
+.set .jobs{display:block;font-size:12.5px;color:var(--faint);margin-bottom:9px}
 .set .games{display:flex;flex-wrap:wrap;gap:5px}
 .set .games i{font-style:normal;font-size:11.5px;font-weight:700;background:var(--bg);border:1px solid var(--line);
   color:var(--sub);padding:3px 9px;border-radius:6px}
@@ -1019,8 +1021,9 @@ function go(id){
 function renderSets(){
   $('setList').innerHTML = Object.entries(SETS).map(([k,v])=>
     `<button class="set ${S.set===k?'on':''}" onclick="pickSet('${k}')">
-      <b>${v.name}</b><div class="jobs">${v.jobs}</div>
-      <div class="games">${v.tasks.map(t=>`<i>${TASKS[t].name}</i>`).join('')}</div>
+      <img class="set-ic" src="assets/hire/set-${k}.webp" alt="" onerror="this.style.display='none'">
+      <span class="set-tx"><b>${v.name}</b><span class="jobs">${v.jobs}</span>
+      <span class="games">${v.tasks.map(t=>`<i>${TASKS[t].name}</i>`).join('')}</span></span>
     </button>`).join('');
   $('toConsent').disabled = !S.set;
 }
@@ -1332,6 +1335,9 @@ $('toIntro').onclick = ()=>{
   S.ti = 0; S.results = [];
   showIntro();
 };
+/* 홈에서 직렬을 골라 들어오면(?set=food 등) 선택 화면을 건너뛰고 바로 동의로 */
+(()=>{ const s=new URLSearchParams(location.search).get('set');
+  if(s && SETS[s]){ S.set=s; renderSets(); go('consent'); } })();
 </script>
 </body>
 </html>

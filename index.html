@@ -189,6 +189,13 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
 .tcard .s{font-size:12.5px;color:var(--sub);margin-top:3px;line-height:1.5;word-break:keep-all}
 .tcard .badge{float:right;font-size:11px;font-weight:800;background:var(--blue);color:#fff;
   padding:3px 9px;border-radius:999px}
+.hire-sets{display:grid;gap:10px}
+.hire-set{display:flex;align-items:center;gap:13px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px;text-decoration:none;transition:.12s}
+.hire-set:active{transform:scale(.995)}
+.hire-set:hover{border-color:var(--blue);background:var(--blue-soft)}
+.hire-set img{width:52px;height:52px;flex:none;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.hire-set b{display:block;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.hire-set i{font-style:normal;font-size:12.5px;color:var(--sub)}
 
 </style>
 </head>
@@ -427,17 +434,28 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
   <div class="wrap">
     <h1 class="h2s">알바 채용 도구</h1>
 
-    <div class="p-card" style="border-color:var(--blue);background:var(--blue-soft);margin-bottom:16px">
-      <div class="p-name" style="margin-bottom:6px">직무체험 테스트 — 채용 참고용</div>
-      <div class="p-sum" style="margin-bottom:8px">
-        지원자에게 5분 정도 실제 업무를 축소한 과제를 시켜보는 도구입니다.
-        주문 기억, 계산, 우선순위 판단, 오류 찾기처럼 그 일에서 진짜 쓰는 능력만 다룹니다.
-      </div>
-      <div style="font-size:12.5px;color:var(--sub);margin-bottom:14px">
-        접객·주문(음식점·카페) / 판매·진열(편의점·마트) / 이동·배송(배달·운수) / 정밀·반복(청소·미용·농업·제조)
-        · 지원자 동의 절차 포함 · 등급 없이 항목별 결과 제공
-      </div>
-      <a class="btn-next" style="display:inline-block;text-decoration:none" href="hire.html">테스트 준비하기 →</a>
+    <p style="font-size:13.5px;color:var(--sub);line-height:1.6;margin-bottom:16px;max-width:640px">
+      뽑으려는 자리를 고르면 그 일에 맞는 직무 체험 과제로 바로 넘어갑니다. 지원자는 5분 정도 걸리고,
+      지원자 동의를 먼저 받으며 결과는 등급 없이 항목별로만 나옵니다.
+    </p>
+
+    <div class="hire-sets">
+      <a class="hire-set" href="hire.html?set=food">
+        <img src="assets/hire/set-food.webp" alt="" onerror="this.style.display='none'">
+        <span><b>접객·주문</b><i>음식점 · 고깃집 · 카페 · 술집</i></span></a>
+      <a class="hire-set" href="hire.html?set=store">
+        <img src="assets/hire/set-store.webp" alt="" onerror="this.style.display='none'">
+        <span><b>판매·진열</b><i>편의점 · 마트 · 소매점</i></span></a>
+      <a class="hire-set" href="hire.html?set=move">
+        <img src="assets/hire/set-move.webp" alt="" onerror="this.style.display='none'">
+        <span><b>이동·배송</b><i>배달 · 운수 · 물류</i></span></a>
+      <a class="hire-set" href="hire.html?set=care">
+        <img src="assets/hire/set-care.webp" alt="" onerror="this.style.display='none'">
+        <span><b>정밀·반복</b><i>청소 · 미용 · 농업축산 · 제조</i></span></a>
+    </div>
+
+    <div style="font-size:12px;color:var(--sub);margin-top:14px">
+      이 테스트만으로 채용을 결정하지 마세요. 면접에서 무엇을 더 물어볼지 정하는 참고용입니다.
     </div>
 
   </div>
