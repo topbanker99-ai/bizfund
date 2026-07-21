@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>표준근로계약서 생성기 — 업종별 조항 조립</title>
+<title>근로계약서 생성기 — 사장님서랍 — 업종별 조항 조립</title>
 <meta name="description" content="업종·사업장 규모·고용형태를 고르면 법정 필수사항이 빠짐없이 들어간 근로계약서를 만들어 드립니다. 무효 조항은 자동으로 걸러냅니다.">
 <style>
 :root{
@@ -167,7 +167,7 @@ p.step-d{font-size:13.5px;color:var(--sub);margin-top:7px;margin-bottom:22px}
 
 <header>
   <div class="hd">
-    <div class="brand">표준<em>근로계약서</em> 생성기</div>
+    <div class="brand"><a href="./" style="text-decoration:none;color:inherit">사장님<em>서랍</em></a> · 근로계약서</div>
     <div class="hd-acts">
       <span class="hd-note">근기법 제17조 필수사항 자동 점검 · 무효 조항 차단</span>
       <button class="filebtn" onclick="document.getElementById('fileIn').click()">초안 불러오기</button>
@@ -220,7 +220,7 @@ const THIS_YEAR = 2026;
 const REVIEWER = null;   // 예: { name:'김경동 공인노무사', org:'노무법인 종로', date:'2026-07-21' }
 
 /* 지원금 진단 연결 (같은 그룹 서비스). null이면 안내 블록이 숨겨집니다. */
-const FUND_URL = 'https://topbanker99-ai.github.io/bizfund/';
+const FUND_URL = './';   // 사장님서랍 홈
 
 const S = { step:1, industry:null, employees:null, empType:null, sel:new Set(), vars:{}, special:'' };
 
@@ -756,7 +756,7 @@ function fundHint(){
     <b>이 채용으로 받을 수 있는 지원금이 있을 수 있습니다.</b><br>
     청년일자리도약장려금, 두루누리 사회보험료 지원, 고용촉진장려금은 모두 근로계약서와 4대보험 가입자명부가 기본 서류입니다.
     방금 만든 계약서로 절반은 준비된 셈이니, 해당되는 지원금이 있는지 확인해 보세요.
-    <div style="margin-top:9px"><a class="btn btn-g btn-sm" href="${FUND_URL}" target="_blank" rel="noopener">지원금 진단하러 가기 →</a></div></div>`;
+    <div style="margin-top:9px"><a class="btn btn-g btn-sm" href="${FUND_URL}" target="_blank" rel="noopener">사장님서랍에서 지원금 진단하기 →</a></div></div>`;
 }
 function step4(){
   const v = validate();
