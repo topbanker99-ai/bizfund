@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "지원사업",
-      "tagType": "",
-      "title": "[울산] 울주군 2026년 2차 소상공인 경영환경개선 및 디지털기기 지원 사업 공고",
-      "sub": "울산광역시",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124563",
-      "until": "2026-08-04"
+      "tag": "마감 D-2",
+      "tagType": "urgent",
+      "title": "2026년 7월 서리풀 소상공인 창업 클리닉 모집 공고",
+      "sub": "서울특별시 · 신청 마감 2026.07.22",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123742",
+      "until": "2026-07-22"
     },
     {
-      "tag": "지원사업",
-      "tagType": "",
-      "title": "[대구] 북구 2026년 하반기 소상공인 경영안정자금 지원사업 공고",
-      "sub": "대구광역시",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124560",
-      "until": "2026-08-04"
+      "tag": "마감 D-3",
+      "tagType": "urgent",
+      "title": "[부산] 2026년 청년디자이너-소상공인 협업 디자인 프로젝트 지원 과제 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.07.23",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124040",
+      "until": "2026-07-23"
     },
     {
-      "tag": "지원사업",
-      "tagType": "",
-      "title": "2026년 3차 소상공인 온라인쇼핑몰 판매지원(온라인쇼핑몰ㆍ로컬상품관) 참여기업 모집 공고",
-      "sub": "중소벤처기업부",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124549",
-      "until": "2026-08-04"
+      "tag": "마감 D-4",
+      "tagType": "urgent",
+      "title": "[경북] 영주시 2026년 소상공인 재창업 지원사업 참여자 추가모집 공고",
+      "sub": "경상북도 · 신청 마감 2026.07.24",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123985",
+      "until": "2026-07-24"
     },
     {
-      "tag": "지원사업",
-      "tagType": "",
-      "title": "2026년 2차 소상공인 협업활성화 공동사업 공고",
-      "sub": "중소벤처기업부",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124540",
-      "until": "2026-08-04"
+      "tag": "마감 D-6",
+      "tagType": "urgent",
+      "title": "2026년 농식품 데이터 활용 컨설팅 및 구매 지원사업 공고",
+      "sub": "농림축산식품부 · 신청 마감 2026.07.26",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123759",
+      "until": "2026-07-26"
     }
   ]
 }
