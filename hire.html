@@ -199,6 +199,32 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
   .opts.two{grid-template-columns:1fr}
   .stage{padding:18px 14px}
 }
+/* 유통기한 점검 */
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:4px 0}
+.exp-item{border:1.5px solid var(--line);border-radius:12px;background:var(--paper);padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:.12s}
+.exp-item .exp-emo{font-size:26px;line-height:1}
+.exp-item .exp-nm{font-size:13px;font-weight:700;color:var(--navy)}
+.exp-item .exp-date{font-size:12px;color:var(--sub)}
+.exp-item.sel{border-color:var(--blue);background:var(--blue-soft)}
+.exp-item.sel .exp-nm{color:var(--blue)}
+.exp-item.should{border-color:#D9534F;background:#FBEDEC}
+.exp-item.should .exp-date{color:#C0392B;font-weight:800}
+.exp-item:disabled{cursor:default;opacity:.96}
+/* 분류 정리 */
+.sort-shelf{position:relative;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#EAEFF4}
+.sort-shelf img{width:100%;height:120px;object-fit:cover;display:block}
+.sort-shelf span{position:absolute;left:10px;bottom:8px;background:rgba(15,42,74,.72);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:8px}
+.sort-bins{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.sort-bin{border:2px dashed var(--line);border-radius:12px;min-height:96px;padding:6px;transition:.12s;background:var(--paper)}
+.sort-bin.over{border-color:var(--blue);background:var(--blue-soft)}
+.sort-bin-h{font-size:13px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:5px}
+.sort-drop{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:40px}
+.sort-tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px 4px 4px;border-top:1px solid var(--line)}
+.sort-chip{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;border:1.5px solid var(--blue-line);background:#fff;border-radius:11px;padding:8px 12px;font-size:14px;font-weight:700;color:var(--navy);display:inline-flex;align-items:center;gap:6px}
+.sort-chip .ce{font-size:18px}
+.sort-chip.dragging{position:fixed;z-index:999;cursor:grabbing;box-shadow:0 8px 24px rgba(15,42,74,.25);border-color:var(--blue)}
+.sort-chip.cok{border-color:var(--ok);background:var(--ok-bg)}
+.sort-chip.cbad{border-color:#D9534F;background:#FBEDEC}
 </style>
 </head>
 <body>
@@ -329,9 +355,9 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 /* ---------- 업종 세트 ---------- */
 const SETS = {
   food: { name:'접객·주문', jobs:'음식점 · 고깃집 · 카페 · 술집', tasks:['order','table','cash','priority'] },
-  store:{ name:'판매·진열', jobs:'편의점 · 마트 · 소매점',        tasks:['cash','stock','find','check'] },
+  store:{ name:'판매·진열', jobs:'편의점 · 마트 · 소매점',        tasks:['cash','sort','expiry','find'] },
   move: { name:'이동·배송', jobs:'배달 · 운수 · 물류',            tasks:['route','check','priority','find'] },
-  care: { name:'정밀·반복', jobs:'청소 · 미용 · 농업축산 · 제조',  tasks:['steps','check','find','stock'] }
+  care: { name:'정밀·반복', jobs:'청소 · 미용 · 농업축산 · 제조',  tasks:['steps','reserve','find','stock'] }
 };
 
 /* ---------- 업종별 콘텐츠 ---------- */
@@ -812,6 +838,80 @@ route:{
     $('stage').innerHTML = `<div class="q" style="font-size:15px;margin-bottom:10px">가장 짧게 도는 순서는?</div>${map}${legend}`;
     choose(t.opts.map(o=>o.label), t.ans, done, 25000, 'left');
   }
+},
+
+/* 10. 유통기한 점검 — 날짜 판단 */
+expiry:{
+  name:'유통기한 점검', job:'유통기한이 지난 상품 골라내기',
+  desc:'매대에 유통기한이 다른 상품이 섞여 있습니다. 오늘 기준으로 지난 것만 골라 빼면 됩니다.',
+  how:'맨 위에 오늘 날짜가 나옵니다. 유통기한이 지난 상품을 눌러 표시하고, 다 고르면 "다 골랐습니다"를 누르세요.',
+  tip:'유통기한이 오늘이면 아직 팝니다. 어제까지인 것만 빼세요.',
+  count:5, practice:1,
+  make(c,i){
+    const pool=[['우유','🥛'],['도시락','🍱'],['삼각김밥','🍙'],['샌드위치','🥪'],['요구르트','🍶'],['샐러드','🥗'],['빵','🍞'],['소시지','🌭'],['우동','🍜'],['커피우유','🥛']];
+    const n = i<1?4 : i<3?5 : 6;
+    const items = sample(pool, n);
+    const mon = 3 + rnd(6), today = 10 + rnd(11);
+    const list = items.map(([nm,emo])=>{ const off = pick([-3,-2,-1,-1,0,1,2,3]); return {nm,emo,day:today+off,off}; });
+    if(!list.some(x=>x.off<0)){ list[0].off=-1; list[0].day=today-1; }
+    if(!list.some(x=>x.off>=0)){ const L=list[list.length-1]; L.off=0; L.day=today; }
+    return { mon, today, list, target:new Set(list.filter(x=>x.off<0).map(x=>x.nm)) };
+  },
+  run(t, done){
+    hideTimer();
+    $('stage').innerHTML =
+      `<div class="q" style="font-size:15px;margin-bottom:10px">오늘 <b>${t.mon}/${t.today}</b><span class="sm">유통기한이 지난 상품을 골라 빼세요</span></div>`
+      + `<div class="exp-grid">` + t.list.map((x,idx)=>
+          `<button class="exp-item" data-i="${idx}"><span class="exp-emo">${x.emo}</span><span class="exp-nm">${esc(x.nm)}</span><span class="exp-date">${t.mon}/${x.day}</span></button>`).join('') + `</div>`;
+    $('controls').innerHTML = `<button class="btn p" id="expDone">다 골랐습니다</button>`;
+    const sel=new Set(), t0=performance.now();
+    $('stage').querySelectorAll('.exp-item').forEach(b=>{
+      b.onclick=()=>{ const i=+b.dataset.i; if(sel.has(i)){sel.delete(i);b.classList.remove('sel');} else {sel.add(i);b.classList.add('sel');} };
+    });
+    $('expDone').onclick=()=>{
+      const chosen=new Set([...sel].map(i=>t.list[i].nm));
+      const ok = chosen.size===t.target.size && [...chosen].every(x=>t.target.has(x));
+      $('stage').querySelectorAll('.exp-item').forEach(b=>{ b.disabled=true; if(t.list[+b.dataset.i].off<0) b.classList.add('should'); });
+      $('expDone').disabled=true;
+      $('feedback').innerHTML=`<div class="fb ${ok?'o':'x'}">${ok?'정확합니다':'빨간 표시가 빼야 할 상품입니다'}</div>`;
+      done({ok, ms:performance.now()-t0});
+    };
+  }
+},
+
+/* 11. 예약 배치 — 미용실 상황 판단 */
+reserve:{
+  name:'예약 배치', job:'예약과 시술 시간을 겹치지 않게 잡기',
+  desc:'미용실에서 예약을 받는 상황입니다. 시간이 겹치지 않게, 손님을 놓치지 않게 판단하면 됩니다.',
+  how:'상황을 읽고 가장 알맞은 응대를 고르세요. 답을 고르면 이유가 나옵니다.',
+  tip:'이미 잡힌 예약과 시술에 걸리는 시간을 먼저 떠올리면 쉽습니다.',
+  count:5, practice:1,
+  make(c,i){ const s=RESERVE_SITS[i % RESERVE_SITS.length]; const idx=shuf(s.o.map((_,j)=>j));
+    return { q:s.q, opts:idx.map(j=>s.o[j]), ans:s.o[s.a], why:s.why }; },
+  run(t, done){
+    showTimer();
+    $('stage').innerHTML = `<div class="q">${esc(t.q)}</div>`;
+    choose(t.opts, t.ans, r=>{ $('feedback').innerHTML += `<div class="note info" style="margin-top:8px">${esc(t.why)}</div>`; done(r); }, 30000, 'left');
+  }
+},
+
+/* 12. 분류 정리 — 드래그드롭 */
+sort:{
+  name:'분류 정리', job:'물건을 보관 방법에 맞게 나누기',
+  desc:'진열대 물건을 냉장·냉동·상온으로 나눕니다. 끌어다 알맞은 칸에 놓으면 됩니다.',
+  how:'아래 물건을 손가락(또는 마우스)으로 끌어 위의 알맞은 칸에 놓으세요. 다 옮기면 "정리 끝"을 누릅니다.',
+  tip:'우유·요구르트는 냉장, 아이스크림·냉동식품은 냉동, 물·과자·라면은 상온입니다.',
+  count:4, practice:1,
+  make(c,i){
+    const P={ '냉장':[['우유','🥛'],['요구르트','🍶'],['두부','🧈'],['김밥','🍙'],['샐러드','🥗']],
+              '냉동':[['아이스크림','🍦'],['냉동만두','🥟'],['냉동피자','🍕'],['얼음','🧊']],
+              '상온':[['생수','💧'],['컵라면','🍜'],['과자','🍪'],['통조림','🥫'],['초콜릿','🍫']] };
+    const bins=['냉장','냉동','상온'];
+    const per = i<2?1:2;
+    const items=[]; bins.forEach(b=> sample(P[b], per).forEach(([nm,emo])=> items.push({nm,emo,bin:b})));
+    return { bins, items: shuf(items) };
+  },
+  run(t, done){ hideTimer(); sortRun(t, done); }
 }
 };
 
@@ -834,6 +934,75 @@ function choose(opts, ans, done, limit, cls){
     b.onclick = () => finish(opts[+b.dataset.i] === ans, b);
   });
   runTimer(limit, ()=> finish(false, null));
+}
+
+/* ---------- 예약 배치(미용실) 상황 ---------- */
+const RESERVE_SITS = [
+  {q:'2시에 커트 예약이 있습니다. 1시 40분에 오신 손님이 "지금 펌 되나요?" 하고 묻습니다. 펌은 두 시간쯤 걸립니다.',
+   o:['바로 펌을 시작한다','2시 예약과 겹친다고 말씀드리고 다른 시간을 안내한다','커트 예약을 미룬다','일단 받고 본다'],a:1,
+   why:'펌 두 시간이면 2시 커트 예약과 겹칩니다. 이미 잡힌 예약이 먼저입니다.'},
+  {q:'파마 손님이 중화제를 바르고 20분 기다리는 중입니다. 그 사이 커트 손님이 오셨고, 커트는 15분이면 됩니다.',
+   o:['대기 시간 동안 커트를 해드린다','파마가 끝날 때까지 기다리시게 한다','커트 손님을 돌려보낸다','두 명을 동시에 붙잡고 뛴다'],a:0,
+   why:'비는 대기 시간을 활용하면 두 손님을 다 받을 수 있습니다.'},
+  {q:'예약 장부를 보니 3시에 두 분이 같은 시간으로 잡혀 있습니다.',
+   o:['늦게 온 사람을 돌려보낸다','먼저 예약한 분을 3시로, 다른 분께는 사과하고 시간을 조정한다','둘 다 3시에 시작한다','모른 척한다'],a:1,
+   why:'먼저 잡은 예약이 우선입니다. 나머지 한 분께는 사과하고 가까운 시간으로 옮깁니다.'},
+  {q:'2시 예약 손님이 2시 20분이 되도록 오지 않습니다. 2시 30분에 다음 예약이 있습니다.',
+   o:['계속 기다린다','전화로 확인하고, 안 되면 다음 준비를 한다','바로 예약을 취소한다','다음 손님을 미룬다'],a:1,
+   why:'먼저 연락해 확인하는 게 순서입니다. 다음 예약에 지장이 없게 준비합니다.'},
+  {q:'마감 한 시간 전입니다. 손님이 "염색 되나요?" 하고 묻습니다. 염색은 한 시간 반쯤 걸립니다.',
+   o:['시간이 모자란다고 말씀드리고 다음 예약을 권한다','일단 시작한다','대충 빨리 끝낸다','된다고만 한다'],a:0,
+   why:'마감을 훌쩍 넘깁니다. 솔직히 안내하고 다음 예약을 잡는 편이 낫습니다.'},
+  {q:'단골손님이 예약 없이 오셨는데, 10분 뒤 예약 손님이 도착합니다.',
+   o:['단골을 먼저 해드린다','예약 손님을 우선하고, 단골께 양해를 구해 잠시 기다리시게 한다','예약을 미룬다','둘 다 안 받는다'],a:1,
+   why:'예약이 우선입니다. 단골께는 사정을 설명하고 대기나 다른 시간을 안내합니다.'}
+];
+
+/* ---------- 분류 정리 드래그드롭 (터치·마우스 공용) ---------- */
+function sortRun(t, done){
+  const stage=$('stage'), t0=performance.now();
+  stage.innerHTML =
+    `<div class="sort-shelf"><img src="assets/hire/shelf.webp" alt="편의점 진열대" onerror="this.remove()"><span>진열대에서 꺼낸 물건</span></div>`
+    + `<div class="sort-bins">` + t.bins.map(b=>`<div class="sort-bin" data-bin="${b}"><div class="sort-bin-h">${b}</div><div class="sort-drop"></div></div>`).join('') + `</div>`
+    + `<div class="sort-tray" id="sortTray">` + t.items.map((it,i)=>`<div class="sort-chip" data-i="${i}"><span class="ce">${it.emo}</span>${esc(it.nm)}</div>`).join('') + `</div>`;
+  $('controls').innerHTML = `<button class="btn p" id="sortDone" disabled>정리 끝</button>`;
+  const chips=[...stage.querySelectorAll('.sort-chip')];
+  const bins=[...stage.querySelectorAll('.sort-bin')];
+  const placed={};
+  const hit=(el,e)=>{ const r=el.getBoundingClientRect(); return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom; };
+  const check=()=>{ $('sortDone').disabled = chips.some(c=>placed[+c.dataset.i]==null); };
+  chips.forEach(chip=>{
+    chip.addEventListener('pointerdown', e=>{
+      e.preventDefault();
+      const r=chip.getBoundingClientRect(), dx=e.clientX-r.left, dy=e.clientY-r.top;
+      chip.classList.add('dragging');
+      chip.style.width=r.width+'px'; chip.style.left=r.left+'px'; chip.style.top=r.top+'px';
+      const move=ev=>{ chip.style.left=(ev.clientX-dx)+'px'; chip.style.top=(ev.clientY-dy)+'px';
+        bins.forEach(b=>b.classList.toggle('over', hit(b,ev))); };
+      const up=ev=>{
+        document.removeEventListener('pointermove',move);
+        document.removeEventListener('pointerup',up);
+        document.removeEventListener('pointercancel',up);
+        chip.classList.remove('dragging'); bins.forEach(b=>b.classList.remove('over'));
+        chip.style.width=chip.style.left=chip.style.top='';
+        const tgt=bins.find(b=>hit(b,ev));
+        if(tgt){ tgt.querySelector('.sort-drop').appendChild(chip); placed[+chip.dataset.i]=tgt.dataset.bin; }
+        else { $('sortTray').appendChild(chip); placed[+chip.dataset.i]=null; }
+        check();
+      };
+      document.addEventListener('pointermove',move);
+      document.addEventListener('pointerup',up);
+      document.addEventListener('pointercancel',up);
+    });
+  });
+  $('sortDone').onclick=()=>{
+    let ok=true;
+    chips.forEach(c=>{ const good=placed[+c.dataset.i]===t.items[+c.dataset.i].bin;
+      c.classList.add(good?'cok':'cbad'); if(!good) ok=false; });
+    $('sortDone').disabled=true;
+    $('feedback').innerHTML=`<div class="fb ${ok?'o':'x'}">${ok?'잘 나눴습니다':'빨간 표시가 자리를 바꿔야 할 물건입니다'}</div>`;
+    done({ok, ms:performance.now()-t0});
+  };
 }
 
 /* ---------- 상태 ---------- */
@@ -953,7 +1122,10 @@ const OWNER_LINE = {
   find:{high:'물건을 빠르고 정확하게 찾습니다. 진열 위치를 금방 익히겠습니다.',mid:'찾기는 하지만 순서를 놓치는 경우가 있었습니다.',low:'여러 물건 중 지정한 것을 찾는 데 시간이 걸립니다. 진열도를 붙여두면 도움이 됩니다.'},
   check:{high:'틀린 부분을 잘 짚어냅니다. 마감이나 검수를 맡길 만합니다.',mid:'대체로 찾아내지만 놓치는 경우가 있습니다.',low:'잘못된 항목을 지나치는 편입니다. 검수는 이중으로 확인하는 게 안전합니다.'},
   steps:{high:'알려준 순서를 정확히 지킵니다. 매뉴얼대로 일할 사람입니다.',mid:'순서는 기억하지만 중간에 헷갈리는 지점이 있었습니다.',low:'순서를 지키는 데 어려움이 있습니다. 벽에 순서표를 붙여두면 크게 좋아집니다.'},
-  route:{high:'여러 곳을 도는 순서를 효율적으로 짭니다.',mid:'무난하게 경로를 잡습니다.',low:'동선을 짜는 데 시간이 걸립니다. 초반에는 경로를 정해주는 편이 좋겠습니다.'}
+  route:{high:'여러 곳을 도는 순서를 효율적으로 짭니다.',mid:'무난하게 경로를 잡습니다.',low:'동선을 짜는 데 시간이 걸립니다. 초반에는 경로를 정해주는 편이 좋겠습니다.'},
+  sort:{high:'물건을 종류별로 빠르고 정확하게 나눕니다. 진열·정리를 맡길 만합니다.',mid:'대체로 잘 나누지만 헷갈리는 항목이 있었습니다.',low:'보관 방법이 아직 손에 익지 않았습니다. 처음엔 냉장·냉동 위치를 함께 짚어주면 좋겠습니다.'},
+  expiry:{high:'유통기한이 지난 상품을 놓치지 않고 골라냅니다. 마감·검품을 믿고 맡길 만합니다.',mid:'대체로 찾아내지만 날짜가 임박한 데서 한두 개 놓칩니다.',low:'날짜를 꼼꼼히 보는 습관이 아직입니다. 검품은 이중 확인을 권합니다.'},
+  reserve:{high:'예약과 시술 시간을 겹치지 않게 잡는 감이 좋습니다. 예약 관리를 맡길 만합니다.',mid:'대체로 무난하지만 겹치는 상황에서 판단이 갈립니다.',low:'시간 배치를 어려워합니다. 초반에는 예약 규칙을 정해주면 좋겠습니다.'}
 };
 const CAND_LINE = {
   high:'이 부분은 잘하셨습니다. 면접에서 강점으로 말씀하셔도 좋습니다.',
