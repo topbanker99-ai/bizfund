@@ -5,6 +5,10 @@
    verifiedAt 을 채우고 DATA_STATUS 를 'verified' 로 바꿀 것.
    진단(diagnose)에는 tier === 1 만 투입한다.
    [2026-07 검증 메모] 희망리턴 철거비 한도 400만→600만원(2025.7.11 이후 접수분) 반영.
+   [2026-07-21 1차 검수] 공식 출처 대조로 보정: smart-store 500→700만원(유형별),
+     noran 한도 120만원→지자체별(연 12~36만), durunuri·flex-work·youth-jump·
+     hope-restart·kosmes-youth 문구 최신화. 미확정(원문 재확인 필요):
+     sbiz-start(명칭·소관 불명), online(300만원 근거), sgi-guarantee(한도·보증비율).
    ------------------------------------------------------------ */
 const DATA_STATUS = 'draft';
 
@@ -15,7 +19,7 @@ const PROGRAMS = [
     category: 'loan', agency: '소상공인시장진흥공단',
     name: '소상공인 정책자금 · 일반경영안정자금',
     summary: '운전자금 목적의 저리 대출',
-    amountMax: 70000000, terms: '5년 이내(거치 포함)',
+    amountMax: 70000000, terms: '5년 이내(거치기간 2년 포함)',
     applyUrl: 'https://ols.sbiz.or.kr', sourceUrl: 'https://www.sbiz.or.kr',
     require: {
       bizStatus: { include: ['운영'] },
@@ -50,7 +54,7 @@ const PROGRAMS = [
     category: 'loan', agency: '중소벤처기업진흥공단',
     name: '청년전용창업자금',
     summary: '만 39세 이하 대표의 창업 초기 자금',
-    amountMax: 100000000, terms: '6년 이내(거치 3년)',
+    amountMax: 100000000, terms: '운전 6년 이내(거치 3년)·시설 10년 이내 · 제조·중점분야 한도 2억',
     applyUrl: 'https://www.kosmes.or.kr', sourceUrl: 'https://www.kosmes.or.kr',
     require: {
       bizStatus: { include: ['운영'] },
@@ -65,7 +69,7 @@ const PROGRAMS = [
     category: 'loan', agency: '지역신용보증재단',
     name: '소상공인 신용보증 (보증부 은행대출)',
     summary: '담보가 부족한 소상공인의 은행 대출 보증',
-    amountMax: 100000000, terms: '보증비율 85~100%, 보증료 별도',
+    amountMax: 100000000, terms: '보증비율 상품별 상이(2026년 전액보증 축소), 보증료 별도',
     applyUrl: 'https://www.koreg.or.kr', sourceUrl: 'https://www.koreg.or.kr',
     require: { bizStatus: { include: ['운영'] }, employees: { max: 9 }, taxOk: { eq: '예' } },
     boost: [], docs: ['사업자등록증', '금융거래확인서', '부가가치세 과세표준증명', '대표자 신분증']
@@ -77,7 +81,7 @@ const PROGRAMS = [
     category: 'voucher', agency: '소상공인시장진흥공단',
     name: '스마트상점 기술보급',
     summary: '키오스크·테이블오더 등 스마트 기술 도입비 지원',
-    amountMax: 5000000, terms: '자부담 일부, 공급기업 풀 내 선택',
+    amountMax: 7000000, terms: '구입형 최대 700만원·렌탈형 연 350만원(최대 2년)·SW형 연 30만원 · 자부담 일부',
     applyUrl: 'https://www.sbiz.or.kr', sourceUrl: 'https://www.sbiz.or.kr',
     require: { bizStatus: { include: ['운영'] }, employees: { max: 9 }, industry: { include: ['음식점', '소매', '서비스'] } },
     boost: [], docs: ['사업자등록증', '견적서', '사업장 사진']
@@ -87,7 +91,7 @@ const PROGRAMS = [
     category: 'voucher', agency: '소상공인시장진흥공단',
     name: '소상공인 온라인 판로지원',
     summary: '온라인 입점·라이브커머스·콘텐츠 제작 지원',
-    amountMax: 3000000, terms: '항목별 바우처',
+    amountMax: 3000000, terms: '2026년 메뉴판식 통합신청(8개 중 최대 4개 선택)',
     applyUrl: 'https://www.sbiz.or.kr', sourceUrl: 'https://www.sbiz.or.kr',
     require: { bizStatus: { include: ['운영'] }, employees: { max: 9 }, onlineSales: { eq: '예' } },
     boost: [], docs: ['사업자등록증', '온라인몰 운영 확인서']
@@ -97,7 +101,7 @@ const PROGRAMS = [
     category: 'grant', agency: '근로복지공단',
     name: '두루누리 사회보험료 지원',
     summary: '소규모 사업장 저임금 근로자의 국민연금·고용보험료 일부 지원',
-    amountMax: null, terms: '보험료의 일정 비율, 근로자 요건 충족 시',
+    amountMax: null, terms: '월보수 270만원 미만 근로자, 국민연금·고용보험료 80% 지원(신규가입·최대 36개월)',
     applyUrl: 'https://insurancesupport.or.kr', sourceUrl: 'https://insurancesupport.or.kr',
     require: { bizStatus: { include: ['운영'] }, employees: { max: 9 }, hasWorker: { eq: '예' } },
     boost: [], docs: ['보험료 지원 신청서', '근로자 보수 자료', '4대보험 가입자명부']
@@ -107,7 +111,7 @@ const PROGRAMS = [
     category: 'grant', agency: '고용노동부',
     name: '유연근무 장려금',
     summary: '재택·시차출퇴근 등 유연근무 도입 사업주 장려금',
-    amountMax: null, terms: '근로자당 월 단위 지원',
+    amountMax: null, terms: '유형별 근로자당 월 지원(재택·원격·선택 월 최대 30만원 등, 2026년 개편)',
     applyUrl: 'https://www.ei.go.kr', sourceUrl: 'https://www.moel.go.kr',
     require: { bizStatus: { include: ['운영'] }, hasWorker: { eq: '예' } },
     boost: [], docs: ['취업규칙', '근태 기록', '유연근무 운영 내역', '근로계약서']
@@ -117,7 +121,7 @@ const PROGRAMS = [
     category: 'grant', agency: '고용노동부',
     name: '청년일자리도약장려금',
     summary: '취업애로 청년 정규직 채용 시 인건비 지원',
-    amountMax: null, terms: '채용 유지 기간에 따라 분할 지급',
+    amountMax: null, terms: '2026년 수도권형·비수도권형 개편, 근속 기간에 따라 지급',
     applyUrl: 'https://www.work24.go.kr', sourceUrl: 'https://www.moel.go.kr',
     require: { bizStatus: { include: ['운영'] }, hasWorker: { eq: '예' }, taxOk: { eq: '예' } },
     boost: [], docs: ['사업자등록증', '근로계약서', '급여이체 내역', '4대보험 가입자명부']
@@ -127,7 +131,7 @@ const PROGRAMS = [
     category: 'grant', agency: '중소기업중앙회',
     name: '노란우산공제 희망장려금',
     summary: '공제 신규 가입 소상공인 납입액 일부 지원 (지자체)',
-    amountMax: 1200000, terms: '지자체별 상이',
+    amountMax: null, terms: '지자체별 상이(대체로 월 1~3만원 × 최대 12회, 연 12만~36만원)',
     applyUrl: 'https://www.8899.or.kr', sourceUrl: 'https://www.8899.or.kr',
     require: { bizStatus: { include: ['운영'] }, employees: { max: 9 }, revenue: { max: 300000000 } },
     boost: [], docs: ['사업자등록증', '공제 가입증서', '소득금액증명']
@@ -149,7 +153,7 @@ const PROGRAMS = [
     category: 'grant', agency: '소상공인시장진흥공단',
     name: '희망리턴패키지 · 재도전 지원',
     summary: '사업정리 컨설팅, 재취업·재창업 교육과 장려금',
-    amountMax: null, terms: '교육 이수 연계, 항목별 상이',
+    amountMax: null, terms: '원스톱폐업지원 + 재기사업화(재창업·경영개선 시 사업화자금 최대 2,000만원, 자부담 50%)',
     applyUrl: 'https://hope.sbiz.or.kr', sourceUrl: 'https://hope.sbiz.or.kr',
     require: { bizStatus: { include: ['폐업예정', '폐업완료'] } },
     boost: [], docs: ['사업자등록증', '폐업사실증명', '교육 신청서']
