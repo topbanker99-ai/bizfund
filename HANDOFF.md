@@ -145,9 +145,42 @@ curl -s "https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do?crtfcKey=$BIZINFO_KEY&d
 ### 금지
 - "온더탑스튜디오" 키워드는 어떤 콘텐츠에도 노출 금지
 
+
 ---
 
-## 5. 시작하기
+## 5. 저장소에 없는 자료
+
+영상면접 이식용 원본(`02-영상면접/`, `_공통의존성/`, `ADAPTATION-자금진단.md`)은
+저장소에 없습니다. 웹 채팅에서 zip으로 주고받던 것이라 별도 보관 중입니다.
+
+영상면접 작업을 시작할 때 다음 중 하나로 준비하세요.
+
+1. 비공개 저장소를 하나 만들어 넣고 Claude Code에 함께 연결
+2. 작업 시점에 zip으로 업로드
+
+프롬프트 파일에 탑뱅커AI 면접 평가 기준이 들어 있어 공개 저장소에 그대로 올리면
+노출됩니다. 하드코딩된 키는 없으나(전부 `process.env`), 내용 자체가 자산이라
+비공개 보관을 권합니다.
+
+---
+
+## 6. 환경별 제약
+
+웹 클로드 코드나 샌드박스 환경은 외부 도메인 접근이 제한될 수 있습니다.
+실제로 웹 채팅 환경에서는 `bizinfo.go.kr` 호출이 차단돼 API 응답을 직접 못 봤습니다.
+
+접근이 막히면 이렇게 우회하세요.
+
+1. 코드를 고쳐 커밋 → GitHub Actions 러너는 외부 접근이 자유로움 → Actions 로그에서 결과 확인
+2. 또는 사용자가 로컬에서 curl 한 번 실행해 결과를 붙여넣기
+
+Actions 로그 확인 경로:
+https://github.com/topbanker99-ai/bizfund/actions/workflows/update-banners.yml
+→ 최신 실행 → `update` → `fetch banners` 단계 펼치기
+
+---
+
+## 7. 시작하기
 
 ```bash
 gh repo clone topbanker99-ai/bizfund
