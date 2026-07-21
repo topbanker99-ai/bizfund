@@ -191,7 +191,6 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
   padding:3px 9px;border-radius:999px}
 
 </style>
-<link rel="stylesheet" href="yeokgeom.css">
 </head>
 <body>
 
@@ -440,7 +439,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
 </section>
 
 
-<!-- ================= 경영 순발력 트레이닝 ================= -->
+<!-- ================= 알바 채용 도구 ================= -->
 <section class="view" id="v-reflex">
   <div class="wrap">
     <h1 class="h2s">알바 채용 도구</h1>
@@ -458,149 +457,6 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
       <a class="btn-next" style="display:inline-block;text-decoration:none" href="hire.html">테스트 준비하기 →</a>
     </div>
 
-    <h2 style="font-size:17px;font-weight:800;color:var(--navy);margin:26px 0 8px">사장님 순발력 게임</h2>
-    <p style="font-size:13.5px;color:var(--sub);margin-bottom:8px;max-width:660px">
-      사장님이 직접 해보는 두뇌 게임입니다. 채용과는 관계없이 심심풀이로 만들어 둔 코너입니다.
-    </p>
-    <div class="res-disclaim" style="margin-bottom:22px">
-      가볍게 해보는 자기점검 도구입니다. 게임 점수가 사업 능력이나 자금관리 실력을 보여주는 것은 아니며,
-      자금진단 결과나 대출 심사와는 아무 관계가 없습니다. 기록은 이 브라우저에만 남습니다.
-    </div>
-<div id="yg-app" class="yg-onmenu">
-
-  <div id="yg-hero"></div>
-  <div id="yg-live" class="yg-sr" aria-live="assertive"></div>
-
-  <main class="yg-main">
-
-    <!-- 메뉴 -->
-    <section id="yg-menu" class="yg-screen yg-active">
-      <div id="yg-grid-open"></div>
-      <div class="yg-sec-label" id="yg-soon-label" style="margin-top:24px;"><h2>업데이트 예정</h2></div>
-      <div class="yg-grid" id="yg-grid-soon"></div>
-      <div id="yg-profile-wrap"></div>
-    </section>
-
-    <!-- 튜토리얼 -->
-    <section id="yg-tutorial" class="yg-screen">
-      <div class="yg-panel">
-        <div class="yg-tut-head">
-          <div class="yg-tut-ico" id="yg-tut-ico"></div>
-          <div>
-            <div class="yg-panel-eyebrow">HOW TO PLAY</div>
-            <h2 id="yg-tut-name"></h2>
-          </div>
-        </div>
-        <div class="yg-meta" id="yg-tut-meta" style="margin-top:10px;"></div>
-        <div id="yg-tut-body"></div>
-        <div class="yg-panel-actions">
-          <button class="yg-btn ghost" data-yg="menu">목록으로</button>
-          <button class="yg-btn pri" data-yg="begin">연습 시작</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 라운드 안내 -->
-    <section id="yg-roundintro" class="yg-screen">
-      <div class="yg-panel">
-        <div class="yg-panel-eyebrow" id="yg-ri-eyebrow">ROUND 1</div>
-        <h2 id="yg-ri-title"></h2>
-        <div class="yg-meta" id="yg-ri-meta"></div>
-        <div id="yg-ri-brief"></div>
-        <div class="yg-rule-box">
-          <h4>이번 라운드 규칙</h4>
-          <div id="yg-ri-rule" style="font-size:14.5px; line-height:1.7;"></div>
-        </div>
-        <div class="yg-panel-actions">
-          <button class="yg-btn ghost" data-yg="quit">나가기</button>
-          <button class="yg-btn gold" data-yg="roundgo">라운드 시작</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 카운트다운 -->
-    <section id="yg-countdown" class="yg-screen">
-      <div class="yg-count-wrap">
-        <div id="yg-count-visual"></div>
-        <p id="yg-count-sub">곧 시작합니다</p>
-      </div>
-    </section>
-
-    <!-- 게임 -->
-    <section id="yg-game" class="yg-screen">
-      <div class="yg-gamebar">
-        <h3 id="yg-g-name"></h3>
-        <span class="yg-chip mode" id="yg-g-mode"></span>
-        <span class="yg-chip rd" id="yg-g-round"></span>
-        <span class="yg-chip" id="yg-g-prog"></span>
-        <span class="yg-chip combo" id="yg-g-combo"></span>
-        <button class="yg-quit" id="yg-g-quit" data-yg="quit" aria-label="게임 나가기">✕<span class="yg-quit-lb">나가기</span></button>
-      </div>
-      <div class="yg-timerbar"><div class="yg-timerfill" id="yg-timerfill"></div></div>
-      <div class="yg-progdots" id="yg-progdots"></div>
-      <div class="yg-stage" id="yg-stage"></div>
-      <div class="yg-controls" id="yg-controls"></div>
-    </section>
-
-    <!-- 결과 -->
-    <section id="yg-results" class="yg-screen">
-      <div class="yg-panel">
-        <div class="yg-rank-wrap">
-          <div class="yg-rank" id="yg-r-rank">A</div>
-          <h2 id="yg-r-name"></h2>
-          <p id="yg-r-sub"></p>
-          <p class="yg-rank-legend">등급 기준 — S 90%+ · A 75%+ · B 60%+</p>
-        </div>
-        <div class="yg-record" id="yg-r-record" style="display:none"></div>
-        <div class="yg-stats" id="yg-r-stats"></div>
-        <div class="yg-rounds" id="yg-r-rounds"></div>
-        <div class="yg-trend" id="yg-r-trend" style="display:none"></div>
-        <div class="yg-review" id="yg-r-review"></div>
-        <div class="yg-coach" id="yg-r-coach"></div>
-        <button class="yg-btn nextrec" id="yg-r-next" data-yg="nextgame" style="display:none"></button>
-        <button class="yg-btn save" data-yg="savecard">결과 카드 이미지 저장 (1080×1080)</button>
-        <div class="yg-panel-actions">
-          <button class="yg-btn ghost" data-yg="menu">게임 목록</button>
-          <button class="yg-btn pri" data-yg="retry">다시 도전</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="yg-mock-intro" class="yg-screen">
-      <div class="yg-panel">
-        <div class="yg-panel-eyebrow">MOCK EXAM · 실전 모의</div>
-        <h2 id="yg-mock-title"></h2>
-        <div class="yg-meta" id="yg-mock-prog"></div>
-        <div class="yg-rule-box" id="yg-mock-rule"></div>
-        <p class="yg-mock-disc">본 트레이너는 자기점검용 연습 도구이며, 공인된 심리검사나 직무적성 진단이 아닙니다.</p>
-        <div class="yg-panel-actions">
-          <button class="yg-btn ghost" data-yg="quit">중단</button>
-          <button class="yg-btn gold" data-yg="mockgo">시작</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="yg-mock-report" class="yg-screen">
-      <div class="yg-panel">
-        <div class="yg-rank-wrap">
-          <div class="yg-rank" id="yg-mock-rank"></div>
-          <h2 id="yg-mock-rank-name">전체 모의고사 결과</h2>
-          <p id="yg-mock-rank-sub"></p>
-          <p class="yg-rank-legend">등급 기준 — S 90%+ · A 75%+ · B 60%+</p>
-        </div>
-        <div id="yg-mock-list"></div>
-        <div id="yg-mock-radar"></div>
-        <div class="yg-coach" id="yg-mock-coach"></div>
-        <div class="yg-panel-actions">
-          <button class="yg-btn ghost" data-yg="menu">메뉴로</button>
-          <button class="yg-btn pri" data-yg="mockretry">다시 응시</button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-</div>
   </div>
 </section>
 
@@ -1128,6 +984,5 @@ function bnrLoad(){
   bnrLoad();
 })();
 </script>
-<script src="yeokgeom.js"></script>
 </body>
 </html>
