@@ -1,79 +1,118 @@
 /**
- * 기업마당(bizinfo.go.kr) 지원사업 공고를 받아 banners.json의 feed 부분만 갱신합니다.
- * GitHub Actions에서 하루 한 번 실행합니다. 인증키는 저장소 Secrets(BIZINFO_KEY)에 둡니다.
+ * 기업마당 지원사업 공고 → banners.json 의 feed 갱신
  *
- * 브라우저에서 직접 부르지 않는 이유
- *  - 인증키가 HTML 소스에 노출됩니다.
- *  - 기업마당·공공데이터포털은 CORS 헤더를 주지 않아 브라우저 호출이 막힙니다.
- * 그래서 서버(액션)에서 받아 JSON으로 저장소에 커밋하고, 화면은 그 파일만 읽습니다.
+ * GitHub Actions 에서 하루 한 번 실행합니다. 인증키는 Secrets(BIZINFO_KEY).
+ * 브라우저에서 직접 부르지 않는 이유: 키가 소스에 노출되고, CORS 가 막히고,
+ * 개발계정은 하루 1,000건이라 방문자마다 호출하면 금방 소진됩니다.
+ *
+ * 호출은 한 번만 합니다. 분야 필터는 파라미터 대신 아래 정규식으로 처리합니다.
  */
 import fs from 'node:fs/promises';
 
 const KEY = process.env.BIZINFO_KEY;
 const OUT = 'banners.json';
+const API = 'https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do';
 
-// 소상공인에게 의미 있는 분야만. 기업마당 분야코드: 01금융 02기술 03인력 04수출 05내수 06창업 07경영 09기타
-const FIELDS = ['01', '06', '07'];
-const KEEP = /소상공인|자영업|창업|점포|폐업|재기|경영개선|융자|보증|바우처|컨설팅|임대료|판로/;
-const DROP = /연구개발|R&D|특허|해외진출|수출바우처|스마트공장|대학|연구소/;
+// 소상공인에게 의미 있는 공고만 남깁니다.
+const KEEP = /소상공인|자영업|점포|창업|폐업|재기|경영개선|경영안정|융자|보증|바우처|컨설팅|임대료|판로|상권|전통시장/;
+const DROP = /연구개발|R&D|특허|기술개발|해외진출|수출바우처|스마트공장|대학|연구소|시제품|실증|중견기업/;
 
-const todayISO = () => new Date().toISOString().slice(0, 10);
-const clean = (s) => String(s ?? '').replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+// 한국 기준 날짜. 액션은 UTC 21:00(=KST 익일 06:00)에 돌기 때문에
+// UTC 날짜를 그대로 쓰면 화면에서 이미 지난 날짜로 취급된다.
+const kstDate = (offsetDays = 0) =>
+  new Date(Date.now() + 9 * 3600000 + offsetDays * 86400000).toISOString().slice(0, 10);
+const today = () => kstDate(0);
+const clean = (s) => String(s ?? '').replace(/<[^>]*>/g, '').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+const ymd = (s) => String(s ?? '').replace(/[^0-9]/g, '').slice(0, 8);
 
 function daysLeft(end) {
-  if (!end) return null;
-  const m = String(end).replace(/[^0-9]/g, '');
+  const m = ymd(end);
   if (m.length < 8) return null;
   const d = new Date(`${m.slice(0,4)}-${m.slice(4,6)}-${m.slice(6,8)}T23:59:59+09:00`);
+  if (isNaN(d)) return null;
   return Math.ceil((d - new Date()) / 86400000);
 }
 
-async function fetchField(code) {
-  const url = new URL('https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do');
-  url.searchParams.set('crtfcKey', KEY);
-  url.searchParams.set('dataType', 'json');
-  url.searchParams.set('searchLclasId', code);
-  url.searchParams.set('hashtags', '소상공인');
-  const r = await fetch(url, { headers: { 'User-Agent': 'sajangnim-seorap/1.0' } });
-  if (!r.ok) throw new Error(`${code}: HTTP ${r.status}`);
-  const j = await r.json();
-  return j?.jsonArray ?? j?.response?.body?.items ?? [];
+// 응답 모양이 바뀌어도 배열을 찾아냅니다.
+function pickArray(j) {
+  if (Array.isArray(j)) return j;
+  for (const k of ['jsonArray', 'items', 'item', 'list', 'data']) {
+    if (Array.isArray(j?.[k])) return j[k];
+  }
+  const b = j?.response?.body;
+  if (Array.isArray(b?.items)) return b.items;
+  if (Array.isArray(b?.items?.item)) return b.items.item;
+  for (const v of Object.values(j ?? {})) if (Array.isArray(v) && v.length && typeof v[0] === 'object') return v;
+  return [];
 }
 
 function toBanner(it) {
-  const title = clean(it.pblancNm || it.title);
-  const org   = clean(it.jrsdInsttNm || it.excInsttNm || '');
-  const end   = it.reqstEndDe || it.reqstEndEnd || '';
+  const title = clean(it.pblancNm || it.polcyNm || it.title || it.pblancTtl);
+  const org   = clean(it.jrsdInsttNm || it.excInsttNm || it.instNm || '');
+  const end   = it.reqstEndDe || it.reqstEndEnd || it.rceptEndDe || it.endDe || '';
   const left  = daysLeft(end);
-  let link = clean(it.pblancUrl || it.rceptEngnHmpgUrl || '');
-  if (link && !/^https?:/.test(link)) link = 'https://www.bizinfo.go.kr' + link;
+
+  let link = clean(it.pblancUrl || it.rceptEngnHmpgUrl || it.detailUrl || it.link || '');
+  if (link && !/^https?:/i.test(link)) link = 'https://www.bizinfo.go.kr' + (link.startsWith('/') ? '' : '/') + link;
 
   let tag = '지원사업', tagType = '';
-  if (left !== null && left <= 7) { tag = `마감 D-${Math.max(left, 0)}`; tagType = 'urgent'; }
+  if (left !== null && left <= 7)       { tag = `마감 D-${Math.max(left, 0)}`; tagType = 'urgent'; }
   else if (left !== null && left <= 30) { tag = `마감 D-${left}`; }
 
-  const sub = [org, end ? `신청 마감 ${String(end).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')}` : '']
-    .filter(Boolean).join(' · ');
+  const m = ymd(end);
+  const endTxt = m.length === 8 ? `신청 마감 ${m.slice(0,4)}.${m.slice(4,6)}.${m.slice(6,8)}` : '';
+  const sub = [org, endTxt].filter(Boolean).join(' · ');
 
-  return { tag, tagType, title, sub, url: link || 'https://www.bizinfo.go.kr', until: todayISO(), _left: left };
+  // 노출 기한은 공고 마감일. 마감일을 못 읽으면 2주 뒤까지만 띄운다.
+  const until = m.length === 8 ? `${m.slice(0,4)}-${m.slice(4,6)}-${m.slice(6,8)}` : kstDate(14);
+
+  return { tag, tagType, title, sub, url: link || 'https://www.bizinfo.go.kr', until, _left: left };
 }
 
-const main = async () => {
+async function main() {
   const cur = JSON.parse(await fs.readFile(OUT, 'utf8'));
 
   if (!KEY) {
-    console.log('BIZINFO_KEY 없음 — feed를 비우고 고정 배너만 유지합니다.');
-    cur.feed = []; cur.updated = todayISO(); cur.source = 'manual';
+    console.log('BIZINFO_KEY 없음 — 고정 배너만 유지합니다. (정상)');
+    cur.feed = [];
+    cur.updated = today();
+    cur.source = 'manual';
     await fs.writeFile(OUT, JSON.stringify(cur, null, 2) + '\n');
     return;
   }
 
-  const raw = [];
-  for (const c of FIELDS) {
-    try { raw.push(...(await fetchField(c))); }
-    catch (e) { console.error('수집 실패', c, e.message); }
+  const url = new URL(API);
+  url.searchParams.set('crtfcKey', KEY);
+  url.searchParams.set('dataType', 'json');
+  url.searchParams.set('hashtags', '소상공인');
+  url.searchParams.set('pageUnit', '100');
+
+  console.log('호출:', API + '?crtfcKey=***&dataType=json&hashtags=소상공인&pageUnit=100');
+
+  const res = await fetch(url, { headers: { 'User-Agent': 'sajangnim-seorap/1.0', Accept: 'application/json' } });
+  console.log('응답 코드:', res.status);
+  const text = await res.text();
+
+  if (!res.ok) {
+    console.error('호출 실패. 응답 앞부분:', text.slice(0, 300));
+    console.error('기존 feed 를 그대로 둡니다.');
+    return;
   }
-  console.log(`수집 ${raw.length}건`);
+
+  let json;
+  try { json = JSON.parse(text); }
+  catch {
+    console.error('JSON 파싱 실패. 인증키가 승인 전이거나 잘못됐을 수 있습니다.');
+    console.error('응답 앞부분:', text.slice(0, 300));
+    return;
+  }
+
+  const raw = pickArray(json);
+  console.log('수집:', raw.length, '건');
+  if (!raw.length) {
+    console.log('받은 데이터가 없어 기존 feed 를 유지합니다. 응답 키:', Object.keys(json ?? {}).join(', '));
+    return;
+  }
 
   const seen = new Set();
   const feed = raw
@@ -86,16 +125,19 @@ const main = async () => {
     .slice(0, 4)
     .map(({ _left, ...b }) => b);
 
-  console.log(`선별 ${feed.length}건`);
-  feed.forEach(b => console.log(' -', b.tag, b.title.slice(0, 50)));
+  console.log('선별:', feed.length, '건');
+  feed.forEach(b => console.log('  -', b.tag, '|', b.title.slice(0, 46)));
 
-  if (!feed.length) { console.log('조건에 맞는 공고 없음 — 기존 feed 유지'); return; }
+  if (!feed.length) {
+    console.log('조건에 맞는 공고가 없어 기존 feed 를 유지합니다.');
+    return;
+  }
 
   cur.feed = feed;
-  cur.updated = todayISO();
+  cur.updated = today();
   cur.source = 'bizinfo';
   await fs.writeFile(OUT, JSON.stringify(cur, null, 2) + '\n');
   console.log('banners.json 갱신 완료');
-};
+}
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch(e => { console.error('오류:', e.message); process.exit(1); });
