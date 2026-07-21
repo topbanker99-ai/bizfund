@@ -1,1 +1,42 @@
+name: update-banners
 
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 21 * * *'
+  push:
+    paths:
+      - '.github/workflows/update-banners.yml'
+      - 'scripts/fetch-banners.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: fetch banners
+        env:
+          BIZINFO_KEY: ${{ secrets.BIZINFO_KEY }}
+        run: node scripts/fetch-banners.mjs
+
+      - name: commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add banners.json
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "chore: update banners"
+            git push
+          fi
