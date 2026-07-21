@@ -25,3 +25,8 @@
 ## 배포
 정적 배포(GitHub Pages·Cloudflare Pages·Vercel)는 `public/` 만 올리면 됨.
 서버 사용 시: `npm i && BIZINFO_API_KEY=... npm start`
+
+## 표준근로계약서 생성기 (contract.html)
+서버 없이 동작하는 단일 HTML. 조항 라이브러리는 파일 안에 임베드되어 있습니다.
+- `clause-library.json` — 조항 원본(v0.2.0). 수정 후 HTML 안의 `const LIB = {...}` 에 반영하세요.
+- 접속: `/contract.html` · 자금진단 사장님 도구 탭에서 링크됨

@@ -6,7 +6,7 @@ const LABELS = {
   bizStatus: '사업 상태', industry: '업종', bizAge: '업력',
   employees: '상시근로자', revenue: '연매출', ownerAge: '대표 나이',
   purpose: '자금 용도', hasWorker: '직원 유무', onlineSales: '온라인 판매',
-  yellowUmbrella: '노란우산 가입', taxOk: '세금 체납'
+  yellowUmbrella: '노란우산 가입', taxOk: '세금 체납', repayHard: '상환 어려움'
 };
 
 function numOk(rule, v) {
@@ -45,7 +45,8 @@ function checkProgram(p, a) {
     hasWorker: r.hasWorker ? eqOk(r.hasWorker, a.hasWorker) : true,
     onlineSales: r.onlineSales ? eqOk(r.onlineSales, a.onlineSales) : true,
     yellowUmbrella: r.yellowUmbrella ? eqOk(r.yellowUmbrella, a.yellowUmbrella) : true,
-    taxOk: r.taxOk ? eqOk(r.taxOk, a.taxOk) : true
+    taxOk: r.taxOk ? eqOk(r.taxOk, a.taxOk) : true,
+    repayHard: r.repayHard ? eqOk(r.repayHard, a.repayHard) : true
   };
   const failed = [], unknown = [], reasons = [];
   for (const k in checks) {

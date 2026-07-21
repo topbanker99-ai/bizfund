@@ -97,11 +97,44 @@ section.view.on{display:block}
 .h2s{font-size:24px;font-weight:800;color:var(--navy);margin-bottom:24px}
 /* 회생·파산 */
 .help-card{border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:14px;background:#fff}
+/* --- 간이진단 (종로 사전진단 패턴) --- */
+.calc-box{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--bg2);margin-bottom:28px}
+.calc-head{margin-bottom:20px}
+.ctabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.ctab{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:700;color:var(--sub)}
+.ctab.on{border-color:var(--blue);background:var(--blue);color:#fff}
+.cfac{margin-bottom:18px}
+.cfac .cq{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:9px}
+.cops{display:grid;gap:7px}
+.cop{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 15px;font-size:13.5px;text-align:left;color:var(--ink)}
+.cop:hover{border-color:var(--blue)}
+.cop.on{border-color:var(--blue);background:var(--blue-soft);font-weight:700;color:var(--navy)}
+.r-empty{margin-top:18px;padding:20px;border:1px dashed var(--line);border-radius:12px;text-align:center;font-size:13px;color:var(--faint);background:#fff}
+.gauge-wrap{text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:18px}
+.gauge-wrap svg{max-width:280px;width:100%}
+.gband{font-size:26px;font-weight:800;margin-top:-6px}
+.grange{font-size:15px;color:var(--sub);font-weight:700}
+.gcaption{font-size:11.5px;color:var(--faint);margin-top:6px}
+.rbreak{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:12px}
+.rbreak h4{font-size:13.5px;color:var(--navy);margin-bottom:9px}
+.frow{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.frow .dot{width:6px;height:6px;border-radius:50%;flex:none}
+.frow.fav .dot{background:var(--ok)}
+.frow.unf .dot{background:#D06B57}
+.frow .ft{flex:1;color:var(--sub)}
+.frow .fw{font-weight:800;font-size:12px;color:var(--faint)}
+.laws{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:12px}
+.laws h4{font-size:13.5px;color:var(--navy);margin-bottom:11px}
+.law{border-left:3px solid var(--blue);padding:2px 0 2px 12px;margin-bottom:12px}
+.law .lname{font-size:12.5px;font-weight:800;color:var(--blue)}
+.law .lpoint{font-size:13px;color:var(--sub);margin-top:3px}
+.cwarn{background:#FBEFEF;border:1px solid #EFD3D3;border-radius:12px;padding:15px 17px;margin-top:12px;font-size:12.5px;color:#8C3A3A;line-height:1.65}
 .help-card b{display:block;color:var(--navy);font-size:16px;margin-bottom:8px}
 .help-card p{font-size:13.5px;color:var(--sub)}
 .help-tel{display:inline-block;margin-top:10px;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px}
 footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color:var(--faint);text-align:center;line-height:1.8}
 </style>
+<link rel="stylesheet" href="yeokgeom.css">
 </head>
 <body>
 
@@ -115,6 +148,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
       <a href="#rates" data-nav="rates" onclick="return go('rates')">금리 비교</a>
       <a href="#tools" data-nav="tools" onclick="return go('tools')">사장님 도구</a>
       <a href="#recovery" data-nav="recovery" onclick="return go('recovery')">회생·파산</a>
+      <a href="#reflex" data-nav="reflex" onclick="return go('reflex')">경영 순발력</a>
     </nav>
   </div>
 </header>
@@ -131,6 +165,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
       <div><b>맞춤 진단</b><span>업종·업력·매출 기준으로 신청 가능 / 확인 필요 / 해당 없음을 나눠 보여줍니다.</span></div>
       <div><b>서류 체크리스트</b><span>진단 결과에 맞는 필요서류를 발급처와 함께 한 번에 정리합니다.</span></div>
       <div><b>폐업·재기 지원</b><span>철거비, 채무조정, 폐업공제금 등 정리 단계의 지원 제도까지 안내합니다.</span></div>
+      <div><b>경영 순발력</b><span>짧은 게임으로 판단력과 집중력을 점검해 보는 코너입니다.</span></div>
     </div>
   </div>
 </section>
@@ -195,6 +230,18 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
   <div class="wrap" style="max-width:720px">
     <h1 class="h2s">사장님 도구</h1>
 
+    <div class="p-card" style="margin-bottom:20px;border-color:var(--blue);background:var(--blue-soft)">
+      <div class="p-name" style="margin-bottom:6px">표준근로계약서 생성기</div>
+      <div class="p-sum" style="margin-bottom:6px">
+        업종·사업장 규모·고용형태를 고르면 조건에 맞는 조항만 골라 계약서를 만들어 드립니다.
+        법정 필수 기재사항 누락과 최저임금 미달을 자동으로 잡아내고, 위약금·지각 벌금 같은 무효 조항은 차단합니다.
+      </div>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:14px">
+        음식점·카페·건설·미용·IT·학원·제조·운수배달·청소경비·농업 10개 업종 / 정규·계약·단시간·일용·연소·외국인 6개 고용형태
+      </div>
+      <a class="btn-next" style="display:inline-block;text-decoration:none" href="contract.html">계약서 만들러 가기 →</a>
+    </div>
+
     <div class="p-card" style="margin-bottom:20px">
       <div class="p-name" style="margin-bottom:12px">알바 인건비·4대보험 계산기</div>
       <div class="tool-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
@@ -209,7 +256,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
     </div>
 
     <div class="p-card">
-      <div class="p-name" style="margin-bottom:12px">표준근로계약서 생성 (단시간근로자)</div>
+      <div class="p-name" style="margin-bottom:4px">표준근로계약서 — 간이 생성 (단시간근로자)</div><div style="font-size:12px;color:var(--faint);margin-bottom:12px">빠르게 한 장만 필요할 때 쓰세요. 업종별 조항과 법령 검증이 필요하면 위의 생성기를 이용하세요.</div>
       <div class="tool-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
         <label>사업장(상호)<input class="q-input" id="kBiz" style="margin-top:4px"></label>
         <label>사업주 성명<input class="q-input" id="kOwner" style="margin-top:4px"></label>
@@ -234,6 +281,21 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
       감당하기 어려운 채무는 법이 정한 절차로 정리할 수 있습니다. 부끄러운 일이 아니라 재기를 위해 국가가 만들어 둔 제도를 이용하는 것입니다. 상담은 아래 공공기관에서 무료로 시작할 수 있습니다.
     </p>
 
+    <!-- 간이진단 (종로 사전진단 패턴 이식) -->
+    <div class="calc-box">
+      <div class="calc-head">
+        <div class="eyebrow" style="margin-bottom:10px">간이진단</div>
+        <h2 style="font-size:20px;font-weight:800;color:var(--navy);line-height:1.4">내 상황, 법 기준으로 미리 짚어보기</h2>
+        <p style="font-size:13.5px;color:var(--sub);margin-top:8px">알아보려는 절차를 고르고 해당하는 항목을 선택하면, 채무자회생법 기준으로 유리·불리 요소와 참고 지표를 보여드립니다.</p>
+      </div>
+      <div class="ctabs" id="ctabs"></div>
+      <div id="cfactors"></div>
+      <button class="btn-next" id="runCalc" style="margin-top:8px">이 내용으로 사전진단 →</button>
+      <div id="rEmpty" class="r-empty">항목을 선택하고 진단 버튼을 누르면 결과가 표시됩니다.</div>
+      <div id="rResult" style="display:none"></div>
+    </div>
+
+    <div id="recoGuide">
     <div class="help-card"><b>1. 채무조정 (신용회복위원회)</b>
       <p>연체 전·후 채무의 이자 감면, 상환기간 연장 등을 조정합니다. 법원 절차 전에 가장 먼저 검토할 단계입니다.</p>
       <span class="help-tel">☎ 1600-5500</span></div>
@@ -253,10 +315,162 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
     <div class="res-disclaim" style="margin-top:24px">
       본 안내는 일반 정보이며 법률 자문이 아닙니다. 실제 절차는 개인별 채무 구성에 따라 달라지므로,
       신용회복위원회(1600-5500), 대한법률구조공단(132) 또는 변호사·법무사 상담을 통해 확인하세요.</div>
+    </div>
 
     <div style="text-align:center;margin-top:24px">
       <a class="btn-xl" href="#diagnose" onclick="return go('diagnose')">폐업·재기 지원금 진단하기</a>
     </div>
+  </div>
+</section>
+
+
+<!-- ================= 경영 순발력 트레이닝 ================= -->
+<section class="view" id="v-reflex">
+  <div class="wrap">
+    <h1 class="h2s">경영 순발력 트레이닝</h1>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:8px;max-width:660px">
+      짧은 게임으로 판단 속도와 집중력을 점검해 보는 코너입니다. 충동을 누르는 힘, 여러 가지를 동시에 기억하는 힘,
+      숫자를 빠르게 가늠하는 힘처럼 매장을 돌리면서 매일 쓰는 능력들을 다룹니다.
+    </p>
+    <div class="res-disclaim" style="margin-bottom:22px">
+      가볍게 해보는 자기점검 도구입니다. 게임 점수가 사업 능력이나 자금관리 실력을 보여주는 것은 아니며,
+      자금진단 결과나 대출 심사와는 아무 관계가 없습니다. 기록은 이 브라우저에만 남고 어디에도 전송되지 않습니다.
+    </div>
+<div id="yg-app" class="yg-onmenu">
+
+  <div id="yg-hero"></div>
+  <div id="yg-live" class="yg-sr" aria-live="assertive"></div>
+
+  <main class="yg-main">
+
+    <!-- 메뉴 -->
+    <section id="yg-menu" class="yg-screen yg-active">
+      <div id="yg-grid-open"></div>
+      <div class="yg-sec-label" id="yg-soon-label" style="margin-top:24px;"><h2>업데이트 예정</h2></div>
+      <div class="yg-grid" id="yg-grid-soon"></div>
+      <div id="yg-profile-wrap"></div>
+    </section>
+
+    <!-- 튜토리얼 -->
+    <section id="yg-tutorial" class="yg-screen">
+      <div class="yg-panel">
+        <div class="yg-tut-head">
+          <div class="yg-tut-ico" id="yg-tut-ico"></div>
+          <div>
+            <div class="yg-panel-eyebrow">HOW TO PLAY</div>
+            <h2 id="yg-tut-name"></h2>
+          </div>
+        </div>
+        <div class="yg-meta" id="yg-tut-meta" style="margin-top:10px;"></div>
+        <div id="yg-tut-body"></div>
+        <div class="yg-panel-actions">
+          <button class="yg-btn ghost" data-yg="menu">목록으로</button>
+          <button class="yg-btn pri" data-yg="begin">연습 시작</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 라운드 안내 -->
+    <section id="yg-roundintro" class="yg-screen">
+      <div class="yg-panel">
+        <div class="yg-panel-eyebrow" id="yg-ri-eyebrow">ROUND 1</div>
+        <h2 id="yg-ri-title"></h2>
+        <div class="yg-meta" id="yg-ri-meta"></div>
+        <div id="yg-ri-brief"></div>
+        <div class="yg-rule-box">
+          <h4>이번 라운드 규칙</h4>
+          <div id="yg-ri-rule" style="font-size:14.5px; line-height:1.7;"></div>
+        </div>
+        <div class="yg-panel-actions">
+          <button class="yg-btn ghost" data-yg="quit">나가기</button>
+          <button class="yg-btn gold" data-yg="roundgo">라운드 시작</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 카운트다운 -->
+    <section id="yg-countdown" class="yg-screen">
+      <div class="yg-count-wrap">
+        <div id="yg-count-visual"></div>
+        <p id="yg-count-sub">곧 시작합니다</p>
+      </div>
+    </section>
+
+    <!-- 게임 -->
+    <section id="yg-game" class="yg-screen">
+      <div class="yg-gamebar">
+        <h3 id="yg-g-name"></h3>
+        <span class="yg-chip mode" id="yg-g-mode"></span>
+        <span class="yg-chip rd" id="yg-g-round"></span>
+        <span class="yg-chip" id="yg-g-prog"></span>
+        <span class="yg-chip combo" id="yg-g-combo"></span>
+        <button class="yg-quit" id="yg-g-quit" data-yg="quit" aria-label="게임 나가기">✕<span class="yg-quit-lb">나가기</span></button>
+      </div>
+      <div class="yg-timerbar"><div class="yg-timerfill" id="yg-timerfill"></div></div>
+      <div class="yg-progdots" id="yg-progdots"></div>
+      <div class="yg-stage" id="yg-stage"></div>
+      <div class="yg-controls" id="yg-controls"></div>
+    </section>
+
+    <!-- 결과 -->
+    <section id="yg-results" class="yg-screen">
+      <div class="yg-panel">
+        <div class="yg-rank-wrap">
+          <div class="yg-rank" id="yg-r-rank">A</div>
+          <h2 id="yg-r-name"></h2>
+          <p id="yg-r-sub"></p>
+          <p class="yg-rank-legend">등급 기준 — S 90%+ · A 75%+ · B 60%+</p>
+        </div>
+        <div class="yg-record" id="yg-r-record" style="display:none"></div>
+        <div class="yg-stats" id="yg-r-stats"></div>
+        <div class="yg-rounds" id="yg-r-rounds"></div>
+        <div class="yg-trend" id="yg-r-trend" style="display:none"></div>
+        <div class="yg-review" id="yg-r-review"></div>
+        <div class="yg-coach" id="yg-r-coach"></div>
+        <button class="yg-btn nextrec" id="yg-r-next" data-yg="nextgame" style="display:none"></button>
+        <button class="yg-btn save" data-yg="savecard">결과 카드 이미지 저장 (1080×1080)</button>
+        <div class="yg-panel-actions">
+          <button class="yg-btn ghost" data-yg="menu">게임 목록</button>
+          <button class="yg-btn pri" data-yg="retry">다시 도전</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="yg-mock-intro" class="yg-screen">
+      <div class="yg-panel">
+        <div class="yg-panel-eyebrow">MOCK EXAM · 실전 모의</div>
+        <h2 id="yg-mock-title"></h2>
+        <div class="yg-meta" id="yg-mock-prog"></div>
+        <div class="yg-rule-box" id="yg-mock-rule"></div>
+        <p class="yg-mock-disc">본 트레이너는 자기점검용 연습 도구이며, 공인된 심리검사나 직무적성 진단이 아닙니다.</p>
+        <div class="yg-panel-actions">
+          <button class="yg-btn ghost" data-yg="quit">중단</button>
+          <button class="yg-btn gold" data-yg="mockgo">시작</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="yg-mock-report" class="yg-screen">
+      <div class="yg-panel">
+        <div class="yg-rank-wrap">
+          <div class="yg-rank" id="yg-mock-rank"></div>
+          <h2 id="yg-mock-rank-name">전체 모의고사 결과</h2>
+          <p id="yg-mock-rank-sub"></p>
+          <p class="yg-rank-legend">등급 기준 — S 90%+ · A 75%+ · B 60%+</p>
+        </div>
+        <div id="yg-mock-list"></div>
+        <div id="yg-mock-radar"></div>
+        <div class="yg-coach" id="yg-mock-coach"></div>
+        <div class="yg-panel-actions">
+          <button class="yg-btn ghost" data-yg="menu">메뉴로</button>
+          <button class="yg-btn pri" data-yg="mockretry">다시 응시</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
   </div>
 </section>
 
@@ -314,7 +528,7 @@ const PROGRAMS=[
   require:{bizStatus:{include:['폐업예정','폐업완료']}},
   boost:[],docs:['사업자등록증','폐업사실증명','교육 신청서']},
  {id:'fresh-start',tier:1,category:'debt',agency:'한국자산관리공사(캠코)',name:'새출발기금 채무조정',summary:'폐업·부실 소상공인 대출 채무조정(기간 연장·금리 인하·원금 감면)',amountMax:null,terms:'심사에 따라 조정 내용 결정',applyUrl:'https://www.kamco.or.kr',
-  require:{bizStatus:{include:['운영','폐업예정','폐업완료']}},
+  require:{bizStatus:{include:['운영','폐업예정','폐업완료']},repayHard:{eq:'예'}},
   boost:[],docs:['채무 확인 서류','소득 증빙','사업자등록증 또는 폐업사실증명']},
  {id:'noran-close',tier:1,category:'grant',agency:'중소기업중앙회',name:'노란우산 폐업공제금',summary:'노란우산 가입자가 폐업 시 납입 공제금 수령(압류 방지 자산)',amountMax:null,terms:'납입액+이자, 폐업 사유 발생 시',applyUrl:'https://www.8899.or.kr',
   require:{bizStatus:{include:['폐업예정','폐업완료']},yellowUmbrella:{eq:'예'}},
@@ -337,11 +551,13 @@ const QUESTIONS=[
  {key:'hasWorker',title:'4대보험에 가입한 직원이 있나요?',opts:[['예','있다'],['아니오','없다']]},
  {key:'onlineSales',title:'온라인 판매(스토어·배달앱 등)를 하고 있나요?',opts:[['예','하고 있다'],['아니오','하지 않는다']]},
  {key:'yellowUmbrella',title:'노란우산공제에 가입되어 있나요?',opts:[['예','가입됨'],['아니오','미가입'],['모름','잘 모르겠다']]},
- {key:'taxOk',title:'국세·지방세 체납이 없나요?',opts:[['예','체납 없음'],['아니오','체납 있음'],['모름','확인 필요']]}
+ {key:'taxOk',title:'국세·지방세 체납이 없나요?',opts:[['예','체납 없음'],['아니오','체납 있음'],['모름','확인 필요']]},
+ {key:'repayHard',title:'대출 상환에 어려움이 있나요?',opts:[
+  ['예','연체 중이거나 상환이 어렵다'],['아니오','정상적으로 상환하고 있다'],['모름','잘 모르겠다']]}
 ];
 
 /* ================= 매칭 엔진 ================= */
-const LABELS={bizStatus:'사업 상태',industry:'업종',bizAge:'업력',employees:'상시근로자',revenue:'연매출',ownerAge:'대표 나이',purpose:'자금 용도',hasWorker:'직원 유무',onlineSales:'온라인 판매',yellowUmbrella:'노란우산 가입',taxOk:'세금 체납'};
+const LABELS={bizStatus:'사업 상태',industry:'업종',bizAge:'업력',employees:'상시근로자',revenue:'연매출',ownerAge:'대표 나이',purpose:'자금 용도',hasWorker:'직원 유무',onlineSales:'온라인 판매',yellowUmbrella:'노란우산 가입',taxOk:'세금 체납',repayHard:'상환 어려움'};
 function numOk(rule,v){if(v==null||v==='')return null;v=+v;if(rule.min!=null&&v<rule.min)return false;if(rule.max!=null&&v>rule.max)return false;return true;}
 function listOk(rule,v){if(v==null||v==='모름')return null;
  if(rule.include&&!rule.include.includes(v))return false;
@@ -361,7 +577,8 @@ function checkProgram(p,a){
   hasWorker:r.hasWorker?eqOk(r.hasWorker,a.hasWorker):true,
   onlineSales:r.onlineSales?eqOk(r.onlineSales,a.onlineSales):true,
   yellowUmbrella:r.yellowUmbrella?eqOk(r.yellowUmbrella,a.yellowUmbrella):true,
-  taxOk:r.taxOk?eqOk(r.taxOk,a.taxOk):true
+  taxOk:r.taxOk?eqOk(r.taxOk,a.taxOk):true,
+  repayHard:r.repayHard?eqOk(r.repayHard,a.repayHard):true
  };
  const failed=[],unknown=[],reasons=[];
  for(const k in checks){
@@ -518,10 +735,177 @@ function makeContract(){
  +'</body></html>';
  const w=window.open('','_blank');w.document.write(html);w.document.close();w.print();}
 
+/* ================= 회생·파산 간이진단 =================
+   노무법인 종로 사전진단(#calc) 패턴 이식.
+   가중치 스코어 → 밴드(낮음/보통/높음) → 유리·불리 요소 → 법령 근거.
+   법령 근거는 채무자회생법·서울회생법원 안내 기준만 표기하며 사건번호·판례를 창작하지 않음.
+   [2026-07 확인] 개인회생 무담보 10억·담보 15억, 변제기간 최대 5년,
+   면책 제한 = 파산 면책 확정일부터 7년 / 개인회생 면책 확정일부터 5년. */
+const RECO_DATA={
+ rehab:{
+  label:'개인회생',
+  resultLabel:'개인회생 신청·인가 가능성 (참고)',
+  factors:[
+   {id:'debt',q:'무담보 채무(신용대출·카드빚·사채 등) 총액은?',opts:[
+    {t:'5천만원 미만',v:6,kind:'fav',note:'한도 내 · 소액은 채무조정도 검토'},
+    {t:'5천만원 ~ 3억원',v:12,kind:'fav',note:'개인회생 전형적 구간'},
+    {t:'3억원 ~ 10억원',v:8,kind:'fav',note:'한도 내'},
+    {t:'10억원 초과',v:-30,kind:'unf',note:'개인회생 한도 초과 · 일반회생 검토',block:'무담보 채무가 10억원을 넘으면 개인회생을 신청할 수 없습니다. 일반회생 또는 개인파산을 검토해야 하며, 채무 구성 확인을 위해 전문가 상담이 필요합니다.'}]},
+   {id:'income',q:'매달 꾸준히 들어오는 소득이 있나요?',opts:[
+    {t:'급여 소득이 있다',v:14,kind:'fav',note:'계속적·반복적 소득 인정'},
+    {t:'사업·프리랜서 소득이 있다',v:10,kind:'fav',note:'영업소득자로 신청 가능'},
+    {t:'없거나 매우 불규칙하다',v:-22,kind:'unf',note:'변제 재원 부족 · 파산 쪽 검토'}]},
+   {id:'surplus',q:'생활비를 빼고 매달 갚는 데 쓸 수 있는 돈이 남나요?',opts:[
+    {t:'조금이라도 남는다',v:14,kind:'fav',note:'가용소득 확보'},
+    {t:'거의 남지 않는다',v:-18,kind:'unf',note:'변제계획 수립 곤란'},
+    {t:'계산해 본 적 없다',v:0,kind:'fav',note:'중위소득 기준 산정 필요'}]},
+   {id:'insolvent',q:'가진 재산보다 빚이 많은 상태인가요?',opts:[
+    {t:'빚이 훨씬 많다',v:10,kind:'fav',note:'지급불능 요건에 부합'},
+    {t:'비슷하다',v:0,kind:'fav',note:'재산 평가 필요'},
+    {t:'재산이 더 많다',v:-14,kind:'unf',note:'지급불능 인정 어려움'}]},
+   {id:'prior',q:'과거에 파산 면책이나 개인회생 인가를 받은 적이 있나요?',opts:[
+    {t:'없다',v:6,kind:'fav',note:'재신청 제한 없음'},
+    {t:'있지만 기간이 충분히 지났다',v:2,kind:'fav',note:'제한기간 경과'},
+    {t:'파산 면책 후 7년이 지나지 않았다',v:-24,kind:'unf',note:'면책 제한 기간',block:'파산 면책 확정일부터 7년이 지나지 않으면 다시 면책받기 어렵습니다. 남은 기간과 대안을 먼저 확인하세요.'},
+    {t:'개인회생 면책 후 5년이 지나지 않았다',v:-24,kind:'unf',note:'면책 제한 기간',block:'개인회생 면책 확정일부터 5년이 지나지 않으면 면책이 제한될 수 있습니다.'}]}],
+  laws:[
+   {law:'채무자회생법 제579조',point:'개인회생은 무담보 채무 10억원, 담보부 채무 15억원 이하인 개인 채무자가 신청할 수 있습니다.'},
+   {law:'채무자회생법 제611조',point:'변제기간은 원칙적으로 3년이며 최장 5년을 초과할 수 없습니다.'},
+   {law:'서울회생법원 안내',point:'급여·영업 등 계속적이고 반복적인 수입이 있어야 하며, 생계비를 제외한 가용소득으로 변제합니다.'}]},
+ bankruptcy:{
+  label:'개인파산·면책',
+  resultLabel:'파산 선고·면책 가능성 (참고)',
+  factors:[
+   {id:'income',q:'현재 소득 상황은 어떤가요?',opts:[
+    {t:'소득이 없다',v:16,kind:'fav',note:'지급불능 인정 소지'},
+    {t:'최저생계비 수준에 못 미친다',v:12,kind:'fav',note:'변제 여력 부족'},
+    {t:'생활비를 빼고도 여유가 있다',v:-24,kind:'unf',note:'개인회생이 적합할 수 있음'}]},
+   {id:'asset',q:'처분할 만한 재산(부동산·차량·보증금)이 있나요?',opts:[
+    {t:'거의 없다',v:12,kind:'fav',note:'청산가치 낮음'},
+    {t:'보증금 정도만 있다',v:4,kind:'fav',note:'면제재산 범위 확인 필요'},
+    {t:'상당한 재산이 있다',v:-18,kind:'unf',note:'지급불능 인정 어려움'}]},
+   {id:'cause',q:'채무가 늘어난 원인 중 도박·투기 비중이 큰가요?',opts:[
+    {t:'아니다 (사업 실패·생활고 등)',v:10,kind:'fav',note:'면책 사유 다툼 적음'},
+    {t:'일부 있다',v:-28,kind:'unf',note:'면책 불허가 사유 검토 필요'},
+    {t:'판단이 어렵다',v:-10,kind:'unf',note:'경위 소명 준비 필요'}]},
+   {id:'honest',q:'재산을 숨기거나 특정 채권자에게만 갚은 일이 있나요?',opts:[
+    {t:'없다',v:10,kind:'fav',note:'성실 채무자 요건'},
+    {t:'있거나 애매하다',v:-20,kind:'unf',note:'면책 불허가 사유 소지'}]},
+   {id:'prior',q:'과거에 파산 면책이나 개인회생 인가를 받은 적이 있나요?',opts:[
+    {t:'없다',v:6,kind:'fav',note:'재신청 제한 없음'},
+    {t:'있지만 기간이 충분히 지났다',v:2,kind:'fav',note:'제한기간 경과'},
+    {t:'파산 면책 후 7년이 지나지 않았다',v:-28,kind:'unf',note:'면책 불허가 사유',block:'파산 면책 확정일부터 7년이 지나지 않으면 면책이 불허가됩니다. 신청 자체는 가능하나 면책을 받기 어렵습니다.'},
+    {t:'개인회생 면책 후 5년이 지나지 않았다',v:-28,kind:'unf',note:'면책 불허가 사유',block:'개인회생 면책 확정일부터 5년이 지나지 않으면 면책이 불허가됩니다.'}]}],
+  laws:[
+   {law:'채무자회생법 제564조',point:'과다한 낭비·도박으로 재산을 현저히 감소시킨 경우, 재산을 숨기거나 허위 진술한 경우 면책이 불허가될 수 있습니다.'},
+   {law:'채무자회생법 제564조 제1항',point:'파산 면책 확정일부터 7년, 개인회생 면책 확정일부터 5년 내에 면책받은 이력이 있으면 면책이 제한됩니다.'},
+   {law:'서울회생법원 안내',point:'면책 불허가 사유가 있어도 법원이 사정을 참작해 재량으로 면책하는 경우가 있습니다.'}]},
+ workout:{
+  label:'채무조정 (신복위·새출발기금)',
+  resultLabel:'법원 밖 채무조정 적합도 (참고)',
+  factors:[
+   {id:'delay',q:'현재 연체 상태는 어떤가요?',opts:[
+    {t:'연체는 없지만 상환이 버겁다',v:14,kind:'fav',note:'신속채무조정 대상 구간'},
+    {t:'연체 30일 이내',v:12,kind:'fav',note:'신속채무조정 대상'},
+    {t:'연체 31~89일',v:12,kind:'fav',note:'프리워크아웃 대상'},
+    {t:'연체 90일 이상',v:8,kind:'fav',note:'개인워크아웃 대상'}]},
+   {id:'income',q:'매달 꾸준한 소득이 있나요?',opts:[
+    {t:'있다',v:14,kind:'fav',note:'분할상환 이행 가능'},
+    {t:'불규칙하지만 일부 있다',v:6,kind:'fav',note:'조정 후 상환 검토'},
+    {t:'전혀 없다',v:-20,kind:'unf',note:'법원 절차가 더 적합할 수 있음'}]},
+   {id:'kind',q:'채무가 어디에서 발생했나요?',opts:[
+    {t:'은행·카드 등 금융회사 채무',v:12,kind:'fav',note:'신복위 조정 대상'},
+    {t:'사업자금 대출 (소상공인)',v:12,kind:'fav',note:'새출발기금 대상 검토'},
+    {t:'개인 간 사채가 대부분',v:-18,kind:'unf',note:'조정 대상에서 제외'}]},
+   {id:'debt',q:'총 채무 규모는?',opts:[
+    {t:'1억원 미만',v:10,kind:'fav',note:'조정 한도 내'},
+    {t:'1억원 ~ 5억원',v:6,kind:'fav',note:'한도 확인 필요'},
+    {t:'5억원 초과',v:-12,kind:'unf',note:'법원 절차 병행 검토'}]},
+   {id:'biz',q:'사업 상태는 어떤가요?',opts:[
+    {t:'운영 중이다',v:6,kind:'fav',note:'새출발기금 부실우려 구간'},
+    {t:'폐업했거나 폐업 예정이다',v:10,kind:'fav',note:'새출발기금 주요 대상'},
+    {t:'사업자가 아니다',v:2,kind:'fav',note:'신복위 채무조정 중심'}]}],
+  laws:[
+   {law:'신용회복위원회 채무조정',point:'연체 기간에 따라 신속채무조정, 프리워크아웃, 개인워크아웃으로 나뉘며 이자 감면과 상환기간 연장이 이루어집니다.'},
+   {law:'새출발기금 (캠코)',point:'소상공인·자영업자의 사업자 대출을 대상으로 상환기간 연장, 금리 인하, 심사에 따른 원금 조정을 지원합니다.'},
+   {law:'절차 순서',point:'법원 절차(회생·파산)보다 먼저 검토할 수 있는 단계이며, 조정이 어려울 때 법원 절차로 넘어갑니다.'}]}
+};
+let curCase='rehab';
+const recoSel={};
+function renderCTabs(){
+ document.getElementById('ctabs').innerHTML=Object.keys(RECO_DATA).map(k=>
+  '<button class="ctab'+(k===curCase?' on':'')+'" onclick="setCase(\''+k+'\')">'+RECO_DATA[k].label+'</button>').join('');
+}
+function setCase(k){curCase=k;renderCTabs();renderCFactors();
+ document.getElementById('rResult').style.display='none';
+ document.getElementById('rEmpty').style.display='';}
+function renderCFactors(){
+ const d=RECO_DATA[curCase];const sel=recoSel[curCase]||{};
+ document.getElementById('cfactors').innerHTML=d.factors.map((f,fi)=>
+  '<div class="cfac"><div class="cq">'+(fi+1)+'. '+f.q+'</div><div class="cops">'
+  +f.opts.map((o,oi)=>'<button class="cop'+(sel[f.id]===oi?' on':'')+'" onclick="pickC(\''+f.id+'\','+oi+')">'+o.t+'</button>').join('')
+  +'</div></div>').join('');
+}
+function pickC(fid,oi){
+ if(!recoSel[curCase])recoSel[curCase]={};
+ recoSel[curCase][fid]=oi;renderCFactors();
+}
+function gaugeSVG(score){
+ const cx=150,cy=140,r=118;
+ const ang=Math.PI+(0-Math.PI)*(score/100);
+ const nx=cx+Math.cos(ang)*(r-18),ny=cy-Math.sin(ang)*(r-18);
+ function arc(a0,a1,color){
+  const x0=cx+Math.cos(a0)*r,y0=cy-Math.sin(a0)*r;
+  const x1=cx+Math.cos(a1)*r,y1=cy-Math.sin(a1)*r;
+  return '<path d="M'+x0+' '+y0+' A'+r+' '+r+' 0 0 1 '+x1+' '+y1+'" stroke="'+color+'" stroke-width="15" fill="none" stroke-linecap="round"/>';}
+ const s=Math.PI,seg=Math.PI/3;
+ return '<svg viewBox="0 0 300 175">'
+  +arc(s,s-seg,'#D06B57')+arc(s-seg,s-2*seg,'#E0B75C')+arc(s-2*seg,0,'#3F9E70')
+  +'<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="'+'#0F2A4A'+'"/>'
+  +'<line x1="'+cx+'" y1="'+cy+'" x2="'+nx+'" y2="'+ny+'" stroke="#0F2A4A" stroke-width="4" stroke-linecap="round"/>'
+  +'<text x="30" y="168" font-size="11" fill="#8A94A3">낮음</text>'
+  +'<text x="246" y="168" font-size="11" fill="#8A94A3">높음</text></svg>';
+}
+function bandOf(s){if(s>=68)return['높음','#0E7A4D'];if(s>=45)return['보통','#9A6B00'];return['낮음','#C0563E'];}
+document.getElementById('runCalc').onclick=()=>{
+ const d=RECO_DATA[curCase];const sel=recoSel[curCase]||{};
+ if(Object.keys(sel).length<d.factors.length){
+  alert('모든 항목을 선택하면 더 정확한 참고 지표를 볼 수 있어요.');}
+ let score=50;const favs=[],unfs=[],blocks=[];
+ d.factors.forEach(f=>{
+  const oi=sel[f.id];if(oi===undefined)return;
+  const o=f.opts[oi];score+=o.v;
+  if(o.block)blocks.push(o.block);
+  (o.kind==='fav'?favs:unfs).push({t:o.note||o.t,v:o.v});});
+ score=Math.max(8,Math.min(92,score));
+ if(blocks.length)score=Math.min(score,28);   // 법적 차단 사유가 있으면 밴드를 낮음으로 고정
+ const lo=Math.max(5,score-9),hi=Math.min(95,score+9);
+ const [band,bc]=bandOf(score);
+ const lawHTML=d.laws.map(p=>'<div class="law"><div class="lname">'+p.law+'</div><div class="lpoint">'+p.point+'</div></div>').join('');
+ const row=(a,cls)=>a.length?a.map(f=>'<div class="frow '+cls+'"><span class="dot"></span><span class="ft">'+f.t+'</span><span class="fw">'+(f.v>0?'+':'')+f.v+'</span></div>').join(''):'<div class="frow"><span class="ft" style="color:var(--faint)">해당 없음</span></div>';
+ const blockHTML=blocks.length
+  ?'<div class="cwarn" style="margin-top:0;margin-bottom:12px"><b>먼저 확인해야 할 사항이 있습니다</b><br>'+blocks.join('<br>')+'</div>':'';
+ document.getElementById('rResult').innerHTML=blockHTML+
+  '<div class="gauge-wrap"><div style="font-size:12.5px;color:var(--faint);font-weight:700">'+d.resultLabel+'</div>'
+  +gaugeSVG(score)+'<div class="gband" style="color:'+bc+'">'+band+'</div>'
+  +'<div class="grange">약 '+lo+'–'+hi+'%</div>'
+  +'<div class="gcaption">채무자회생법 등 법령 기준 · 참고 지표</div></div>'
+  +'<div class="rbreak"><h4>▲ 유리하게 작용하는 요소</h4>'+row(favs,'fav')
+  +'<h4 style="margin-top:16px">▼ 불리하게 작용하는 요소</h4>'+row(unfs,'unf')+'</div>'
+  +'<div class="laws"><h4>판단 기준 참고 · 법령 근거</h4>'+lawHTML+'</div>'
+  +'<div class="cwarn">본 지표는 입력값과 법령상 일반 기준을 바탕으로 한 참고용일 뿐, 실제 인가·면책 결과를 보장하지 않습니다. '
+  +'채무 구성과 개별 사정에 따라 결과는 크게 달라지므로 반드시 상담을 통해 확인하세요. '
+  +'무료 상담은 신용회복위원회 1600-5500, 대한법률구조공단 132에서 받으실 수 있습니다.<br><br>'
+  +'빚 문제로 마음이 많이 힘드시다면 혼자 견디지 마세요. 자살예방 상담전화 109에서 24시간 상담을 받으실 수 있습니다.</div>';
+ document.getElementById('rEmpty').style.display='none';
+ document.getElementById('rResult').style.display='';
+};
+renderCTabs();renderCFactors();
+
 /* ================= 라우팅 =================
    go(v): 클릭 즉시 화면 전환 (아티팩트 미리보기 등 hash 이동이 막힌 환경에서도 동작)
    hash는 가능할 때만 뒤따라 동기화하고, 직접 URL 진입 시에는 route()가 hash를 읽는다. */
-const VIEWS=['home','diagnose','result','list','rates','tools','recovery'];
+const VIEWS=['home','diagnose','result','list','rates','tools','recovery','reflex'];
 function show(v){
  if(!VIEWS.includes(v))v='home';
  document.querySelectorAll('section.view').forEach(s=>s.classList.remove('on'));
@@ -542,5 +926,6 @@ window.addEventListener('hashchange',route);
 if(DATA_STATUS!=='draft')document.querySelector('.draft-banner').style.display='none';
 buildSteps();showStep(0);route();
 </script>
+<script src="yeokgeom.js"></script>
 </body>
 </html>

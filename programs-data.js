@@ -161,7 +161,7 @@ const PROGRAMS = [
     summary: '폐업·부실 소상공인 대출 채무조정(기간 연장·금리 인하·원금 감면)',
     amountMax: null, terms: '심사에 따라 조정 내용 결정',
     applyUrl: 'https://www.kamco.or.kr', sourceUrl: 'https://www.kamco.or.kr',
-    require: { bizStatus: { include: ['운영', '폐업예정', '폐업완료'] } },
+    require: { bizStatus: { include: ['운영', '폐업예정', '폐업완료'] }, repayHard: { eq: '예' } },
     boost: [], docs: ['채무 확인 서류', '소득 증빙', '사업자등록증 또는 폐업사실증명']
   },
   {

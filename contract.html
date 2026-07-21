@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>표준근로계약서 생성기 — 업종별 조항 조립</title>
+<meta name="description" content="업종·사업장 규모·고용형태를 고르면 법정 필수사항이 빠짐없이 들어간 근로계약서를 만들어 드립니다. 무효 조항은 자동으로 걸러냅니다.">
+<style>
+:root{
+  --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC; --blue-line:#C5DAF6;
+  --ink:#151B24; --sub:#57626F; --faint:#8A94A2;
+  --bg:#F4F6F9; --paper:#FFFFFF; --line:#E1E6EE; --line-soft:#EDF1F6;
+  --seal:#B23A2E; --seal-bg:#FBEDEB;
+  --caution:#8A6100; --caution-bg:#FBF3DE; --caution-line:#EBDBB0;
+  --ok:#0E7A4D; --ok-bg:#E7F4EE;
+  --doc:'Noto Serif KR','Nanum Myeongjo',Batang,serif;
+  --ui:'Pretendard','Malgun Gothic',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--ui);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:14px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* 헤더 */
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.hd{max-width:1240px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:16.5px;font-weight:800;color:var(--navy);letter-spacing:-.02em;white-space:nowrap}
+.brand em{font-style:normal;color:var(--blue)}
+.hd-note{font-size:12px;color:var(--faint);text-align:right}
+.hd-acts{display:flex;gap:8px;align-items:center}
+.verbar{background:var(--paper);border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint);text-align:center;padding:6px 22px}
+.verbar .rev{color:var(--ok);font-weight:700}
+.filebtn{font-size:12.5px;font-weight:700;color:var(--blue);border:1.5px solid var(--blue-line);background:var(--blue-soft);border-radius:8px;padding:7px 13px;white-space:nowrap}
+.filebtn:hover{border-color:var(--blue)}
+
+/* 스텝 레일 */
+.rail{display:flex;gap:0;background:var(--paper);border-bottom:1px solid var(--line)}
+.rail-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;width:100%}
+.rstep{flex:1;padding:13px 6px;text-align:center;font-size:12.5px;font-weight:700;color:var(--faint);border-bottom:2.5px solid transparent;transition:.15s}
+.rstep .n{display:inline-flex;width:19px;height:19px;border-radius:50%;background:var(--line);color:#fff;font-size:11px;align-items:center;justify-content:center;margin-right:6px;font-weight:800}
+.rstep.on{color:var(--blue);border-bottom-color:var(--blue)}
+.rstep.on .n{background:var(--blue)}
+.rstep.done{color:var(--ok)}
+.rstep.done .n{background:var(--ok)}
+
+/* 레이아웃 */
+.layout{max-width:1240px;margin:0 auto;padding:26px 22px 60px;display:grid;grid-template-columns:1fr 430px;gap:26px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.side{position:sticky;top:78px}
+
+h2.step-t{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+p.step-d{font-size:13.5px;color:var(--sub);margin-top:7px;margin-bottom:22px}
+
+/* 선택 그룹 */
+.fgroup{margin-bottom:26px}
+.flabel{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.flabel .req{font-size:10.5px;font-weight:800;color:var(--seal);background:var(--seal-bg);padding:2px 7px;border-radius:4px;letter-spacing:.02em}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:12px 14px;text-align:left;font-size:13.5px;font-weight:600;transition:.13s}
+.opt:hover{border-color:var(--blue-line);background:var(--blue-soft)}
+.opt.on{border-color:var(--blue);background:var(--blue-soft);color:var(--navy);font-weight:800}
+.opt .sm{display:block;font-size:11.5px;font-weight:500;color:var(--faint);margin-top:2px}
+.opt.on .sm{color:var(--blue)}
+
+/* 조항 카드 */
+.cat{margin-bottom:22px}
+.cat-h{font-size:12.5px;font-weight:800;color:var(--faint);letter-spacing:.04em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.cl{border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:7px;display:flex;gap:12px;align-items:flex-start;transition:.13s;background:var(--paper)}
+.cl.on{border-color:var(--blue);background:var(--blue-soft)}
+.cl.locked{border-color:var(--seal);background:var(--seal-bg)}
+.cl.off{opacity:.55}
+.cl-box{width:19px;height:19px;border-radius:5px;border:1.8px solid var(--line);flex:none;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:800;background:var(--paper)}
+.cl.on .cl-box{background:var(--blue);border-color:var(--blue)}
+.cl.locked .cl-box{background:var(--seal);border-color:var(--seal)}
+.cl-body{flex:1;min-width:0}
+.cl-t{font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tag{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.02em;white-space:nowrap}
+.tag.req{background:var(--seal-bg);color:var(--seal)}
+.tag.cond{background:var(--caution-bg);color:var(--caution)}
+.tag.na{background:var(--line-soft);color:var(--faint)}
+.tag.add{background:var(--ok-bg);color:var(--ok)}
+.cl-n{font-size:12px;color:var(--sub);margin-top:5px;line-height:1.55}
+.cl-n.cond{color:var(--caution)}
+
+/* 입력폼 */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.vf{display:block}
+.vf span{display:block;font-size:12px;color:var(--sub);font-weight:600;margin-bottom:4px}
+.vf input,.vf select,.vf textarea{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--paper);color:var(--ink)}
+.vf input:focus,.vf select:focus,.vf textarea:focus{outline:none;border-color:var(--blue)}
+.vf textarea{min-height:74px;resize:vertical;line-height:1.6}
+.vf.wide{grid-column:1/-1}
+.vf input.bad,.vf textarea.bad{border-color:var(--seal);background:var(--seal-bg)}
+.vhint{font-size:11.5px;color:var(--faint);margin-top:4px}
+.vhint.bad{color:var(--seal);font-weight:700}
+
+/* 알림 */
+.note{border-radius:11px;padding:13px 15px;font-size:12.5px;line-height:1.6;margin-bottom:12px}
+.note.info{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--navy)}
+.note.warn{background:var(--caution-bg);border:1px solid var(--caution-line);color:var(--caution)}
+.note.bad{background:var(--seal-bg);border:1px solid #EECFCA;color:var(--seal)}
+.note.good{background:var(--ok-bg);border:1px solid #C6E6D6;color:var(--ok)}
+.note b{font-weight:800}
+
+/* 버튼 */
+.navbar{display:flex;justify-content:space-between;gap:10px;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.btn{border-radius:10px;font-weight:700;font-size:14.5px;padding:12px 26px;transition:.13s}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover{background:#1560BE}
+.btn-p:disabled{background:#C3D3E6;cursor:not-allowed}
+.btn-g{color:var(--sub);border:1.5px solid var(--line);background:var(--paper)}
+.btn-g:hover{border-color:var(--blue);color:var(--blue)}
+.btn-sm{font-size:13px;padding:9px 16px;border-radius:9px}
+
+/* 문서 미리보기 */
+.doc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
+.doc-title{font-size:12.5px;font-weight:800;color:var(--faint);letter-spacing:.04em}
+.doc-count{font-size:11.5px;color:var(--faint)}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:30px 28px;max-height:calc(100vh - 230px);overflow-y:auto;font-family:var(--doc)}
+.paper::-webkit-scrollbar{width:7px}.paper::-webkit-scrollbar-thumb{background:#D5DCE6;border-radius:4px}
+.doc-h1{text-align:center;font-size:19px;font-weight:700;letter-spacing:.16em;padding-bottom:16px;border-bottom:2px solid var(--navy);margin-bottom:20px;color:var(--navy)}
+.doc-sec{margin-bottom:17px}
+.doc-sec-t{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.doc-sec-b{font-size:13px;color:#2A3340;white-space:pre-wrap;line-height:1.85;word-break:keep-all}
+.doc-sec-b .blank{background:#FFF3B8;color:#8A6100;padding:0 4px;border-radius:3px;font-style:normal}
+.doc-sign{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;line-height:2.1}
+.doc-empty{text-align:center;padding:56px 20px;color:var(--faint);font-family:var(--ui);font-size:13px}
+.doc-acts{display:flex;gap:8px;margin-top:13px}
+.doc-acts .btn{flex:1;text-align:center}
+
+/* 면책 */
+.disc{max-width:1240px;margin:0 auto;padding:0 22px 40px}
+.disc-in{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--sub);line-height:1.75}
+.disc-in b{color:var(--navy)}
+
+@media(max-width:1020px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static;order:-1}
+  .paper{max-height:340px}
+}
+@media(max-width:560px){
+  .vgrid{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .panel{padding:20px 17px}
+  .rstep{font-size:11px}.rstep .n{margin-right:3px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* 인쇄 */
+@media print{
+  header,.rail,.side .doc-head,.doc-acts,.disc,.navbar,.panel,.verbar{display:none!important}
+  body{background:#fff}
+  @page{size:A4;margin:18mm 16mm}
+  .layout{display:block;padding:0;max-width:none;gap:0}
+  .side{position:static}
+  .paper{border:none;border-radius:0;padding:0;max-height:none;overflow:visible}
+  .doc-sec{page-break-inside:avoid;break-inside:avoid}
+  .doc-sign{page-break-inside:avoid;break-inside:avoid}
+  .doc-h1{page-break-after:avoid}
+  .doc-sec-t{page-break-after:avoid}
+  .doc-sec-b .blank{background:none;color:#000;border-bottom:1px solid #000}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="brand">표준<em>근로계약서</em> 생성기</div>
+    <div class="hd-acts">
+      <span class="hd-note">근기법 제17조 필수사항 자동 점검 · 무효 조항 차단</span>
+      <button class="filebtn" onclick="document.getElementById('fileIn').click()">초안 불러오기</button>
+      <input type="file" id="fileIn" accept=".json" hidden>
+    </div>
+  </div>
+</header>
+
+<div class="verbar" id="verInfo"></div>
+<div class="rail"><div class="rail-in" id="rail"></div></div>
+
+<div class="layout">
+  <!-- 좌: 위저드 -->
+  <main class="panel" id="wizard"></main>
+
+  <!-- 우: 실시간 문서 -->
+  <aside class="side">
+    <div class="doc-head">
+      <span class="doc-title">실시간 미리보기</span>
+      <span class="doc-count" id="docCount"></span>
+    </div>
+    <div class="paper" id="paper"></div>
+    <div class="doc-acts">
+      <button class="btn btn-g btn-sm" id="btnPrint">인쇄 · PDF</button>
+      <button class="btn btn-g btn-sm" onclick="goStep(4)">완성본 확인</button>
+    </div>
+  </aside>
+</div>
+
+<div class="disc">
+  <div class="disc-in">
+    <b>본 서비스는 표준 서식 작성을 돕는 도구이며 법률·노무 자문이 아닙니다.</b>
+    구체적인 사안은 공인노무사·변호사 상담을 권장합니다.
+    생성된 계약서는 서명 전 반드시 내용을 직접 확인하시고, 근로자에게 1부를 교부하세요(근로기준법 제17조, 위반 시 500만원 이하 벌금).
+    입력한 내용은 이 브라우저 안에서만 처리되며 어디에도 전송·저장되지 않습니다. 작성 중인 내용을 남기려면 초안 저장(.json)으로 파일을 직접 보관하세요.
+  </div>
+</div>
+<script>
+/* ============================================================
+   표준근로계약서 생성기 v0.2.0
+   전 과정이 브라우저 안에서만 실행됩니다. 입력값은 전송·저장되지 않습니다.
+   ============================================================ */
+const LIB = {"meta":{"name":"표준근로계약서 조항 라이브러리 시드","version":"0.2.0","updated":"2026-07-21","description":"업종·규모·고용형태 조건으로 조항을 선택→변수입력→병합해 근로계약서를 생성하기 위한 조항(clause) 데이터. body_template 안의 {{변수}}는 변수 입력폼과 연결된다.","legality_legend":{"valid":"요건 없이 유효한 표준 조항","conditional":"성립요건 충족 시에만 유효 (legality_note 참조, UI에 요건 안내 노출)","void":"무효/위법 조항. 라이브러리 진입 차단 + 사용자가 유사 문구 입력 시 경고"},"variable_syntax":"{{key}} 형태. select 타입은 options 사용.","patch_note":"v0.1.1 → v0.2.0: 단시간 연차·퇴직금 누락 수정, 교부확인 조항, 업종 5개(학원·제조·운수배달·청소경비·농업) 및 외국인 E-9 추가","verified_at":"2026-07-21"},"reference":{"minimum_wage":{"unit":"원/시간","by_year":{"2024":9860,"2025":10030,"2026":10320},"monthly_209h":{"2025":2096270,"2026":2156880},"note":"월 환산 209시간(주40h+주휴 포함). 값은 매년 최저임금위원회 고시로 갱신. 하드코딩 금지, 이 테이블 참조."},"legal_thresholds":{"weekly_holiday_min_hours":15,"severance_min_months":12,"severance_min_weekly_hours":15,"probation_max_months":3,"probation_wage_floor_ratio":0.9,"gasan_multiplier":1.5,"night_start":"22:00","night_end":"06:00"}},"industries":[{"key":"common","label":"공통(모든 업종)"},{"key":"restaurant","label":"음식점·요식업"},{"key":"cafe_store","label":"카페·편의점(단시간/알바)"},{"key":"construction","label":"건설(일용)"},{"key":"beauty","label":"미용·뷰티"},{"key":"it_office","label":"IT·사무"},{"key":"academy","label":"학원·교육"},{"key":"manufacturing","label":"제조·공장"},{"key":"transport","label":"운수·배달"},{"key":"facility","label":"청소·경비·시설"},{"key":"agriculture","label":"농업·축산"}],"employment_types":[{"key":"permanent","label":"정규직(기간의 정함 없음)"},{"key":"fixed_term","label":"계약직(기간제)"},{"key":"part_time","label":"단시간(아르바이트)"},{"key":"daily","label":"일용직"},{"key":"minor","label":"연소근로자(18세 미만)"},{"key":"foreign_e9","label":"외국인근로자(E-9 고용허가제)"}],"categories":[{"key":"parties","label":"1. 계약당사자·기본정보"},{"key":"period","label":"2. 계약기간"},{"key":"workplace","label":"3. 근무장소·업무내용"},{"key":"hours","label":"4. 근로시간·휴게·근무일"},{"key":"wage","label":"5. 임금(구성·계산·지급)"},{"key":"holiday","label":"6. 휴일·휴가"},{"key":"insurance","label":"7. 4대보험·퇴직금"},{"key":"probation","label":"8. 수습·시용"},{"key":"special","label":"9. 업종 특약"},{"key":"misc","label":"10. 해지·기타"}],"clauses":[{"id":"parties-001","category":"parties","industry_tags":["common"],"employment_types":["*"],"required":true,"legality":"valid","title":"계약당사자","body_template":"사업주(사용자) {{employer_name}}(이하 '갑')과(와) 근로자 {{employee_name}}(이하 '을')은 다음과 같이 근로계약을 체결한다.\n- 사업체명: {{company_name}} / 대표자: {{employer_name}}\n- 사업장 주소: {{company_address}} / 연락처: {{company_tel}}\n- 근로자 성명: {{employee_name}} / 생년월일: {{employee_birth}} / 주소: {{employee_address}} / 연락처: {{employee_tel}}","variables":[{"key":"company_name","label":"사업체명","type":"text"},{"key":"employer_name","label":"대표자 성명","type":"text"},{"key":"company_address","label":"사업장 주소","type":"text"},{"key":"company_tel","label":"사업장 연락처","type":"text"},{"key":"employee_name","label":"근로자 성명","type":"text"},{"key":"employee_birth","label":"근로자 생년월일","type":"date"},{"key":"employee_address","label":"근로자 주소","type":"text"},{"key":"employee_tel","label":"근로자 연락처","type":"text"}]},{"id":"period-permanent-001","category":"period","industry_tags":["common"],"employment_types":["permanent","part_time","minor"],"required":true,"legality":"valid","title":"근로계약기간 — 기간의 정함이 없음","body_template":"근로개시일: {{start_date}}부터 (기간의 정함이 없는 근로계약)","variables":[{"key":"start_date","label":"근로개시일","type":"date"}],"patched":"고용형태 태그 확장 (v0.1.1)"},{"id":"period-fixed-001","category":"period","industry_tags":["common"],"employment_types":["fixed_term","part_time","daily","minor","foreign_e9"],"required":true,"legality":"conditional","legality_note":"기간제법 제4조 — 계속근로 총기간이 2년을 초과하면 기간의 정함이 없는 근로계약을 체결한 것으로 봅니다. 만 55세 이상 고령자, 박사학위·전문자격 소지자, 휴직자 대체 등 같은 조 제1항 단서의 예외에 해당하는지 확인하세요.","title":"근로계약기간 — 기간의 정함이 있음","body_template":"근로계약기간: {{start_date}}부터 {{end_date}}까지","variables":[{"key":"start_date","label":"시작일","type":"date"},{"key":"end_date","label":"종료일","type":"date"}],"patched":"고용형태 태그 확장 (v0.1.1)"},{"id":"workplace-001","category":"workplace","industry_tags":["common"],"employment_types":["*"],"required":true,"legality":"valid","title":"근무장소 및 업무내용","body_template":"- 근무장소: {{workplace}}\n- 담당업무: {{duties}}","variables":[{"key":"workplace","label":"근무장소","type":"text"},{"key":"duties","label":"담당업무","type":"text"}]},{"id":"workplace-change-001","category":"workplace","industry_tags":["common"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"conditional","legality_note":"'업무상 필요·합리적 범위'로 한정해야 유효. 무제한 전보/사실상 대기발령 조항은 무효 소지. blacklist-transfer 참조.","title":"근무장소·업무 변경(합리적 범위)","body_template":"회사는 업무상 필요에 따라 합리적 범위 내에서 근로자의 근무장소 또는 담당업무를 변경할 수 있으며, 이 경우 근로자의 생활상 불이익을 고려한다.","variables":[]},{"id":"hours-standard-001","category":"hours","industry_tags":["common"],"employment_types":["permanent","fixed_term","foreign_e9"],"required":true,"legality":"valid","title":"소정근로시간·시업/종업·휴게(통상)","body_template":"- 소정근로시간: 1일 {{daily_hours}}시간, 1주 {{weekly_hours}}시간\n- 근무일: 매주 {{workdays}} (주휴일: {{weekly_holiday}})\n- 시업 {{start_time}} ~ 종업 {{end_time}}\n- 휴게시간: {{break_time}} (근로시간 4시간당 30분 이상, 8시간당 1시간 이상)","variables":[{"key":"daily_hours","label":"1일 소정근로시간","type":"number"},{"key":"weekly_hours","label":"1주 소정근로시간","type":"number"},{"key":"workdays","label":"근무일","type":"text"},{"key":"weekly_holiday","label":"주휴일","type":"text"},{"key":"start_time","label":"시업시각","type":"text"},{"key":"end_time","label":"종업시각","type":"text"},{"key":"break_time","label":"휴게시간","type":"text"}]},{"id":"wage-monthly-001","category":"wage","industry_tags":["common"],"employment_types":["permanent","fixed_term","foreign_e9"],"required":true,"legality":"valid","title":"임금 — 월급제(구성항목 분리)","body_template":"- 월 급여 총액: {{monthly_total}}원\n  · 기본급: {{base_pay}}원\n  · 고정수당: {{fixed_allowance}}원 (항목: {{allowance_detail}})\n  · 식대 등: {{meal_allowance}}원\n- 상여금: {{bonus}}\n- 임금 지급일: 매월 {{payday}}일 / 지급방법: {{pay_method}}(계좌이체 등)","variables":[{"key":"monthly_total","label":"월급 총액","type":"currency"},{"key":"base_pay","label":"기본급","type":"currency"},{"key":"fixed_allowance","label":"고정수당 합계","type":"currency"},{"key":"allowance_detail","label":"수당 항목설명","type":"text"},{"key":"meal_allowance","label":"식대","type":"currency"},{"key":"bonus","label":"상여금","type":"text"},{"key":"payday","label":"임금지급일","type":"number"},{"key":"pay_method","label":"지급방법","type":"text"}]},{"id":"wage-hourly-001","category":"wage","industry_tags":["common"],"employment_types":["part_time","daily","minor","foreign_e9"],"required":true,"legality":"conditional","legality_note":"시급은 해당 연도 최저임금 이상이어야 함. reference.minimum_wage로 검증(rule: min_wage_check).","title":"임금 — 시급제","body_template":"- 시간급: {{hourly_wage}}원 (해당 연도 최저임금 이상)\n- 주휴수당: 주 소정근로 15시간 이상 시 별도 지급\n- 임금 지급일: {{payday}} / 지급방법: {{pay_method}}","variables":[{"key":"hourly_wage","label":"시급","type":"currency"},{"key":"payday","label":"임금지급일","type":"text"},{"key":"pay_method","label":"지급방법","type":"text"}],"patched":"고용형태 태그 확장 (v0.1.1)"},{"id":"wage-weekly-holiday-001","category":"wage","industry_tags":["common"],"employment_types":["part_time","fixed_term","permanent","foreign_e9"],"required":false,"legality":"valid","title":"주휴수당","body_template":"근로자가 1주 소정근로시간을 개근하고 1주 소정근로시간이 15시간 이상인 경우, 1주 1일의 유급주휴일을 부여하며 주휴수당을 지급한다.","variables":[]},{"id":"wage-gasan-001","category":"wage","industry_tags":["common"],"employment_types":["*"],"required":false,"legality":"conditional","legality_note":"연장·야간·휴일근로 가산수당(통상임금 1.5배)은 상시근로자 5인 이상 사업장에만 적용. applies_when.min_employees=5.","title":"연장·야간·휴일근로 가산수당(5인 이상)","applies_when":{"min_employees":5},"body_template":"연장근로·야간근로(22:00~06:00)·휴일근로에 대하여 통상임금의 50%를 가산하여 지급한다.","variables":[]},{"id":"holiday-annual-001","category":"holiday","industry_tags":["common"],"employment_types":["permanent","fixed_term","part_time","minor","foreign_e9"],"required":false,"legality":"conditional","legality_note":"상시근로자 5인 이상 사업장에서 발생합니다. 단시간근로자는 통상근로자의 근로시간에 비례해 산정하며(근기법 제18조 제1항, 시행령 별표2), 4주 평균 1주 소정근로시간이 15시간 미만이면 적용되지 않습니다(제18조 제3항).","title":"연차유급휴가(5인 이상)","applies_when":{"min_employees":5},"body_template":"연차유급휴가는 근로기준법 제60조에 따라 부여한다.\n- 1년간 80% 이상 출근 시 15일, 계속근로 1년 미만 또는 80% 미만 출근 시 1개월 개근당 1일\n- 단시간근로자의 연차는 통상근로자의 근로시간에 비례하여 산정한다.","variables":[],"patched":"단시간 포함 + 요건 명시 (v0.2.0)"},{"id":"holiday-publicday-001","category":"holiday","industry_tags":["common"],"employment_types":["permanent","fixed_term","minor","foreign_e9"],"required":false,"legality":"conditional","legality_note":"관공서 공휴일 유급휴일 보장은 5인 이상 사업장 적용.","title":"관공서 공휴일 유급(5인 이상)","applies_when":{"min_employees":5},"body_template":"관공서의 공휴일에 관한 규정에 따른 공휴일 및 대체공휴일을 유급휴일로 보장한다.","variables":[]},{"id":"insurance-4social-001","category":"insurance","industry_tags":["common"],"employment_types":["permanent","fixed_term","part_time","daily","minor","foreign_e9"],"required":false,"legality":"valid","title":"4대 사회보험","body_template":"국민연금·건강보험·고용보험·산업재해보상보험은 법령에 따라 가입하며, 근로자 부담분은 임금에서 공제한다.","variables":[],"patched":"고용형태 태그 확장 (v0.1.1)"},{"id":"insurance-severance-001","category":"insurance","industry_tags":["common"],"employment_types":["permanent","fixed_term","part_time","minor","foreign_e9"],"required":false,"legality":"conditional","title":"퇴직금","body_template":"계속근로기간 1년 이상이고 4주 평균 1주 소정근로시간이 15시간 이상인 경우, 근로자퇴직급여보장법에 따라 퇴직급여를 지급한다.","variables":[],"legality_note":"계속근로기간 1년 이상 + 4주 평균 1주 소정근로시간 15시간 이상인 경우에 발생합니다(근로자퇴직급여 보장법 제4조 제1항 단서).","patched":"단시간 포함 + 요건 명시 (v0.2.0)"},{"id":"probation-001","category":"probation","industry_tags":["common"],"employment_types":["permanent","fixed_term","minor","foreign_e9"],"required":false,"legality":"conditional","legality_note":"수습기간 임금 감액(최저임금 90%)은 '1년 이상 근로계약 + 수습 3개월 이내'에만 가능. 단순노무직(고용노동부 고시)은 감액 불가. rule: probation_wage_check.","title":"수습기간","body_template":"수습기간은 근로개시일부터 {{probation_months}}개월로 한다. 수습기간 중 임금은 {{probation_pay}}(감액 시 최저임금의 90% 이상, 단순노무직 제외).","variables":[{"key":"probation_months","label":"수습기간(개월)","type":"number"},{"key":"probation_pay","label":"수습기간 임금","type":"text"}]},{"id":"misc-rules-001","category":"misc","industry_tags":["common"],"employment_types":["*"],"required":false,"legality":"valid","title":"취업규칙·기타","body_template":"이 계약에 정하지 않은 사항은 취업규칙 및 근로기준법 등 관계 법령에 따른다. 본 계약서는 2부를 작성하여 갑과 을이 각 1부씩 보관한다.","variables":[]},{"id":"restaurant-break-001","category":"hours","industry_tags":["restaurant"],"employment_types":["*"],"required":false,"legality":"conditional","legality_note":"브레이크타임은 근로자가 자유롭게 이용 가능한 '실제 휴게'여야 무급. 대기·호출 상태면 근로시간으로 임금 지급 대상.","title":"브레이크타임(무급 휴게)","body_template":"영업 특성상 {{break_window}}을(를) 휴게시간으로 부여하며, 해당 시간은 근로자가 자유롭게 이용할 수 있고 무급으로 한다.","variables":[{"key":"break_window","label":"휴게 시간대","type":"text"}]},{"id":"restaurant-meal-001","category":"wage","industry_tags":["restaurant"],"employment_types":["*"],"required":false,"legality":"valid","title":"식사 제공(현물)","body_template":"근무일 식사는 현물로 제공한다(식대 임금 산입 여부: {{meal_in_wage}}).","variables":[{"key":"meal_in_wage","label":"식대 임금산입 여부","type":"select","options":["임금에 미산입(복리후생)","식대 항목으로 산입"]}]},{"id":"cafe-parttime-days-001","category":"hours","industry_tags":["common"],"employment_types":["part_time"],"required":true,"legality":"conditional","legality_note":"단시간근로자는 기간제법에 따라 '근로일별 근로시간'을 반드시 명시해야 함. rule: part_time_daily_hours.","title":"단시간근로자 — 근로일별 근로시간","body_template":"요일별 근로시간을 다음과 같이 정한다.\n{{weekly_schedule}}\n(예: 월 10:00~15:00 / 수 10:00~15:00 / 토 09:00~18:00)","variables":[{"key":"weekly_schedule","label":"요일별 근로시간표","type":"text"}],"patched":"전 업종 공통으로 승격 (기간제법상 단시간 전체 의무, v0.1.1)"},{"id":"cafe-ultrashort-001","category":"holiday","industry_tags":["cafe_store"],"employment_types":["part_time"],"required":false,"legality":"conditional","legality_note":"주 15시간 미만(초단시간)일 때만 사용. 주휴·연차·퇴직금 미발생 사실을 '고지'하는 조항이며, 15시간 이상 실근로 시 무효.","title":"초단시간근로자 고지(주15시간 미만)","body_template":"1주 소정근로시간이 15시간 미만이므로 주휴일·연차유급휴가·퇴직급여가 발생하지 않음을 상호 확인한다. (실제 근로가 주 15시간 이상이 되는 경우 해당 규정이 적용된다.)","variables":[]},{"id":"construction-daily-001","category":"wage","industry_tags":["construction"],"employment_types":["daily"],"required":true,"legality":"valid","title":"건설일용 — 일당·공수","body_template":"- 일당: {{daily_wage}}원 (1공수 기준)\n- 지급방법: {{pay_method}}\n- 근로계약서는 근로개시 시점에 서면 교부한다(일용도 매 근로마다 근로조건 서면 명시).","variables":[{"key":"daily_wage","label":"일당(1공수)","type":"currency"},{"key":"pay_method","label":"지급방법","type":"text"}]},{"id":"construction-site-001","category":"workplace","industry_tags":["construction"],"employment_types":["daily"],"required":true,"legality":"valid","title":"건설일용 — 현장(취업장소)","body_template":"- 현장명/취업장소: {{site_name}} ({{site_address}})\n- 담당공종: {{work_type}}","variables":[{"key":"site_name","label":"현장명","type":"text"},{"key":"site_address","label":"현장 주소","type":"text"},{"key":"work_type","label":"담당 공종","type":"text"}]},{"id":"beauty-incentive-001","category":"special","industry_tags":["beauty"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"conditional","legality_note":"인센티브 지급 후에도 총액이 최저임금 이상이어야 함. 인센티브를 이유로 기본급을 최저임금 미만으로 설계하면 위법.","title":"미용 — 매출 인센티브","body_template":"기본급 외에 본인 시술매출의 {{incentive_rate}}%를 인센티브로 지급한다(정산 기준: {{settle_basis}}). 단, 기본급과 합산한 총 임금은 최저임금 이상으로 한다.","variables":[{"key":"incentive_rate","label":"인센티브 요율(%)","type":"number"},{"key":"settle_basis","label":"정산 기준","type":"text"}]},{"id":"beauty-stage-001","category":"special","industry_tags":["beauty"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"valid","title":"미용 — 직급단계(인턴/디자이너)","body_template":"직급: {{stage}} (인턴→스텝→디자이너 등 단계별 처우 상이). 승급 기준: {{promotion_basis}}.","variables":[{"key":"stage","label":"현재 직급","type":"text"},{"key":"promotion_basis","label":"승급 기준","type":"text"}]},{"id":"it-inclusive-wage-001","category":"wage","industry_tags":["it_office"],"employment_types":["permanent"],"required":false,"legality":"conditional","legality_note":"포괄임금(고정OT)은 고정연장시간·금액을 명시해야 유효. 실근로가 고정분을 초과하면 차액 추가지급 의무. 5인 이상 사업장 전제.","title":"IT — 포괄임금(고정연장수당)","applies_when":{"min_employees":5},"body_template":"월 급여에는 매월 {{ot_hours}}시간분의 고정연장근로수당 {{ot_amount}}원이 포함된다. 실제 연장근로가 이를 초과하는 경우 초과분을 별도 지급한다.","variables":[{"key":"ot_hours","label":"고정 연장시간(월)","type":"number"},{"key":"ot_amount","label":"고정 연장수당액","type":"currency"}]},{"id":"it-confidential-001","category":"special","industry_tags":["it_office"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"valid","title":"IT — 비밀유지","body_template":"근로자는 재직 중 및 퇴직 후에도 업무상 알게 된 회사의 영업비밀·기술정보·고객정보를 제3자에게 누설하거나 부당하게 사용하지 아니한다.","variables":[]},{"id":"it-noncompete-001","category":"special","industry_tags":["it_office"],"employment_types":["permanent"],"required":false,"legality":"conditional","legality_note":"경업금지는 기간·지역·대상이 합리적이고 대가(보상)가 있어야 유효. 과도하면 무효. 신중 사용 권장.","title":"IT — 경업금지(신중)","body_template":"근로자는 퇴직 후 {{period_months}}개월간 {{scope}} 범위에서 회사와 경쟁하는 업무에 종사하지 아니한다. 이에 대한 보상은 {{compensation}}으로 한다.","variables":[{"key":"period_months","label":"제한기간(개월)","type":"number"},{"key":"scope","label":"제한 범위","type":"text"},{"key":"compensation","label":"보상","type":"text"}]},{"id":"period-daily-001","category":"period","industry_tags":["common"],"employment_types":["daily"],"required":true,"legality":"valid","source":"patch-0.1.1","title":"근로계약기간 — 일용","body_template":"본 계약은 일용근로계약으로 근로일 단위로 체결한다.\n- 근로개시일: {{start_date}}\n- 근로예정일: {{work_days}}\n- 근로일마다 계약이 성립하며, 계속 근로 시 별도 합의로 갱신한다.","variables":[{"key":"start_date","label":"근로개시일","type":"date"},{"key":"work_days","label":"근로예정일(기간·일수)","type":"text"}]},{"id":"hours-daily-001","category":"hours","industry_tags":["common"],"employment_types":["daily"],"required":true,"legality":"valid","source":"patch-0.1.1","title":"근로시간·휴게 — 일용","body_template":"- 1일 소정근로시간: {{daily_hours}}시간 (시업 {{start_time}} ~ 종업 {{end_time}})\n- 휴게시간: {{break_time}} (근로시간 4시간당 30분 이상, 8시간당 1시간 이상)\n- 1일 8시간을 초과하는 근로는 연장근로로 보아 별도 정산한다.","variables":[{"key":"daily_hours","label":"1일 소정근로시간","type":"number"},{"key":"start_time","label":"시업시각","type":"text"},{"key":"end_time","label":"종업시각","type":"text"},{"key":"break_time","label":"휴게시간","type":"text"}]},{"id":"hours-minor-001","category":"hours","industry_tags":["common"],"employment_types":["minor"],"required":true,"legality":"conditional","source":"patch-0.1.1","legality_note":"근기법 제69조 — 1일 7시간·1주 35시간 초과 금지(합의 시 1일 1시간·1주 5시간 한도 연장). 제70조 제2항 — 22시~06시 및 휴일 근로 금지(본인 동의 + 지방고용노동관서장 인가 시 예외).","title":"근로시간·휴게 — 연소근로자(18세 미만)","body_template":"- 소정근로시간: 1일 {{daily_hours}}시간, 1주 {{weekly_hours}}시간\n  (근로기준법 제69조에 따라 1일 7시간·1주 35시간을 초과할 수 없으며, 당사자 합의 시 1일 1시간·1주 5시간을 한도로 연장할 수 있다)\n- 근무일: 매주 {{workdays}} / 시업 {{start_time}} ~ 종업 {{end_time}}\n- 휴게시간: {{break_time}}\n- 근로기준법 제70조 제2항에 따라 22:00부터 06:00까지의 야간근로 및 휴일근로는 시키지 아니한다.","variables":[{"key":"daily_hours","label":"1일 소정근로시간(7시간 이하)","type":"number"},{"key":"weekly_hours","label":"1주 소정근로시간(35시간 이하)","type":"number"},{"key":"workdays","label":"근무일","type":"text"},{"key":"start_time","label":"시업시각","type":"text"},{"key":"end_time","label":"종업시각","type":"text"},{"key":"break_time","label":"휴게시간","type":"text"}]},{"id":"minor-consent-001","category":"parties","industry_tags":["common"],"employment_types":["minor"],"required":true,"legality":"conditional","source":"patch-0.1.1","legality_note":"근기법 제66조 — 18세 미만자를 고용하는 사용자는 연령 증명 가족관계기록사항 증명서와 친권자·후견인 동의서를 사업장에 갖추어 두어야 합니다.","title":"연소근로자 — 친권자 동의·증명서 비치","body_template":"근로자가 18세 미만이므로 사용자는 근로기준법 제66조에 따라 다음 서류를 사업장에 갖추어 둔다.\n- 연령을 증명하는 가족관계기록사항에 관한 증명서\n- 친권자 또는 후견인의 동의서 (동의자: {{guardian_name}} / 관계: {{guardian_relation}} / 연락처: {{guardian_tel}})","variables":[{"key":"guardian_name","label":"친권자·후견인 성명","type":"text"},{"key":"guardian_relation","label":"근로자와의 관계","type":"text"},{"key":"guardian_tel","label":"친권자·후견인 연락처","type":"text"}]},{"id":"holiday-weekly-001","category":"holiday","industry_tags":["common"],"employment_types":["*"],"required":false,"legality":"conditional","source":"patch-0.1.1","legality_note":"주 소정근로시간 15시간 이상인 경우 유급주휴일이 발생합니다(근기법 제55조). 15시간 미만이면 발생하지 않습니다.","title":"주휴일 지정","body_template":"- 주휴일: 매주 {{weekly_holiday}} (유급)\n- 주 소정근로시간이 15시간 이상인 경우 유급으로 하며, 15시간 미만인 경우 주휴수당은 발생하지 아니한다.","variables":[{"key":"weekly_holiday","label":"주휴일(요일)","type":"text"}]},{"id":"sys-under5-notice-001","category":"holiday","industry_tags":["common"],"employment_types":["*"],"required":false,"legality":"valid","source":"patch-0.1.1","only_when":{"max_employees":4},"title":"5인 미만 사업장 적용 범위 안내","body_template":"본 사업장은 상시근로자 5인 미만으로, 근로기준법상 연장·야간·휴일근로 가산수당(제56조)과 연차유급휴가(제60조), 관공서 공휴일 유급휴일(제55조 제2항)은 법정 의무 적용 대상이 아니다. 다만 최저임금, 주휴수당, 퇴직금, 근로계약서 교부 의무는 동일하게 적용된다.","variables":[]},{"id":"misc-delivery-001","category":"misc","industry_tags":["common"],"employment_types":["*"],"required":true,"legality":"valid","source":"patch-0.2.0","title":"계약서 교부 및 수령 확인","body_template":"사용자는 본 계약을 체결함과 동시에 계약서 사본을 근로자의 교부요구와 관계없이 근로자에게 교부한다(근로기준법 제17조).\n본 계약서는 2부를 작성하여 사용자와 근로자가 각 1부씩 보관한다.\n\n근로자 수령 확인 :  {{delivery_date}}     성명 ______________ (서명 또는 인)","variables":[{"key":"delivery_date","label":"계약서 교부일","type":"date"}]},{"id":"academy-lecture-001","category":"wage","industry_tags":["academy"],"employment_types":["permanent","fixed_term","part_time"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"강의 시수제로 임금을 정하더라도 지휘·감독을 받는다면 근로자입니다. 근로자를 사업소득(3.3%)으로 처리하는 것은 위법입니다.","title":"강의료 — 시수제","body_template":"- 강의 시간당 강사료: {{fee_per_hour}}원 / 주 배정 시수: {{weekly_classes}}시간\n- 수업 준비·교재 연구·학부모 상담 등 수업 외 지시 업무 시간도 근로시간에 포함한다.\n- 시수 변동이 있어도 월 임금은 최저임금 이상을 보장한다.","variables":[{"key":"fee_per_hour","label":"시간당 강사료","type":"currency"},{"key":"weekly_classes","label":"주 배정 시수","type":"number"}]},{"id":"academy-class-001","category":"workplace","industry_tags":["academy"],"employment_types":["permanent","fixed_term","part_time"],"required":false,"legality":"valid","source":"patch-0.2.0","title":"담당 강좌·수업 배정","body_template":"- 담당 과목·학년: {{subject}}\n- 수업 배정은 학원 운영상 필요에 따라 조정할 수 있으며, 조정 시 근로자와 사전 협의한다.","variables":[{"key":"subject","label":"담당 과목·학년","type":"text"}]},{"id":"mfg-shift-001","category":"hours","industry_tags":["manufacturing"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"교대제를 운영하더라도 1주 12시간을 초과하는 연장근로는 할 수 없습니다(근기법 제53조). 야간(22시~06시) 근로에는 가산수당이 발생합니다.","title":"교대제 근무","body_template":"- 교대 형태: {{shift_type}}\n- 교대 주기 및 조 편성: {{shift_cycle}}\n- 교대 근무표는 매월 사전에 공지하며, 야간근로(22:00~06:00)에 대해서는 통상임금의 50%를 가산하여 지급한다.","variables":[{"key":"shift_type","label":"교대 형태(예: 2조 2교대)","type":"text"},{"key":"shift_cycle","label":"교대 주기·조 편성","type":"text"}]},{"id":"mfg-safety-001","category":"special","industry_tags":["manufacturing","construction"],"employment_types":["*"],"required":false,"legality":"valid","source":"patch-0.2.0","title":"안전보건 교육·보호구","body_template":"사용자는 산업안전보건법에 따라 근로자에게 안전보건교육을 실시하고 필요한 보호구를 지급한다. 근로자는 지급된 보호구를 착용하고 안전수칙을 준수한다.","variables":[]},{"id":"transport-vehicle-001","category":"special","industry_tags":["transport"],"employment_types":["*"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"차량 수리비·사고 부담금을 근로자에게 미리 정해 물리는 약정은 근기법 제20조(위약 예정 금지) 위반으로 무효입니다.","title":"차량·면허 관리","body_template":"- 운전 차량: {{vehicle}} / 소유: {{vehicle_owner}}\n- 근로자는 유효한 운전면허를 유지하고 안전운행 의무를 준수한다.\n- 차량 유지·보험·유류비는 사용자가 부담한다. 근로자의 고의·중과실이 있는 경우에도 손해배상액을 미리 정하지 아니한다.","variables":[{"key":"vehicle","label":"운행 차량","type":"text"},{"key":"vehicle_owner","label":"차량 소유(사업주/근로자)","type":"select","options":["사업주","근로자"]}]},{"id":"transport-fullmgmt-001","category":"wage","industry_tags":["transport"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"택시운송사업은 여객자동차법에 따라 운송수입금 전액관리제가 적용됩니다. 기준금(사납금)을 공제하고 지급하는 방식은 허용되지 않습니다.","title":"운송수입금 전액관리제","body_template":"근로자는 운송수입금 전액을 사용자에게 납입하고, 사용자는 근로시간에 따라 정해진 임금을 지급한다. 운송수입금 미달을 이유로 임금을 공제하지 아니한다.","variables":[]},{"id":"facility-monitor-001","category":"hours","industry_tags":["facility"],"employment_types":["permanent","fixed_term"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"감시·단속적 근로자로 근로시간·휴게·휴일 규정을 적용 제외하려면 고용노동부장관의 승인을 받아야 합니다(근기법 제63조 제3호). 승인 전에는 일반 규정이 그대로 적용됩니다.","title":"감시·단속적 근로 (승인 시)","body_template":"본 업무는 감시·단속적 업무로서 고용노동부장관의 적용제외 승인(승인번호: {{approval_no}})을 받은 경우에 한하여 근로기준법 제4장·제5장의 근로시간·휴게·휴일 규정을 적용하지 아니한다.\n승인을 받지 못한 경우에는 일반 근로시간 규정이 그대로 적용된다. 야간근로 가산수당과 최저임금은 승인 여부와 관계없이 적용된다.","variables":[{"key":"approval_no","label":"적용제외 승인번호(없으면 '미승인')","type":"text"}]},{"id":"agri-63-001","category":"hours","industry_tags":["agriculture"],"employment_types":["*"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"농림·축산·양잠·수산 사업은 근기법 제63조에 따라 근로시간·휴게·휴일 규정이 적용되지 않습니다. 다만 최저임금, 연차유급휴가, 야간근로 가산수당은 그대로 적용됩니다.","title":"근로시간 적용제외 (농업·축산)","body_template":"본 사업은 근로기준법 제63조 제1호에 해당하여 근로시간·휴게·휴일에 관한 규정을 적용하지 아니한다.\n- 통상 근로시간: {{usual_hours}} (농번기·농한기에 따라 조정)\n- 최저임금, 연차유급휴가, 야간근로(22:00~06:00) 가산수당은 적용된다.","variables":[{"key":"usual_hours","label":"통상 근로시간","type":"text"}]},{"id":"foreign-e9-notice-001","category":"parties","industry_tags":["common"],"employment_types":["foreign_e9"],"required":true,"legality":"conditional","source":"patch-0.2.0","legality_note":"E-9 고용허가제는 고용노동부 고시 표준근로계약서(EPS 제출용)를 반드시 사용해야 합니다. 본 문서는 근로조건 설명·내부 보관용 참고본이며 EPS 제출을 대체하지 않습니다.","title":"고용허가제 표준근로계약서 적용","body_template":"본 근로관계는 외국인근로자의 고용 등에 관한 법률에 따른 고용허가제(E-9)에 해당하며, 고용노동부 고시 표준근로계약서를 고용허가 절차(EPS)를 통해 별도로 체결·제출한다.\n본 문서는 근로조건을 근로자에게 설명하고 사업장에서 보관하기 위한 참고본으로, EPS 표준근로계약서의 내용이 우선한다.\n- 외국인등록번호: {{foreign_id}} / 국적: {{nationality}}","variables":[{"key":"foreign_id","label":"외국인등록번호","type":"text"},{"key":"nationality","label":"국적","type":"text"}]},{"id":"foreign-e9-lodging-001","category":"wage","industry_tags":["common"],"employment_types":["foreign_e9"],"required":false,"legality":"conditional","source":"patch-0.2.0","legality_note":"숙식비를 임금에서 공제하려면 근로계약 체결 전에 근로자에게 공제 항목과 금액을 사전 고지하고 동의를 받아야 합니다(고용노동부 지침).","title":"숙식 제공 및 비용 공제","body_template":"- 숙소 제공 여부: {{lodging}} / 숙소 형태: {{lodging_type}}\n- 숙식비 공제액: 월 {{lodging_cost}}원 (사전 고지 및 근로자 동의 후 공제)\n- 근로자가 동의하지 않는 경우 공제하지 아니한다.","variables":[{"key":"lodging","label":"숙소 제공","type":"select","options":["제공","미제공"]},{"key":"lodging_type","label":"숙소 형태","type":"text"},{"key":"lodging_cost","label":"월 숙식비 공제액","type":"currency"}]}],"blacklist":[{"id":"blk-liquidated-damages","pattern_keywords":["손해배상 예정","위약금","무단퇴사 시 배상","○○만원 배상"],"reason":"근로기준법 제20조 위반 — 근로계약 불이행에 대한 위약금·손해배상액 예정 금지. 무효.","severity":"block"},{"id":"blk-education-penalty","pattern_keywords":["교육비 반환","의무재직","위약 예정"],"reason":"실비 초과·강제근로형 교육비 반환약정은 무효 소지. 실제 지출·자발성 요건 필요.","severity":"warn"},{"id":"blk-salary-deduction-penalty","pattern_keywords":["지각 시 감봉","결근 벌금","지각 3회 감봉","벌금 공제"],"reason":"임금 전액지급 원칙 위반. 임의 벌금·감봉 공제 불가(취업규칙 감급도 한도 제한).","severity":"block"},{"id":"blk-severance-in-salary","pattern_keywords":["퇴직금 포함","월급에 퇴직금","퇴직금 분할"],"reason":"퇴직금 월급 분할지급 약정은 원칙적으로 무효(퇴직 시 별도 지급 원칙).","severity":"block"},{"id":"blk-below-minwage","pattern_keywords":["최저임금 미만"],"reason":"최저임금법 위반. 미달분 무효, 최저임금액으로 지급 의무 + 벌칙.","severity":"block"},{"id":"blk-no-insurance","pattern_keywords":["4대보험 미가입 합의","보험 가입하지 않기로","3.3% 처리"],"reason":"사회보험 가입은 강행규정. 미가입 합의·근로자를 사업소득(3.3%)으로 위장 처리 시 무효·적발 위험.","severity":"block"},{"id":"blk-unlimited-transfer","pattern_keywords":["무제한 전보","일방적 대기발령","언제든지 어느 장소든"],"reason":"합리적 범위를 벗어난 무제한 근무장소·업무 변경 조항은 권리남용/무효 소지. workplace-change-001로 대체.","severity":"warn"},{"id":"blk-resignation-damages","pattern_keywords":["인수인계 안 하면 급여 미지급","퇴사 시 급여 미지급"],"reason":"이미 제공한 근로의 임금은 사유 불문 지급 의무. 미지급 조건부 조항 무효.","severity":"block"}],"validation_rules":[{"id":"min_wage_check","when":"임금 조항 입력 시","logic":"시급(또는 월급/월소정시간) >= reference.minimum_wage.by_year[계약연도] 이어야 함. 미달 시 block.","message":"입력한 임금이 {{year}}년 최저임금({{min}}원) 미만입니다."},{"id":"weekly_holiday_15h","when":"근로시간·주휴 조항","logic":"주 소정근로시간 >= 15 이면 주휴수당 조항 필수 노출. < 15 이면 초단시간 고지 조항 권장.","message":"주 15시간 이상 근무 시 주휴수당이 발생합니다. 주휴 조항을 포함하세요."},{"id":"five_or_more_gasan","when":"사업장 규모 입력 시","logic":"employees >= 5 이면 wage-gasan-001, holiday-annual-001, holiday-publicday-001 활성화. < 5 이면 비활성+미적용 안내.","message":"5인 미만 사업장은 연장·야간·휴일 가산수당 및 연차가 법정 의무가 아닙니다(단, 부여 가능)."},{"id":"mandatory_fields_17","when":"저장/생성 전","logic":"근기법 제17조 서면교부 4항목(임금 구성·계산·지급 / 소정근로시간 / 휴일 / 연차) + 계약기간 + 근무장소·업무 누락 검사. 누락 시 block.","message":"법정 필수 기재사항이 누락되었습니다: {{missing}}"},{"id":"part_time_daily_hours","when":"단시간근로자","logic":"employment_type == part_time 이면 '근로일별 근로시간' 명시 필수(cafe-parttime-days-001).","message":"단시간근로자는 요일별 근로시간을 반드시 명시해야 합니다."},{"id":"probation_wage_check","when":"수습 감액 입력 시","logic":"수습 임금 < 최저임금 인 경우: 계약기간 >= 1년 AND 단순노무직 아님 AND 수습 <= 3개월 이어야 허용. 아니면 block.","message":"수습 감액(최저임금 90%)은 1년 이상 계약·3개월 이내·단순노무직 제외에서만 가능합니다."}]};
+const CATS = LIB.categories;
+const MINWAGE = LIB.reference.minimum_wage.by_year;
+const TH = LIB.reference.legal_thresholds;
+const THIS_YEAR = 2026;
+
+/* 공인노무사 감수를 받으면 아래에 이름·자격번호를 넣으세요. null이면 배지가 표시되지 않습니다. */
+const REVIEWER = null;   // 예: { name:'김경동 공인노무사', org:'노무법인 종로', date:'2026-07-21' }
+
+/* 지원금 진단 연결 (같은 그룹 서비스). null이면 안내 블록이 숨겨집니다. */
+const FUND_URL = 'https://topbanker99-ai.github.io/bizfund/';
+
+const S = { step:1, industry:null, employees:null, empType:null, sel:new Set(), vars:{}, special:'' };
+
+const DOC_TITLE = {
+  permanent:'표 준 근 로 계 약 서',
+  fixed_term:'표 준 근 로 계 약 서 (기간의 정함이 있는 경우)',
+  part_time:'단시간근로자 표준근로계약서',
+  daily:'일용근로자 표준근로계약서',
+  minor:'연소근로자 표준근로계약서 (18세 미만)',
+  foreign_e9:'근로조건 확인서 (외국인근로자 E-9 · 참고본)'
+};
+
+/* ---------- 조항 필터 ---------- */
+function candidates(){
+  if(!S.industry || !S.empType) return [];
+  return LIB.clauses.filter(c=>{
+    const indOk = c.industry_tags.includes(S.industry) || c.industry_tags.includes('common');
+    const empOk = c.employment_types.includes('*') || c.employment_types.includes(S.empType);
+    if(!indOk || !empOk) return false;
+    if(c.only_when && c.only_when.max_employees != null && S.employees > c.only_when.max_employees) return false;
+    return true;
+  });
+}
+function isObligatory(c){
+  const m = c.applies_when && c.applies_when.min_employees;
+  return m == null || S.employees >= m;
+}
+function syncRequired(){
+  const cand = candidates(), ids = new Set(cand.map(c=>c.id));
+  [...S.sel].forEach(id=>{ if(!ids.has(id)) S.sel.delete(id); });
+  cand.forEach(c=>{ if(c.required) S.sel.add(c.id); });
+  if(S.employees < 5 && ids.has('sys-under5-notice-001')) S.sel.add('sys-under5-notice-001');
+}
+
+/* ---------- 문서 조립 ---------- */
+function fillTemplate(tpl, forDoc){
+  const missing = [];
+  const out = String(tpl).replace(/\{\{(\w+)\}\}/g, (_, k)=>{
+    const v = S.vars[k];
+    if(v === undefined || v === ''){ missing.push(k); return forDoc ? '<span class="blank">________</span>' : '________'; }
+    return forDoc ? String(v).replace(/[<>&]/g, ch=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[ch])) : v;
+  });
+  return { text: out, missing };
+}
+function buildDoc(forDoc){
+  const picked = candidates().filter(c=>S.sel.has(c.id));
+  const order = CATS.map(c=>c.key);
+  picked.sort((a,b)=> order.indexOf(a.category) - order.indexOf(b.category));
+  return picked.map(c=>{
+    const f = fillTemplate(c.body_template, forDoc);
+    return { id:c.id, cat:c.category, title:c.title, body:f.text, missing:f.missing };
+  });
+}
+
+/* ---------- 검증 ---------- */
+function num(k){ const v = parseFloat(S.vars[k]); return isNaN(v) ? null : v; }
+function contractYear(){
+  const d = S.vars.start_date;
+  if(d && /^\d{4}/.test(d)) { const y = +d.slice(0,4); if(MINWAGE[y]) return y; }
+  return THIS_YEAR;
+}
+function monthlyStdHours(){
+  const w = num('weekly_hours');
+  if(w == null || w <= 0) return null;
+  const holidayHours = w >= TH.weekly_holiday_min_hours ? (w/40)*8 : 0;
+  return (w + holidayHours) * 4.345;
+}
+/* [수정] 최저임금 산입범위 반영
+   산입: 기본급 + 매월 정기·일률 지급 수당 + 매월 지급 식대 등 복리후생비(2024년부터 전액)
+   제외: 연장·야간·휴일근로 수당(포괄임금 고정OT 포함), 현물 식사, 연 1회 상여금 */
+function minWageBase(){
+  const parts = [], excluded = [];
+  if(num('base_pay') != null){
+    parts.push(num('base_pay'));
+    if(num('fixed_allowance')) parts.push(num('fixed_allowance'));
+    // 현물 식사는 산입 제외
+    if(num('meal_allowance')){
+      if(S.vars.meal_in_wage === '현물(식사 제공)') excluded.push(['현물 식사', num('meal_allowance')]);
+      else parts.push(num('meal_allowance'));
+    }
+    // 포괄임금 고정OT는 연장근로수당이므로 산입 제외
+    if(num('ot_amount')) excluded.push(['고정 연장근로수당', num('ot_amount')]);
+    return { amount: parts.reduce((a,b)=>a+b,0), excluded, mode:'항목별' };
+  }
+  // 기본급을 따로 안 적은 경우: 총액에서 산입 제외분만 뺌
+  const total = num('monthly_total');
+  if(total == null) return null;
+  if(num('ot_amount')) excluded.push(['고정 연장근로수당', num('ot_amount')]);
+  const off = excluded.reduce((a,b)=>a+b[1],0);
+  return { amount: total - off, excluded, mode:'총액' };
+}
+function hourlyEquivalent(){
+  if(num('hourly_wage') != null) return { hourly:num('hourly_wage'), from:'시급', excluded:[] };
+  if(num('daily_wage') != null && num('daily_hours')) return { hourly:num('daily_wage')/num('daily_hours'), from:'일당 ÷ 1일 근로시간', excluded:[] };
+  if(num('fee_per_hour') != null) return { hourly:num('fee_per_hour'), from:'시간당 강사료', excluded:[] };
+  const b = minWageBase(), h = monthlyStdHours();
+  if(b && h) return { hourly:b.amount/h, from:`산입임금 ${Math.round(b.amount).toLocaleString()}원 ÷ 월 소정 ${h.toFixed(0)}시간`, excluded:b.excluded };
+  return null;
+}
+function monthsBetween(a,b){
+  if(!a || !b) return null;
+  const d1=new Date(a), d2=new Date(b);
+  if(isNaN(d1)||isNaN(d2)) return null;
+  return (d2-d1)/(1000*60*60*24*30.44);
+}
+
+function validate(){
+  const errors=[], warns=[], infos=[];
+  const picked = candidates().filter(c=>S.sel.has(c.id));
+  const cats = new Set(picked.map(c=>c.category));
+  const has = id => S.sel.has(id);
+  const wh = num('weekly_hours');
+  const ultraShort = wh != null && wh < TH.weekly_holiday_min_hours;
+
+  /* 1. min_wage_check — 산입범위 반영 */
+  const y = contractYear(), min = MINWAGE[y] || MINWAGE[THIS_YEAR];
+  const he = hourlyEquivalent();
+  if(he){
+    if(he.excluded.length){
+      infos.push('최저임금 산입에서 제외한 항목 — ' + he.excluded.map(e=>`${e[0]} ${e[1].toLocaleString()}원`).join(', ') + '. 연장근로수당과 현물 식사는 최저임금에 산입되지 않습니다.');
+    }
+    if(he.hourly < min - 0.5){
+      errors.push({rule:'min_wage_check',
+        msg:`${y}년 최저임금(${min.toLocaleString()}원) 미달입니다. 환산 시급 약 ${Math.round(he.hourly).toLocaleString()}원 — ${he.from}.`});
+    } else {
+      infos.push(`환산 시급 약 ${Math.round(he.hourly).toLocaleString()}원 — ${y}년 최저임금 ${min.toLocaleString()}원 이상입니다. (${he.from})`);
+    }
+  }
+
+  /* 2. weekly_holiday_15h */
+  if(wh != null){
+    const hasHoliday = has('wage-weekly-holiday-001') || has('holiday-weekly-001');
+    if(!ultraShort && !hasHoliday){
+      warns.push({rule:'weekly_holiday_15h', msg:`주 ${wh}시간 근무는 유급주휴일이 발생합니다(근기법 제55조). 주휴일 조항을 포함하세요.`});
+    }
+    if(ultraShort){
+      infos.push(`주 ${wh}시간은 초단시간근로자입니다. 근기법 제18조 제3항에 따라 주휴수당과 연차가 발생하지 않고, 퇴직급여법 제4조에 따라 퇴직금도 발생하지 않습니다.`);
+      if(has('holiday-annual-001')) warns.push({rule:'ultra_short', msg:'주 15시간 미만인데 연차 조항이 선택되어 있습니다. 법정 의무는 아니며, 회사가 자율로 부여하는 경우에만 유지하세요.'});
+      if(has('insurance-severance-001')) warns.push({rule:'ultra_short', msg:'주 15시간 미만은 퇴직금 지급 대상이 아닙니다. 자율 지급이 아니라면 조항을 빼세요.'});
+    }
+  }
+
+  /* 3. five_or_more_gasan */
+  if(S.employees < 5) infos.push('5인 미만 사업장은 연장·야간·휴일 가산수당과 연차유급휴가가 법정 의무가 아닙니다. 최저임금·주휴수당·퇴직금·계약서 교부는 동일하게 적용됩니다.');
+
+  /* 4. mandatory_fields_17 */
+  const missCat=[];
+  if(!cats.has('wage')) missCat.push('임금(구성·계산·지급방법)');
+  if(!cats.has('hours')) missCat.push('소정근로시간');
+  if(!cats.has('period')) missCat.push('근로계약기간');
+  if(!cats.has('workplace')) missCat.push('근무장소·업무내용');
+  const holidayOk = cats.has('holiday') || (S.vars.weekly_holiday && S.vars.weekly_holiday !== '') || ultraShort;
+  if(!holidayOk) missCat.push('휴일');
+  // [수정] 초단시간·일용은 연차 의무 없음
+  const annualRequired = S.employees >= 5 && !ultraShort && S.empType !== 'daily';
+  if(annualRequired && !has('holiday-annual-001')) missCat.push('연차유급휴가(5인 이상 필수)');
+  if(missCat.length) errors.push({rule:'mandatory_fields_17', msg:'법정 필수 기재사항이 빠졌습니다 — '+missCat.join(', ')});
+
+  /* 빈칸 */
+  const blanks = new Set(buildDoc(false).flatMap(s=>s.missing));
+  if(blanks.size) errors.push({rule:'blank_fields', msg:`아직 채우지 않은 항목이 ${blanks.size}개 있습니다. 3단계에서 입력해 주세요.`});
+
+  /* 5. part_time_daily_hours */
+  if(S.empType === 'part_time' && !has('cafe-parttime-days-001')){
+    errors.push({rule:'part_time_daily_hours', msg:'단시간근로자는 요일별 근로시간을 반드시 명시해야 합니다(기간제법 제17조).'});
+  }
+
+  /* 6. [수정] probation_wage_check — 계약기간 실측 */
+  if(has('probation-001')){
+    const pm = num('probation_months');
+    const reduced = /90|감액|최저임금의/.test(S.vars.probation_pay||'');
+    if(pm != null && pm > TH.probation_max_months){
+      errors.push({rule:'probation_wage_check', msg:`수습기간 임금 감액은 ${TH.probation_max_months}개월 이내에서만 가능합니다. 입력값 ${pm}개월.`});
+    }
+    if(reduced){
+      const span = monthsBetween(S.vars.start_date, S.vars.end_date);
+      if(S.empType === 'fixed_term' && span != null && span < 12){
+        errors.push({rule:'probation_wage_check',
+          msg:`수습 감액은 계약기간 1년 이상인 경우에만 가능합니다. 현재 계약기간 약 ${span.toFixed(1)}개월(${S.vars.start_date} ~ ${S.vars.end_date}).`});
+      } else if(S.empType === 'part_time' || S.empType === 'daily'){
+        warns.push({rule:'probation_wage_check', msg:'단시간·일용 근로자는 대부분 단순노무직에 해당해 수습 감액이 불가합니다. 고용노동부 단순노무직 고시를 확인하세요.'});
+      } else {
+        warns.push({rule:'probation_wage_check', msg:'수습 감액은 1년 이상 계약 · 3개월 이내 · 단순노무직 제외인 경우에만 가능합니다. 세 조건을 모두 확인하세요.'});
+      }
+    }
+  }
+
+  /* 7. [신규] 기간제 2년 초과 — 기간제법 제4조 */
+  if(S.empType === 'fixed_term'){
+    const span = monthsBetween(S.vars.start_date, S.vars.end_date);
+    if(span != null){
+      if(span > 24.2){
+        warns.push({rule:'fixed_term_2y',
+          msg:`계약기간이 약 ${(span/12).toFixed(1)}년으로 2년을 초과합니다. 기간제법 제4조에 따라 2년을 넘겨 사용하면 기간의 정함이 없는 근로계약을 체결한 것으로 봅니다. 만 55세 이상 고령자, 박사·전문자격 소지자, 휴직자 대체 등 예외에 해당하는지 확인하세요.`});
+      } else if(span > 21){
+        infos.push(`계약기간이 약 ${span.toFixed(0)}개월입니다. 갱신해서 총 2년을 넘기면 무기계약으로 전환되니 갱신 시점을 관리하세요.`);
+      }
+      if(span <= 0) errors.push({rule:'period_order', msg:'계약 종료일이 시작일보다 빠르거나 같습니다.'});
+    }
+  }
+
+  /* 8. 연소근로자 */
+  if(S.empType === 'minor'){
+    const dh = num('daily_hours');
+    if(dh != null && dh > 7) errors.push({rule:'minor_hours', msg:`연소근로자의 1일 소정근로시간은 7시간을 초과할 수 없습니다(근기법 제69조). 입력값 ${dh}시간.`});
+    if(wh != null && wh > 35) errors.push({rule:'minor_hours', msg:`연소근로자의 1주 소정근로시간은 35시간을 초과할 수 없습니다(근기법 제69조). 입력값 ${wh}시간.`});
+    if(!has('minor-consent-001')) errors.push({rule:'minor_consent', msg:'18세 미만 고용 시 친권자·후견인 동의서와 가족관계증명서 비치 조항이 필요합니다(근기법 제66조).'});
+    infos.push('18세 미만 근로자는 22:00~06:00 야간근로와 휴일근로가 금지됩니다(본인 동의 + 지방고용노동관서장 인가 시 예외).');
+  }
+
+  /* 9. [신규] 외국인 E-9 */
+  if(S.empType === 'foreign_e9'){
+    warns.push({rule:'foreign_e9', msg:'E-9 고용허가제는 고용노동부 고시 표준근로계약서를 EPS(eps.go.kr)를 통해 별도로 체결·제출해야 합니다. 이 문서는 근로조건 설명·사업장 보관용 참고본이며 EPS 제출을 대체하지 않습니다.'});
+  }
+
+  /* 10. 블랙리스트 */
+  blacklistHits(S.special).forEach(h=>{
+    (h.severity === 'block' ? errors : warns).push({rule:h.id, msg:`특약에 "${h.hit}" 문구가 있습니다. ${h.reason}`});
+  });
+
+  return { errors, warns, infos, ok: errors.length === 0 };
+}
+function blacklistHits(text){
+  if(!text) return [];
+  const t = text.replace(/\s/g,'');
+  const out=[];
+  LIB.blacklist.forEach(b=>{
+    b.pattern_keywords.forEach(k=>{
+      const kk = k.replace(/\s/g,'').replace(/○+/g,'');
+      if(kk.length >= 3 && t.includes(kk)) out.push({id:b.id, hit:k, reason:b.reason, severity:b.severity});
+    });
+  });
+  return out.filter((v,i,a)=>a.findIndex(x=>x.id===v.id)===i);
+}
+
+
+/* ============================================================
+   DOCX 생성 — 외부 라이브러리 없이 OOXML(.docx)을 직접 씁니다.
+   .docx는 특정 XML들을 담은 ZIP이므로, 무압축(store) ZIP을 만들면
+   워드·한글·구글독스 어디서나 열립니다.
+   ============================================================ */
+const CRC_T = (()=>{ const t=new Uint32Array(256);
+  for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1; t[n]=c>>>0; }
+  return t; })();
+function crc32(u8){ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++) c = CRC_T[(c^u8[i])&0xFF] ^ (c>>>8); return (c^0xFFFFFFFF)>>>0; }
+const ENC = new TextEncoder();
+
+function zipStore(files){
+  const enc = n => ENC.encode(n);
+  const chunks = [], central = [];
+  let offset = 0;
+  const now = new Date();
+  const dosTime = ((now.getHours()<<11) | (now.getMinutes()<<5) | (now.getSeconds()>>1)) & 0xFFFF;
+  const dosDate = (((now.getFullYear()-1980)<<9) | ((now.getMonth()+1)<<5) | now.getDate()) & 0xFFFF;
+
+  files.forEach(f=>{
+    const name = enc(f.name), data = f.data, crc = crc32(data);
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true);
+    lh.setUint16(8, 0, true); lh.setUint16(10, dosTime, true); lh.setUint16(12, dosDate, true);
+    lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true);
+    lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+    chunks.push(new Uint8Array(lh.buffer), name, data);
+
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true);
+    ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+    ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true);
+    ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true);
+    ch.setUint16(28, name.length, true); ch.setUint16(30, 0, true); ch.setUint16(32, 0, true);
+    ch.setUint16(34, 0, true); ch.setUint16(36, 0, true); ch.setUint32(38, 0, true);
+    ch.setUint32(42, offset, true);
+    central.push(new Uint8Array(ch.buffer), name);
+    offset += 30 + name.length + data.length;
+  });
+
+  const cdSize = central.reduce((a,b)=>a+b.length, 0);
+  const eo = new DataView(new ArrayBuffer(22));
+  eo.setUint32(0, 0x06054b50, true); eo.setUint16(4, 0, true); eo.setUint16(6, 0, true);
+  eo.setUint16(8, files.length, true); eo.setUint16(10, files.length, true);
+  eo.setUint32(12, cdSize, true); eo.setUint32(16, offset, true); eo.setUint16(20, 0, true);
+
+  const all = [...chunks, ...central, new Uint8Array(eo.buffer)];
+  const total = all.reduce((a,b)=>a+b.length, 0);
+  const out = new Uint8Array(total);
+  let p = 0; all.forEach(c=>{ out.set(c, p); p += c.length; });
+  return out;
+}
+
+const xesc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const FONT = '<w:rFonts w:ascii="맑은 고딕" w:eastAsia="맑은 고딕" w:hAnsi="맑은 고딕"/>';
+
+function wP(text, o){
+  o = o || {};
+  const jc = o.center ? '<w:jc w:val="center"/>' : '';
+  const sp = `<w:spacing w:before="${o.before||0}" w:after="${o.after||60}" w:line="${o.line||300}" w:lineRule="auto"/>`;
+  const ind = o.indent ? `<w:ind w:left="${o.indent}"/>` : '';
+  const rpr = `<w:rPr>${FONT}${o.bold?'<w:b/>':''}<w:sz w:val="${o.size||20}"/><w:szCs w:val="${o.size||20}"/>${o.spacingChar?`<w:spacing w:val="${o.spacingChar}"/>`:''}</w:rPr>`;
+  const lines = String(text==null?'':text).split('\n');
+  const runs = lines.map((l,i)=>`${i?'<w:r>'+rpr+'<w:br/></w:r>':''}<w:r>${rpr}<w:t xml:space="preserve">${xesc(l)}</w:t></w:r>`).join('');
+  return `<w:p><w:pPr>${jc}${sp}${ind}<w:keepLines/></w:pPr>${runs}</w:p>`;
+}
+function wRule(){ return '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr><w:spacing w:after="120"/></w:pPr></w:p>'; }
+
+function buildDocxXml(copyLabel){
+  const secs = buildDoc(false);
+  let body = '';
+  body += wP(DOC_TITLE[S.empType] || '표 준 근 로 계 약 서', {center:true, bold:true, size:32, spacingChar:40, after:60});
+  if(copyLabel) body += wP(copyLabel, {center:true, size:16, after:160});
+  body += wRule();
+  let n = 0;
+  secs.forEach(s=>{
+    n++;
+    body += wP(`제${n}조 (${s.title})`, {bold:true, size:21, before:140, after:40});
+    body += wP(s.body, {size:20, indent:200, after:100});
+  });
+  if(S.special.trim()){
+    n++;
+    body += wP(`제${n}조 (특약사항)`, {bold:true, size:21, before:140, after:40});
+    body += wP(S.special.trim(), {size:20, indent:200, after:100});
+  }
+  const g = k => S.vars[k] || '________________';
+  body += wP('', {after:200});
+  body += wRule();
+  body += wP(S.vars.contract_date || new Date().toISOString().slice(0,10).replace(/-/g,'. '), {center:true, size:20, before:200, after:200});
+  body += wP(`(사업주)  사업체명: ${g('company_name')}\n          주소: ${g('company_address')}\n          대표자: ${g('employer_name')}                    (서명 또는 인)`, {size:20, after:140});
+  body += wP(`(근로자)  주소: ${g('employee_address')}\n          연락처: ${g('employee_tel')}\n          성명: ${g('employee_name')}                    (서명 또는 인)`, {size:20, after:140});
+  if(S.empType === 'minor'){
+    body += wP(`(친권자·후견인)  성명: ${g('guardian_name')}   관계: ${g('guardian_relation')}   연락처: ${g('guardian_tel')}\n                                                        (서명 또는 인)`, {size:20, after:140});
+  }
+  const sect = '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1134" w:bottom="1418" w:left="1134" w:header="851" w:footer="992" w:gutter="0"/></w:sectPr>';
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}${sect}</w:body></w:document>`;
+}
+
+function makeDocx(copies){
+  const CT = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`;
+  const RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  const DRELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr>${FONT}<w:sz w:val="20"/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr>${FONT}<w:sz w:val="20"/></w:rPr></w:style></w:styles>`;
+
+  let xml;
+  if(copies === 2){
+    const a = buildDocxXml('[ 사업주 보관용 ]'), b = buildDocxXml('[ 근로자 교부용 ]');
+    const bodyA = a.slice(a.indexOf('<w:body>')+8, a.indexOf('<w:sectPr>'));
+    const bodyB = b.slice(b.indexOf('<w:body>')+8, b.indexOf('<w:sectPr>'));
+    const tail  = a.slice(a.indexOf('<w:sectPr>'));
+    const brk = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+    xml = a.slice(0, a.indexOf('<w:body>')+8) + bodyA + brk + bodyB + tail;
+  } else {
+    xml = buildDocxXml(null);
+  }
+  return zipStore([
+    {name:'[Content_Types].xml', data: ENC.encode(CT)},
+    {name:'_rels/.rels',         data: ENC.encode(RELS)},
+    {name:'word/_rels/document.xml.rels', data: ENC.encode(DRELS)},
+    {name:'word/styles.xml',     data: ENC.encode(STYLES)},
+    {name:'word/document.xml',   data: ENC.encode(xml)},
+  ]);
+}
+
+function saveBlob(bytes, filename, mime){
+  const blob = new Blob([bytes], {type: mime});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 600);
+}
+function downloadDocx(copies){
+  const v = validate();
+  if(!v.ok){ alert('아직 확인할 항목이 남아 있습니다. 4단계에서 확인해 주세요.'); return; }
+  const name = (S.vars.employee_name||'근로자').replace(/[\\/:*?"<>|]/g,'');
+  const date = new Date().toISOString().slice(0,10);
+  saveBlob(makeDocx(copies), `근로계약서_${name}_${date}${copies===2?'_2부':''}.docx`,
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+}
+
+/* ---------- 저장/불러오기 (개인정보는 파일로만) ---------- */
+function exportJSON(){
+  const data = { _format:'contract-draft', _version:LIB.meta.version, _saved:new Date().toISOString(),
+    industry:S.industry, employees:S.employees, empType:S.empType,
+    sel:[...S.sel], vars:S.vars, special:S.special };
+  saveBlob(ENC.encode(JSON.stringify(data,null,1)),
+    `계약서초안_${(S.vars.employee_name||'무제')}_${new Date().toISOString().slice(0,10)}.json`, 'application/json');
+}
+function importJSON(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(d._format !== 'contract-draft') throw new Error('형식이 다릅니다');
+      S.industry=d.industry; S.employees=d.employees; S.empType=d.empType;
+      S.sel=new Set(d.sel||[]); S.vars=d.vars||{}; S.special=d.special||'';
+      syncRequired(); S.step=3; render();
+    }catch(e){ alert('불러오지 못했습니다. 이 도구에서 저장한 파일인지 확인해 주세요.'); }
+  };
+  r.readAsText(file);
+}
+/* 근로자 정보만 비우고 사업장 정보는 유지 */
+const EMPLOYEE_KEYS = ['employee_name','employee_birth','employee_address','employee_tel',
+  'guardian_name','guardian_relation','guardian_tel','foreign_id','nationality',
+  'start_date','end_date','delivery_date','work_days','weekly_schedule',
+  'monthly_total','base_pay','fixed_allowance','allowance_detail','meal_allowance','bonus',
+  'hourly_wage','daily_wage','fee_per_hour','weekly_classes','probation_months','probation_pay',
+  'ot_hours','ot_amount','incentive_rate','incentive_base','stage','stage_criteria'];
+function nextEmployee(){
+  if(!confirm('근로자 정보와 임금 항목만 비우고 사업장 정보는 그대로 둡니다. 계속할까요?')) return;
+  EMPLOYEE_KEYS.forEach(k=> delete S.vars[k]);
+  S.step = 3; render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+
+/* ---------- 스텝 레일 ---------- */
+const STEPS=['기본 선택','조항 선택','내용 입력','완성·저장'];
+function renderRail(){
+  document.getElementById('rail').innerHTML = STEPS.map((t,i)=>{
+    const n=i+1, cls = n===S.step?'on':(n<S.step?'done':'');
+    return `<button class="rstep ${cls}" onclick="goStep(${n})"><span class="n">${n<S.step?'✓':n}</span>${t}</button>`;
+  }).join('');
+}
+function goStep(n){
+  if(n>1 && (!S.industry || !S.employees || !S.empType)) return;
+  if(n>2) syncRequired();
+  S.step=n; render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- 1단계 ---------- */
+function step1(){
+  const ind = LIB.industries.filter(i=>i.key!=='common');
+  return `<h2 class="step-t">어떤 일자리인가요?</h2>
+  <p class="step-d">세 가지만 고르면 조건에 맞는 조항만 추려서 보여드립니다.</p>
+  <div class="fgroup"><div class="flabel">업종 <span class="req">필수</span></div>
+    <div class="opts">${ind.map(i=>`<button class="opt ${S.industry===i.key?'on':''}" onclick="setF('industry','${i.key}')">${i.label}</button>`).join('')}</div></div>
+  <div class="fgroup"><div class="flabel">상시근로자 수 <span class="req">필수</span></div>
+    <div class="opts">
+      <button class="opt ${S.employees===4?'on':''}" onclick="setF('employees',4)">5인 미만<span class="sm">가산수당·연차 의무 없음</span></button>
+      <button class="opt ${S.employees===5?'on':''}" onclick="setF('employees',5)">5인 이상<span class="sm">가산수당·연차 의무 적용</span></button>
+    </div>
+    <div class="vhint">사업주 본인은 제외하고, 아르바이트를 포함한 상시 인원 기준입니다.</div></div>
+  <div class="fgroup"><div class="flabel">고용형태 <span class="req">필수</span></div>
+    <div class="opts">${LIB.employment_types.map(e=>`<button class="opt ${S.empType===e.key?'on':''}" onclick="setF('empType','${e.key}')">${e.label}</button>`).join('')}</div></div>
+  ${S.empType==='minor'?'<div class="note warn">18세 미만을 고용할 때는 친권자·후견인 동의서와 가족관계증명서를 사업장에 갖추어 두어야 합니다(근기법 제66조). 관련 조항이 자동으로 포함됩니다.</div>':''}
+  ${S.empType==='foreign_e9'?'<div class="note bad"><b>E-9 고용허가제는 고용노동부 고시 표준근로계약서를 EPS(eps.go.kr)로 별도 체결·제출해야 합니다.</b> 여기서 만드는 문서는 근로조건을 설명하고 사업장에 보관하기 위한 참고본이며, EPS 제출을 대체하지 않습니다.</div>':''}
+  <div class="navbar"><span></span>
+    <button class="btn btn-p" ${(S.industry&&S.employees&&S.empType)?'':'disabled'} onclick="goStep(2)">조항 고르기 →</button></div>`;
+}
+function setF(k,v){ S[k]=v; syncRequired(); render(); }
+
+/* ---------- 2단계 ---------- */
+function step2(){
+  const byCat = {};
+  candidates().forEach(c=>{ (byCat[c.category] ||= []).push(c); });
+  const blocks = CATS.filter(ct=>byCat[ct.key]).map(ct=>{
+    const items = byCat[ct.key].map(c=>{
+      const on = S.sel.has(c.id), lock = c.required, oblig = isObligatory(c);
+      const tags=[];
+      if(lock) tags.push('<span class="tag req">법정 필수</span>');
+      if(!oblig) tags.push('<span class="tag na">5인 미만 의무 아님</span>');
+      if(c.legality==='conditional') tags.push('<span class="tag cond">요건 확인</span>');
+      const note = !oblig
+        ? '상시근로자 5인 미만 사업장은 법정 의무가 아닙니다. 회사가 자율적으로 부여하려면 선택하세요.'
+        : (c.legality==='conditional' ? c.legality_note : '');
+      return `<div class="cl ${lock?'locked':(on?'on':'')} ${!oblig&&!on?'off':''}" onclick="${lock?'':`toggle('${c.id}')`}">
+        <div class="cl-box">${on?'✓':''}</div>
+        <div class="cl-body"><div class="cl-t">${c.title}${tags.join('')}</div>
+        ${note?`<div class="cl-n ${c.legality==='conditional'&&oblig?'cond':''}">${note}</div>`:''}</div></div>`;
+    }).join('');
+    return `<div class="cat"><div class="cat-h">${ct.label}</div>${items}</div>`;
+  }).join('');
+  return `<h2 class="step-t">계약서에 넣을 조항을 고르세요</h2>
+  <p class="step-d">법정 필수 조항은 자동으로 들어가며 해제할 수 없습니다. 나머지는 상황에 맞게 켜고 끄시면 됩니다.</p>
+  ${S.employees<5?'<div class="note info">5인 미만 사업장으로 설정하셨습니다. 가산수당·연차·공휴일 조항은 법정 의무가 아니어서 회색으로 표시되지만, 부여하실 거라면 선택할 수 있습니다.</div>':''}
+  ${blocks}
+  <div class="navbar"><button class="btn btn-g" onclick="goStep(1)">← 이전</button>
+    <button class="btn btn-p" onclick="goStep(3)">내용 입력하기 →</button></div>`;
+}
+function toggle(id){ S.sel.has(id) ? S.sel.delete(id) : S.sel.add(id); render(); }
+
+/* ---------- 3단계 ---------- */
+function step3(){
+  const picked = candidates().filter(c=>S.sel.has(c.id));
+  const seen = new Set();
+  const groups = picked.map(c=>{
+    const vs = (c.variables||[]).filter(v=>!seen.has(v.key) && seen.add(v.key));
+    if(!vs.length) return '';
+    return `<div class="fgroup"><div class="flabel">${c.title}</div><div class="vgrid">${vs.map(v=>field(v)).join('')}</div></div>`;
+  }).join('');
+  return `<h2 class="step-t">빈칸을 채워 주세요</h2>
+  <p class="step-d">오른쪽 문서가 입력하는 대로 채워집니다. 노란 칸이 아직 비어 있는 자리입니다.</p>
+  <div class="fgroup"><div class="flabel">계약 체결일</div><div class="vgrid">
+    <label class="vf"><span>계약서 작성일</span><input type="date" value="${S.vars.contract_date||''}" oninput="setVar('contract_date',this.value)"></label></div></div>
+  ${groups}
+  <div class="fgroup"><div class="flabel">특약사항 <span class="tag na">선택</span></div>
+    <label class="vf"><textarea id="spec" placeholder="추가로 정할 내용이 있으면 적어 주세요. 위법한 문구가 들어가면 자동으로 알려 드립니다." oninput="S.special=this.value;renderPaper();renderHits()">${S.special}</textarea></label>
+    <div class="vhint">위약금·지각 벌금·퇴직금 월급 분할·4대보험 미가입 같은 조항은 법으로 무효입니다.</div>
+    <div id="hits"></div></div>
+  <div class="navbar"><button class="btn btn-g" onclick="goStep(2)">← 이전</button>
+    <button class="btn btn-p" onclick="goStep(4)">완성본 확인 →</button></div>`;
+}
+function field(v){
+  const val = S.vars[v.key] ?? '';
+  const wide = /schedule|detail|address|work_days|pay_method|probation_pay|bonus|usual_hours|shift_cycle|subject|criteria/.test(v.key);
+  const esc = s => String(s).replace(/"/g,'&quot;');
+  let inner;
+  if(v.type==='select'){
+    inner = `<select onchange="setVar('${v.key}',this.value)"><option value="">선택하세요</option>${(v.options||[]).map(o=>`<option ${val===o?'selected':''}>${o}</option>`).join('')}</select>`;
+  } else if(v.key==='weekly_schedule'){
+    inner = `<textarea placeholder="월 10:00~15:00&#10;수 10:00~15:00&#10;토 09:00~18:00" oninput="setVar('${v.key}',this.value)">${esc(val)}</textarea>`;
+  } else {
+    const t = v.type==='date' ? 'date' : (v.type==='number'||v.type==='currency' ? 'number' : 'text');
+    inner = `<input type="${t}" value="${esc(val)}" placeholder="${v.type==='currency'?'원 단위 숫자만':''}" oninput="setVar('${v.key}',this.value)">`;
+  }
+  return `<label class="vf ${wide?'wide':''}"><span>${v.label}</span>${inner}</label>`;
+}
+function setVar(k,v){ S.vars[k]=v; renderPaper(); }
+function renderHits(){
+  const el=document.getElementById('hits'); if(!el) return;
+  el.innerHTML = blacklistHits(S.special).map(h=>`<div class="note ${h.severity==='block'?'bad':'warn'}"><b>${h.severity==='block'?'무효 조항':'주의'}</b> — "${h.hit}" ${h.reason}</div>`).join('');
+}
+
+/* ---------- 4단계 ---------- */
+function fundHint(){
+  if(!FUND_URL) return '';
+  const isNew = S.empType !== 'daily';
+  if(!isNew) return '';
+  return `<div class="note info" style="margin-top:18px">
+    <b>이 채용으로 받을 수 있는 지원금이 있을 수 있습니다.</b><br>
+    청년일자리도약장려금, 두루누리 사회보험료 지원, 고용촉진장려금은 모두 근로계약서와 4대보험 가입자명부가 기본 서류입니다.
+    방금 만든 계약서로 절반은 준비된 셈이니, 해당되는 지원금이 있는지 확인해 보세요.
+    <div style="margin-top:9px"><a class="btn btn-g btn-sm" href="${FUND_URL}" target="_blank" rel="noopener">지원금 진단하러 가기 →</a></div></div>`;
+}
+function step4(){
+  const v = validate();
+  const list = (arr,cls,label) => arr.length ? arr.map(e=>`<div class="note ${cls}"><b>${label}</b> ${e.msg||e}</div>`).join('') : '';
+  return `<h2 class="step-t">${v.ok?'계약서가 완성됐습니다':'아직 확인할 곳이 있습니다'}</h2>
+  <p class="step-d">${v.ok?'2부를 출력해 사업주와 근로자가 각 1부씩 보관하세요. 근로자 교부는 법정 의무입니다.':'아래 항목을 해결하면 저장 버튼이 열립니다.'}</p>
+  ${list(v.errors,'bad','확인 필요 —')}
+  ${list(v.warns,'warn','주의 —')}
+  ${v.ok?'<div class="note good"><b>법정 필수 기재사항을 모두 갖추었습니다.</b> 근로기준법 제17조 서면 명시·교부 항목과 최저임금 기준을 통과했습니다.</div>':''}
+  ${list(v.infos,'info','참고 —')}
+  ${v.ok?`<div class="fgroup" style="margin-top:22px"><div class="flabel">내려받기</div>
+    <div class="opts" style="grid-template-columns:1fr 1fr">
+      <button class="opt" onclick="downloadDocx(2)"><b>Word · 2부</b><span class="sm">사업주 보관용 + 근로자 교부용</span></button>
+      <button class="opt" onclick="downloadDocx(1)"><b>Word · 1부</b><span class="sm">단면 출력용</span></button>
+    </div>
+    <div class="opts" style="grid-template-columns:1fr 1fr;margin-top:8px">
+      <button class="opt" onclick="window.print()"><b>인쇄 · PDF</b><span class="sm">브라우저 인쇄로 PDF 저장</span></button>
+      <button class="opt" onclick="nextEmployee()"><b>다음 근로자</b><span class="sm">사업장 정보는 그대로 두고 이어서 작성</span></button>
+    </div></div>`:''}
+  ${v.ok?fundHint():''}
+  <div class="navbar"><button class="btn btn-g" onclick="goStep(3)">← 내용 고치기</button>
+    <button class="btn btn-g" onclick="exportJSON()">초안 저장(.json)</button></div>`;
+}
+
+/* ---------- 미리보기 ---------- */
+function docHTML(){
+  const secs = buildDoc(true);
+  if(!secs.length) return '<div class="doc-empty">조건을 고르면 계약서가 여기에 만들어집니다.</div>';
+  let n = 0;
+  const body = secs.map(s=>`<div class="doc-sec"><div class="doc-sec-t">제${++n}조 (${s.title})</div><div class="doc-sec-b">${s.body}</div></div>`).join('');
+  const spec = S.special.trim()
+    ? `<div class="doc-sec"><div class="doc-sec-t">제${n+1}조 (특약사항)</div><div class="doc-sec-b">${S.special.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</div></div>` : '';
+  const g = k => S.vars[k] || '<span class="blank">________</span>';
+  const minorSign = S.empType==='minor'
+    ? `<div>(친권자·후견인) 성명: ${g('guardian_name')} (서명 또는 인) &nbsp; 관계: ${g('guardian_relation')} &nbsp; 연락처: ${g('guardian_tel')}</div>` : '';
+  return `<div class="doc-h1">${DOC_TITLE[S.empType]||'표 준 근 로 계 약 서'}</div>${body}${spec}
+    <div class="doc-sign">
+      <div style="text-align:center;margin-bottom:14px">${S.vars.contract_date || new Date().toISOString().slice(0,10).replace(/-/g,'. ')}</div>
+      <div>(사업주) 사업체명: ${g('company_name')} &nbsp; 주소: ${g('company_address')}</div>
+      <div style="padding-left:4.2em">대표자: ${g('employer_name')} (서명 또는 인)</div>
+      <div style="margin-top:9px">(근로자) 주소: ${g('employee_address')} &nbsp; 연락처: ${g('employee_tel')}</div>
+      <div style="padding-left:4.2em">성명: ${g('employee_name')} (서명 또는 인)</div>
+      ${minorSign}
+    </div>`;
+}
+function renderPaper(){
+  document.getElementById('paper').innerHTML = docHTML();
+  const secs = buildDoc(false);
+  const blanks = new Set(secs.flatMap(s=>s.missing)).size;
+  document.getElementById('docCount').textContent = secs.length ? `조항 ${secs.length}개${blanks?` · 빈칸 ${blanks}개`:' · 빈칸 없음'}` : '';
+}
+
+/* ---------- 구동 ---------- */
+function render(){
+  renderRail();
+  document.getElementById('wizard').innerHTML =
+    S.step===1?step1(): S.step===2?step2(): S.step===3?step3(): step4();
+  renderPaper();
+  if(S.step===3) renderHits();
+}
+document.getElementById('btnPrint').onclick = ()=>{
+  if(!buildDoc(false).length){ alert('먼저 조건을 선택해 주세요.'); return; }
+  window.print();
+};
+document.getElementById('fileIn').onchange = e => { if(e.target.files[0]) importJSON(e.target.files[0]); e.target.value=''; };
+document.getElementById('verInfo').innerHTML =
+  `조항 라이브러리 v${LIB.meta.version} · 기준일 ${LIB.meta.verified_at} · ${THIS_YEAR}년 최저임금 ${MINWAGE[THIS_YEAR].toLocaleString()}원`
+  + (REVIEWER ? ` · <span class="rev">${REVIEWER.name} 감수 (${REVIEWER.date})</span>` : '');
+render();
+</script>
+</body>
+</html>
