@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사장님자금진단 — 정책자금·지원금 3분 진단</title>
+<meta name="description" content="소상공인·사업주가 받을 수 있는 정책자금 대출과 국가 보조금을 무료로 진단합니다. 폐업·재기 지원금까지.">
+<style>
+:root{
+  --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC;
+  --ink:#1C2430; --sub:#5A6675; --faint:#8A94A3;
+  --bg:#FFFFFF; --bg2:#F6F8FB; --line:#E3E8EF;
+  --ok:#0E7A4D; --ok-bg:#E8F5EE; --cond:#9A6B00; --cond-bg:#FBF3DE; --no:#98A2B1; --no-bg:#F2F4F7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard','Malgun Gothic',sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px}
+.logo{font-size:18px;font-weight:800;color:var(--navy);white-space:nowrap}
+.logo em{font-style:normal;color:var(--blue)}
+nav.gnb{display:flex;gap:18px;font-size:14px;font-weight:600;color:var(--sub);flex-wrap:wrap}
+nav.gnb a.on{color:var(--blue)}
+.draft-banner{background:#FFF6E5;border-bottom:1px solid #F2DDAE;color:#7A5A12;font-size:12.5px;text-align:center;padding:7px 14px}
+section.view{display:none;padding:44px 0 80px}
+section.view.on{display:block}
+.hero{text-align:center;padding:20px 0 6px}
+.eyebrow{display:inline-block;background:var(--blue-soft);color:var(--blue);font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+.hero h1{font-size:clamp(25px,4.4vw,38px);font-weight:800;color:var(--navy);line-height:1.35}
+.hero p{color:var(--sub);font-size:15.5px;margin:14px 0 26px}
+.btn-xl{display:inline-block;background:var(--blue);color:#fff;font-size:16px;font-weight:700;padding:15px 32px;border-radius:10px;border:none}
+.btn-xl:hover{background:#1560BE}
+.hero-note{margin-top:14px;font-size:12.5px;color:var(--faint)}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.feat div{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:20px 18px}
+.feat b{display:block;color:var(--navy);font-size:15px;margin-bottom:6px}
+.feat span{font-size:13px;color:var(--sub)}
+@media(max-width:680px){.feat{grid-template-columns:1fr}}
+/* 진단 마법사 */
+.wizard{max-width:620px;margin:0 auto}
+.prog{height:6px;background:var(--bg2);border-radius:99px;overflow:hidden;margin-bottom:26px}
+.prog i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .25s}
+.q-step{display:none}
+.q-step.on{display:block}
+.q-num{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.q-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:20px;line-height:1.4}
+.q-opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;font-size:15px;margin-bottom:10px;background:#fff;transition:.15s}
+.q-opt:hover{border-color:var(--blue)}
+.q-opt.sel{border-color:var(--blue);background:var(--blue-soft);font-weight:700;color:var(--navy)}
+.q-input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px;font-family:inherit}
+.q-input:focus{outline:none;border-color:var(--blue)}
+.q-nav{display:flex;justify-content:space-between;margin-top:22px}
+.btn-prev{color:var(--faint);font-size:14px;font-weight:600;padding:10px 6px}
+.btn-next{background:var(--blue);color:#fff;font-size:15px;font-weight:700;padding:12px 30px;border-radius:10px}
+.btn-next:disabled{background:#C6D4E6;cursor:not-allowed}
+/* 결과 */
+.res-head{text-align:center;margin-bottom:30px}
+.res-head h2{font-size:24px;font-weight:800;color:var(--navy)}
+.res-head p{color:var(--sub);font-size:14px;margin-top:8px}
+.res-group{margin-bottom:34px}
+.res-tag{display:inline-block;font-size:13px;font-weight:800;padding:5px 13px;border-radius:999px;margin-bottom:14px}
+.tag-ok{background:var(--ok-bg);color:var(--ok)}
+.tag-cond{background:var(--cond-bg);color:var(--cond)}
+.tag-no{background:var(--no-bg);color:var(--no)}
+.p-card{border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px;background:#fff}
+.p-card.dim{opacity:.62}
+.p-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.p-agency{font-size:12px;color:var(--faint);font-weight:600}
+.p-name{font-size:16.5px;font-weight:800;color:var(--navy);margin:2px 0 4px}
+.p-sum{font-size:13.5px;color:var(--sub)}
+.p-amt{font-size:15px;font-weight:800;color:var(--blue);white-space:nowrap}
+.p-meta{font-size:12.5px;color:var(--faint);margin-top:8px}
+.p-why{margin-top:10px;font-size:12.5px}
+.p-why span{display:inline-block;background:var(--bg2);border:1px solid var(--line);border-radius:7px;padding:3px 9px;margin:2px 4px 2px 0;color:var(--sub)}
+.p-why span.bad{background:#FBEFEF;border-color:#EFD3D3;color:#A34141}
+.p-apply{display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--blue)}
+.res-disclaim{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:12.5px;color:var(--sub)}
+/* 목록/검색 */
+.filter{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.filter input,.filter select{border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit}
+.filter input{flex:1;min-width:200px}
+/* 금리 비교 */
+.rate-table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0 8px}
+.rate-table th{background:var(--navy);color:#fff;padding:11px 10px;font-weight:700;text-align:left}
+.rate-table td{border-bottom:1px solid var(--line);padding:11px 10px;vertical-align:top}
+.rate-table tr:nth-child(even) td{background:var(--bg2)}
+.out-links{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.out-links a{display:block;border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff}
+.out-links b{display:block;color:var(--navy);font-size:14px;margin-bottom:4px}
+.out-links span{font-size:12px;color:var(--sub)}
+.out-links a:hover{border-color:var(--blue)}
+@media(max-width:680px){.out-links{grid-template-columns:1fr}}
+/* 도구 */
+.tool-grid label{display:block;font-size:13px;color:var(--sub)}
+.h2s{font-size:24px;font-weight:800;color:var(--navy);margin-bottom:24px}
+/* 회생·파산 */
+.help-card{border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:14px;background:#fff}
+.help-card b{display:block;color:var(--navy);font-size:16px;margin-bottom:8px}
+.help-card p{font-size:13.5px;color:var(--sub)}
+.help-tel{display:inline-block;margin-top:10px;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color:var(--faint);text-align:center;line-height:1.8}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="draft-banner">현재 데이터는 검수 전(draft) 상태입니다. 최종 자격·금액은 각 기관 공고 원문 기준으로 확정됩니다.</div>
+  <div class="wrap hd">
+    <a class="logo" href="#home" data-nav="home" onclick="return go('home')">사장님<em>자금진단</em></a>
+    <nav class="gnb">
+      <a href="#diagnose" data-nav="diagnose" onclick="return go('diagnose')">3분 진단</a>
+      <a href="#list" data-nav="list" onclick="return go('list')">자금 목록</a>
+      <a href="#rates" data-nav="rates" onclick="return go('rates')">금리 비교</a>
+      <a href="#tools" data-nav="tools" onclick="return go('tools')">사장님 도구</a>
+      <a href="#recovery" data-nav="recovery" onclick="return go('recovery')">회생·파산</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= 홈 ================= -->
+<section class="view" id="v-home">
+  <div class="wrap hero">
+    <span class="eyebrow">정책자금 · 보조금 · 폐업 지원까지</span>
+    <h1>우리 가게가 받을 수 있는 돈,<br>3분 안에 확인하세요</h1>
+    <p>11개 질문에 답하면 신청 가능한 정책자금 대출과 국가 지원금을 골라 드립니다.<br>휴업·폐업을 고민 중이어도 받을 수 있는 지원금이 있습니다.</p>
+    <button class="btn-xl" onclick="go('diagnose')">무료 진단 시작하기</button>
+    <div class="hero-note">회원가입·개인정보 입력 없이 바로 진단합니다.</div>
+    <div class="feat">
+      <div><b>맞춤 진단</b><span>업종·업력·매출 기준으로 신청 가능 / 확인 필요 / 해당 없음을 나눠 보여줍니다.</span></div>
+      <div><b>서류 체크리스트</b><span>진단 결과에 맞는 필요서류를 발급처와 함께 한 번에 정리합니다.</span></div>
+      <div><b>폐업·재기 지원</b><span>철거비, 채무조정, 폐업공제금 등 정리 단계의 지원 제도까지 안내합니다.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 진단 ================= -->
+<section class="view" id="v-diagnose">
+  <div class="wrap wizard">
+    <div class="prog"><i id="progBar" style="width:0%"></i></div>
+    <div id="steps"></div>
+  </div>
+</section>
+
+<!-- ================= 결과 ================= -->
+<section class="view" id="v-result">
+  <div class="wrap" id="resultMount"></div>
+</section>
+
+<!-- ================= 목록 ================= -->
+<section class="view" id="v-list">
+  <div class="wrap">
+    <h1 class="h2s">전체 자금 목록</h1>
+    <div class="filter">
+      <input id="q" placeholder="자금 이름·기관 검색">
+      <select id="fCat">
+        <option value="">전체 유형</option>
+        <option value="loan">대출·보증</option>
+        <option value="grant">지원금·장려금</option>
+        <option value="voucher">바우처</option>
+        <option value="debt">채무조정</option>
+      </select>
+    </div>
+    <div id="listMount"></div>
+  </div>
+</section>
+
+<!-- ================= 금리 비교 ================= -->
+<section class="view" id="v-rates">
+  <div class="wrap">
+    <h1 class="h2s">정책자금 vs 시중 사업자대출 금리</h1>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:6px">
+      정책자금은 정부 재원으로 금리를 낮춘 대출입니다. 같은 조건이라면 시중 사업자 신용대출보다 통상 수 %p 낮습니다.
+      아래 표는 공시 자료 기준의 대략적인 비교이며, 실제 금리는 신용도·담보·시점에 따라 달라집니다.
+    </p>
+    <table class="rate-table">
+      <tr><th>구분</th><th>대표 상품</th><th>금리 수준(연)</th><th>비고</th></tr>
+      <tr><td>정책자금(직접·대리대출)</td><td>소진공 정책자금, 중진공 청년전용창업자금</td><td>약 2%대~3%대</td><td>기준금리 연동, 우대 시 추가 인하</td></tr>
+      <tr><td>보증부 은행대출</td><td>지역신보 보증 + 은행 대출</td><td>약 4%대 내외</td><td>보증료 별도(연 0.5~1%대)</td></tr>
+      <tr><td>시중은행 사업자 신용대출</td><td>은행별 개인사업자 신용대출</td><td>약 4%대~7%대</td><td>은행연합회 공시 평균 기준</td></tr>
+      <tr><td>2금융권 사업자대출</td><td>저축은행·캐피탈</td><td>약 8%대 이상</td><td>급전 목적 외 권장하지 않음</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--faint)">※ 검수 전 참고용 수치입니다. 아래 공식 비교 서비스에서 실시간 조건을 확인하세요.</p>
+    <div class="out-links">
+      <a href="https://finlife.fss.or.kr" target="_blank" rel="noopener"><b>금융감독원 금융상품한눈에</b><span>전 금융권 대출·예금 공시 비교 (공공)</span></a>
+      <a href="https://portal.kfb.or.kr" target="_blank" rel="noopener"><b>은행연합회 소비자포털</b><span>은행별 중소기업·개인사업자 대출금리 공시</span></a>
+      <a href="https://finda.co.kr" target="_blank" rel="noopener"><b>핀다</b><span>여러 금융사 대출 조건 한번에 조회 (민간)</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 사장님 도구 ================= -->
+<section class="view" id="v-tools">
+  <div class="wrap" style="max-width:720px">
+    <h1 class="h2s">사장님 도구</h1>
+
+    <div class="p-card" style="margin-bottom:20px">
+      <div class="p-name" style="margin-bottom:12px">알바 인건비·4대보험 계산기</div>
+      <div class="tool-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <label>시급(원)<input class="q-input" id="cWage" type="number" value="10320" style="margin-top:4px"></label>
+        <label>주 근무시간<input class="q-input" id="cHours" type="number" value="20" style="margin-top:4px"></label>
+      </div>
+      <button class="btn-next" onclick="calcLabor()">계산하기</button>
+      <div id="cOut" style="margin-top:16px;font-size:14px"></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--faint)">
+        2026년 기준: 최저임금 10,320원 / 국민연금 사업주 4.75% / 건강보험 사업주 3.595%(장기요양 13.14% 별도) / 고용보험 사업주 약 1.15% / 산재보험 업종 평균 약 1.47% 가정. 요율은 변경될 수 있습니다.
+      </div>
+    </div>
+
+    <div class="p-card">
+      <div class="p-name" style="margin-bottom:12px">표준근로계약서 생성 (단시간근로자)</div>
+      <div class="tool-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <label>사업장(상호)<input class="q-input" id="kBiz" style="margin-top:4px"></label>
+        <label>사업주 성명<input class="q-input" id="kOwner" style="margin-top:4px"></label>
+        <label>근로자 성명<input class="q-input" id="kWorker" style="margin-top:4px"></label>
+        <label>근로개시일<input class="q-input" id="kStart" placeholder="2026-08-01" style="margin-top:4px"></label>
+        <label>근로일<input class="q-input" id="kDays" placeholder="매주 월·수·금" style="margin-top:4px"></label>
+        <label>근로시간<input class="q-input" id="kTime" placeholder="10:00~15:00" style="margin-top:4px"></label>
+        <label>시급(원)<input class="q-input" id="kWage2" type="number" value="10320" style="margin-top:4px"></label>
+        <label>임금지급일<input class="q-input" id="kPayday" placeholder="매월 10일" style="margin-top:4px"></label>
+      </div>
+      <button class="btn-next" onclick="makeContract()">계약서 인쇄 미리보기</button>
+      <div style="margin-top:10px;font-size:12px;color:var(--faint)">고용노동부 표준 서식을 기초로 한 간이 양식입니다. 팝업 차단 시 허용이 필요합니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 회생·파산 ================= -->
+<section class="view" id="v-recovery">
+  <div class="wrap" style="max-width:720px">
+    <h1 class="h2s">회생·파산, 제도를 이용하는 것입니다</h1>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:22px">
+      감당하기 어려운 채무는 법이 정한 절차로 정리할 수 있습니다. 부끄러운 일이 아니라 재기를 위해 국가가 만들어 둔 제도를 이용하는 것입니다. 상담은 아래 공공기관에서 무료로 시작할 수 있습니다.
+    </p>
+
+    <div class="help-card"><b>1. 채무조정 (신용회복위원회)</b>
+      <p>연체 전·후 채무의 이자 감면, 상환기간 연장 등을 조정합니다. 법원 절차 전에 가장 먼저 검토할 단계입니다.</p>
+      <span class="help-tel">☎ 1600-5500</span></div>
+
+    <div class="help-card"><b>2. 새출발기금 (한국자산관리공사)</b>
+      <p>부실·부실우려 소상공인 대출의 상환기간 연장, 금리 인하, 심사에 따른 원금 조정을 지원합니다. 폐업 전에도 신청할 수 있습니다.</p>
+      <span class="help-tel">☎ 1660-1378</span></div>
+
+    <div class="help-card"><b>3. 개인회생 (법원)</b>
+      <p>일정 소득이 있는 경우 3~5년간 변제계획을 이행하면 남은 채무를 면책받는 법원 절차입니다.</p>
+      <span class="help-tel">대한법률구조공단 ☎ 132</span></div>
+
+    <div class="help-card"><b>4. 개인파산·면책 (법원)</b>
+      <p>변제 능력이 없는 경우 재산을 청산하고 남은 채무의 면책을 구하는 절차입니다. 법인 폐업 시 대표자 연대보증 채무가 함께 걸려 있는 경우가 많아 반드시 전문가 검토가 필요합니다.</p>
+      <span class="help-tel">대한법률구조공단 ☎ 132</span></div>
+
+    <div class="res-disclaim" style="margin-top:24px">
+      본 안내는 일반 정보이며 법률 자문이 아닙니다. 실제 절차는 개인별 채무 구성에 따라 달라지므로,
+      신용회복위원회(1600-5500), 대한법률구조공단(132) 또는 변호사·법무사 상담을 통해 확인하세요.</div>
+
+    <div style="text-align:center;margin-top:24px">
+      <a class="btn-xl" href="#diagnose" onclick="return go('diagnose')">폐업·재기 지원금 진단하기</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    사장님자금진단 · 본 서비스는 공공 공고를 바탕으로 한 정보 안내이며 대출 모집·중개를 하지 않습니다.<br>
+    최종 자격과 금액은 각 소관기관의 공고 원문과 심사로 확정됩니다.
+  </div>
+</footer>
+
+<script>
+/* ================= 데이터 (티어1 · draft) =================
+   verifiedAt 채우고 공고 원문 대조 후 DATA_STATUS='verified' 로 변경 */
+const DATA_STATUS='draft';
+const PROGRAMS=[
+ /* --- 대출·보증 (운영 중 전용) --- */
+ {id:'sbiz-ilban',tier:1,category:'loan',agency:'소상공인시장진흥공단',name:'소상공인 정책자금 · 일반경영안정자금',summary:'운전자금 목적의 저리 대출',amountMax:70000000,terms:'5년 이내(거치 포함)',applyUrl:'https://ols.sbiz.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},revenue:{max:12000000000},industry:{exclude:['유흥','도박','금융','부동산임대']},purpose:['운전'],taxOk:{eq:'예'}},
+  boost:[{when:{ownerAge:{max:39}},label:'청년 사업자 우대'},{when:{bizAge:{max:3}},label:'초기 창업 우대'}],
+  docs:['사업자등록증','부가가치세 과세표준증명','국세·지방세 완납증명','임대차계약서']},
+ {id:'sbiz-start',tier:1,category:'loan',agency:'소상공인시장진흥공단',name:'소상공인 정책자금 · 창업기반지원자금',summary:'업력이 짧은 사업자의 시설·운전 자금',amountMax:100000000,terms:'5년 이내',applyUrl:'https://ols.sbiz.or.kr',
+  require:{bizStatus:{include:['운영']},bizAge:{max:3},employees:{max:9},industry:{exclude:['유흥','도박','금융','부동산임대']},purpose:['운전','시설'],taxOk:{eq:'예'}},
+  boost:[{when:{ownerAge:{max:39}},label:'청년 창업 우대'}],
+  docs:['사업자등록증','임대차계약서','사업계획서']},
+ {id:'kosmes-youth',tier:1,category:'loan',agency:'중소벤처기업진흥공단',name:'청년전용창업자금',summary:'만 39세 이하 대표의 창업 초기 자금',amountMax:100000000,terms:'6년 이내(거치 3년)',applyUrl:'https://www.kosmes.or.kr',
+  require:{bizStatus:{include:['운영']},ownerAge:{max:39},bizAge:{max:3},industry:{exclude:['유흥','도박','금융','부동산임대']},taxOk:{eq:'예'}},
+  boost:[],docs:['사업자등록증','사업계획서','재무제표']},
+ {id:'sgi-guarantee',tier:1,category:'loan',agency:'지역신용보증재단',name:'소상공인 신용보증 (보증부 은행대출)',summary:'담보가 부족한 소상공인의 은행 대출 보증',amountMax:100000000,terms:'보증비율 85~100%, 보증료 별도',applyUrl:'https://www.koreg.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},taxOk:{eq:'예'}},
+  boost:[],docs:['사업자등록증','금융거래확인서','부가가치세 과세표준증명','대표자 신분증']},
+ /* --- 지원금·바우처 (운영 중) --- */
+ {id:'smart-store',tier:1,category:'voucher',agency:'소상공인시장진흥공단',name:'스마트상점 기술보급',summary:'키오스크·테이블오더 등 스마트 기술 도입비 지원',amountMax:5000000,terms:'자부담 일부, 공급기업 풀 내 선택',applyUrl:'https://www.sbiz.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},industry:{include:['음식점','소매','서비스']}},
+  boost:[],docs:['사업자등록증','견적서','사업장 사진']},
+ {id:'online',tier:1,category:'voucher',agency:'소상공인시장진흥공단',name:'소상공인 온라인 판로지원',summary:'온라인 입점·라이브커머스·콘텐츠 제작 지원',amountMax:3000000,terms:'항목별 바우처',applyUrl:'https://www.sbiz.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},onlineSales:{eq:'예'}},
+  boost:[],docs:['사업자등록증','온라인몰 운영 확인서']},
+ {id:'durunuri',tier:1,category:'grant',agency:'근로복지공단',name:'두루누리 사회보험료 지원',summary:'소규모 사업장 저임금 근로자의 국민연금·고용보험료 일부 지원',amountMax:null,terms:'보험료의 일정 비율, 근로자 요건 충족 시',applyUrl:'https://insurancesupport.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},hasWorker:{eq:'예'}},
+  boost:[],docs:['보험료 지원 신청서','근로자 보수 자료','4대보험 가입자명부']},
+ {id:'flex-work',tier:1,category:'grant',agency:'고용노동부',name:'유연근무 장려금',summary:'재택·시차출퇴근 등 유연근무 도입 사업주 장려금',amountMax:null,terms:'근로자당 월 단위 지원',applyUrl:'https://www.ei.go.kr',
+  require:{bizStatus:{include:['운영']},hasWorker:{eq:'예'}},
+  boost:[],docs:['취업규칙','근태 기록','유연근무 운영 내역','근로계약서']},
+ {id:'youth-jump',tier:1,category:'grant',agency:'고용노동부',name:'청년일자리도약장려금',summary:'취업애로 청년 정규직 채용 시 인건비 지원',amountMax:null,terms:'채용 유지 기간에 따라 분할 지급',applyUrl:'https://www.work24.go.kr',
+  require:{bizStatus:{include:['운영']},hasWorker:{eq:'예'},taxOk:{eq:'예'}},
+  boost:[],docs:['사업자등록증','근로계약서','급여이체 내역','4대보험 가입자명부']},
+ {id:'noran',tier:1,category:'grant',agency:'중소기업중앙회',name:'노란우산공제 희망장려금',summary:'공제 신규 가입 소상공인 납입액 일부 지원 (지자체)',amountMax:1200000,terms:'지자체별 상이',applyUrl:'https://www.8899.or.kr',
+  require:{bizStatus:{include:['운영']},employees:{max:9},revenue:{max:300000000}},
+  boost:[],docs:['사업자등록증','공제 가입증서','소득금액증명']},
+ /* --- 휴폐업·재기 --- */
+ {id:'hope-cleanup',tier:1,category:'grant',agency:'소상공인시장진흥공단',name:'희망리턴패키지 · 점포철거비 지원',summary:'폐업 시 점포 철거·원상복구 비용 지원 (3.3㎡당 20만원)',amountMax:6000000,terms:'면적 기준 산정, 실비 지원 · 자력 철거 제외',applyUrl:'https://hope.sbiz.or.kr',
+  require:{bizStatus:{include:['폐업예정','폐업완료']}},
+  boost:[],docs:['사업자등록증','임대차계약서','철거 견적서','폐업사실증명(폐업 완료 시)']},
+ {id:'hope-restart',tier:1,category:'grant',agency:'소상공인시장진흥공단',name:'희망리턴패키지 · 재도전 지원',summary:'사업정리 컨설팅, 재취업·재창업 교육과 장려금',amountMax:null,terms:'교육 이수 연계, 항목별 상이',applyUrl:'https://hope.sbiz.or.kr',
+  require:{bizStatus:{include:['폐업예정','폐업완료']}},
+  boost:[],docs:['사업자등록증','폐업사실증명','교육 신청서']},
+ {id:'fresh-start',tier:1,category:'debt',agency:'한국자산관리공사(캠코)',name:'새출발기금 채무조정',summary:'폐업·부실 소상공인 대출 채무조정(기간 연장·금리 인하·원금 감면)',amountMax:null,terms:'심사에 따라 조정 내용 결정',applyUrl:'https://www.kamco.or.kr',
+  require:{bizStatus:{include:['운영','폐업예정','폐업완료']}},
+  boost:[],docs:['채무 확인 서류','소득 증빙','사업자등록증 또는 폐업사실증명']},
+ {id:'noran-close',tier:1,category:'grant',agency:'중소기업중앙회',name:'노란우산 폐업공제금',summary:'노란우산 가입자가 폐업 시 납입 공제금 수령(압류 방지 자산)',amountMax:null,terms:'납입액+이자, 폐업 사유 발생 시',applyUrl:'https://www.8899.or.kr',
+  require:{bizStatus:{include:['폐업예정','폐업완료']},yellowUmbrella:{eq:'예'}},
+  boost:[],docs:['공제금 지급 청구서','폐업사실증명']}
+];
+
+/* ================= 진단 질문 (11문항) ================= */
+const QUESTIONS=[
+ {key:'bizStatus',title:'현재 사업 상태를 알려주세요',opts:[
+  ['운영','정상 운영 중'],['폐업예정','휴업·폐업을 고려 중'],['폐업완료','이미 폐업함']]},
+ {key:'industry',title:'업종은 무엇인가요?',opts:[
+  ['음식점','음식점·카페'],['소매','도소매·판매'],['서비스','서비스업(미용·수리·교육 등)'],['제조','제조·건설'],['기타','기타'],
+  ['유흥','유흥·사행성 업종']]},
+ {key:'bizAge',title:'사업자등록 후 업력은 얼마나 되었나요?',type:'num',ph:'예: 2 (년 단위, 1년 미만은 0)'},
+ {key:'employees',title:'상시근로자는 몇 명인가요? (대표 제외)',type:'num',ph:'예: 3 (없으면 0)'},
+ {key:'revenue',title:'연 매출은 대략 얼마인가요? (만원 단위)',type:'num',ph:'예: 15000 (1억 5천만원)',mul:10000},
+ {key:'ownerAge',title:'대표자 나이는 어떻게 되나요?',type:'num',ph:'예: 35'},
+ {key:'purpose',title:'자금이 필요한 목적은 무엇인가요?',opts:[
+  ['운전','운영비·재료비 등 운전자금'],['시설','인테리어·장비 등 시설자금'],['지원금','대출보다 지원금·바우처 위주로 보고 싶어요']]},
+ {key:'hasWorker',title:'4대보험에 가입한 직원이 있나요?',opts:[['예','있다'],['아니오','없다']]},
+ {key:'onlineSales',title:'온라인 판매(스토어·배달앱 등)를 하고 있나요?',opts:[['예','하고 있다'],['아니오','하지 않는다']]},
+ {key:'yellowUmbrella',title:'노란우산공제에 가입되어 있나요?',opts:[['예','가입됨'],['아니오','미가입'],['모름','잘 모르겠다']]},
+ {key:'taxOk',title:'국세·지방세 체납이 없나요?',opts:[['예','체납 없음'],['아니오','체납 있음'],['모름','확인 필요']]}
+];
+
+/* ================= 매칭 엔진 ================= */
+const LABELS={bizStatus:'사업 상태',industry:'업종',bizAge:'업력',employees:'상시근로자',revenue:'연매출',ownerAge:'대표 나이',purpose:'자금 용도',hasWorker:'직원 유무',onlineSales:'온라인 판매',yellowUmbrella:'노란우산 가입',taxOk:'세금 체납'};
+function numOk(rule,v){if(v==null||v==='')return null;v=+v;if(rule.min!=null&&v<rule.min)return false;if(rule.max!=null&&v>rule.max)return false;return true;}
+function listOk(rule,v){if(v==null||v==='모름')return null;
+ if(rule.include&&!rule.include.includes(v))return false;
+ if(rule.exclude&&rule.exclude.includes(v))return false;return true;}
+function eqOk(rule,v){if(v==null||v==='모름')return null;return v===rule.eq;}
+function purposeOk(rule,v){if(v==null)return null;if(v==='지원금')return null;return rule.includes(v);}
+function checkProgram(p,a){
+ const r=p.require||{};
+ const checks={
+  bizStatus:r.bizStatus?listOk(r.bizStatus,a.bizStatus):true,
+  industry:r.industry?listOk(r.industry,a.industry):true,
+  bizAge:r.bizAge?numOk(r.bizAge,a.bizAge):true,
+  employees:r.employees?numOk(r.employees,a.employees):true,
+  revenue:r.revenue?numOk(r.revenue,a.revenue):true,
+  ownerAge:r.ownerAge?numOk(r.ownerAge,a.ownerAge):true,
+  purpose:r.purpose?purposeOk(r.purpose,a.purpose):true,
+  hasWorker:r.hasWorker?eqOk(r.hasWorker,a.hasWorker):true,
+  onlineSales:r.onlineSales?eqOk(r.onlineSales,a.onlineSales):true,
+  yellowUmbrella:r.yellowUmbrella?eqOk(r.yellowUmbrella,a.yellowUmbrella):true,
+  taxOk:r.taxOk?eqOk(r.taxOk,a.taxOk):true
+ };
+ const failed=[],unknown=[],reasons=[];
+ for(const k in checks){
+  if(checks[k]===false)failed.push(LABELS[k]);
+  else if(checks[k]===null)unknown.push(LABELS[k]);
+ }
+ (p.boost||[]).forEach(b=>{
+  let hit=true;
+  for(const k in b.when){const res=numOk(b.when[k],a[k]);if(res!==true)hit=false;}
+  if(hit)reasons.push(b.label);
+ });
+ return {failed,unknown,reasons};
+}
+function diagnose(a){
+ const eligible=[],conditional=[],ineligible=[];
+ PROGRAMS.filter(p=>p.tier===1).forEach(p=>{
+  const {failed,unknown,reasons}=checkProgram(p,a);
+  const item={...p,failed,unknown,reasons};
+  if(failed.length)ineligible.push(item);
+  else if(unknown.length)conditional.push(item);
+  else eligible.push(item);
+ });
+ return {eligible,conditional,ineligible};
+}
+
+/* ================= 마법사 ================= */
+const A={};
+function buildSteps(){
+ document.getElementById('steps').innerHTML=QUESTIONS.map((q,i)=>{
+  let body;
+  if(q.opts){
+   body=q.opts.map(o=>'<button class="q-opt" data-k="'+q.key+'" data-v="'+o[0]+'" onclick="pick(this,'+i+')">'+o[1]+'</button>').join('');
+  }else{
+   body='<input class="q-input" id="in-'+q.key+'" type="number" min="0" placeholder="'+(q.ph||'')+'" oninput="typed('+i+')">';
+  }
+  return '<div class="q-step'+(i===0?' on':'')+'" id="st'+i+'">'
+   +'<div class="q-num">'+(i+1)+' / '+QUESTIONS.length+'</div>'
+   +'<div class="q-title">'+q.title+'</div>'+body
+   +'<div class="q-nav">'
+   +(i>0?'<button class="btn-prev" onclick="showStep('+(i-1)+')">← 이전</button>':'<span></span>')
+   +'<button class="btn-next" id="nx'+i+'" disabled onclick="next('+i+')">'+(i===QUESTIONS.length-1?'결과 보기':'다음')+'</button>'
+   +'</div></div>';
+ }).join('');
+}
+function pick(el,i){
+ const k=el.dataset.k;A[k]=el.dataset.v;
+ el.parentNode.querySelectorAll('.q-opt').forEach(b=>b.classList.remove('sel'));
+ el.classList.add('sel');
+ document.getElementById('nx'+i).disabled=false;
+}
+function typed(i){
+ const q=QUESTIONS[i];const v=document.getElementById('in-'+q.key).value;
+ if(v===''){delete A[q.key];document.getElementById('nx'+i).disabled=true;return;}
+ A[q.key]=(q.mul||1)*+v;
+ document.getElementById('nx'+i).disabled=false;
+}
+function showStep(i){
+ document.querySelectorAll('.q-step').forEach(s=>s.classList.remove('on'));
+ document.getElementById('st'+i).classList.add('on');
+ document.getElementById('progBar').style.width=Math.round(i/QUESTIONS.length*100)+'%';
+}
+function next(i){
+ if(i<QUESTIONS.length-1)showStep(i+1);
+ else{renderResult();go('result');}
+}
+function resetDiag(){for(const k in A)delete A[k];buildSteps();showStep(0);go('diagnose');}
+
+/* ================= 결과 ================= */
+function fmtAmt(n){if(n==null)return '심사·항목별';if(n>=100000000)return '최대 '+(n/100000000)+'억원';return '최대 '+(n/10000).toLocaleString()+'만원';}
+function card(p,dim){
+ return '<div class="p-card'+(dim?' dim':'')+'">'
+  +'<div class="p-top"><div><div class="p-agency">'+p.agency+'</div>'
+  +'<div class="p-name">'+p.name+'</div><div class="p-sum">'+(p.summary||'')+'</div></div>'
+  +'<div class="p-amt">'+fmtAmt(p.amountMax)+'</div></div>'
+  +'<div class="p-meta">'+(p.terms||'')+'</div>'
+  +(p.reasons&&p.reasons.length?'<div class="p-why">'+p.reasons.map(r=>'<span>★ '+r+'</span>').join('')+'</div>':'')
+  +(p.unknown&&p.unknown.length?'<div class="p-why">'+p.unknown.map(r=>'<span>확인 필요: '+r+'</span>').join('')+'</div>':'')
+  +(p.failed&&p.failed.length?'<div class="p-why">'+p.failed.map(r=>'<span class="bad">미충족: '+r+'</span>').join('')+'</div>':'')
+  +'<a class="p-apply" href="'+p.applyUrl+'" target="_blank" rel="noopener">신청 페이지 확인 →</a>'
+  +'</div>';
+}
+function renderResult(){
+ const r=diagnose(A);
+ document.getElementById('resultMount').innerHTML=
+  '<div class="res-head"><h2>진단 결과</h2><p>답변 기준으로 분류한 결과입니다. 최종 자격은 각 기관 심사로 확정됩니다.</p></div>'
+  +'<div class="res-group"><span class="res-tag tag-ok">신청 가능 '+r.eligible.length+'건</span>'
+  +(r.eligible.map(p=>card(p)).join('')||'<p style="font-size:13.5px;color:var(--faint)">조건이 모두 확인된 자금이 없습니다. 아래 확인 필요 항목을 살펴보세요.</p>')+'</div>'
+  +'<div class="res-group"><span class="res-tag tag-cond">확인 필요 '+r.conditional.length+'건</span>'
+  +(r.conditional.map(p=>card(p)).join('')||'')+'</div>'
+  +'<div class="res-group"><span class="res-tag tag-no">해당 없음 '+r.ineligible.length+'건</span>'
+  +r.ineligible.map(p=>card(p,true)).join('')+'</div>'
+  +'<div style="margin:6px 0 18px"><button class="btn-next" onclick="showDocs()">필요서류 한번에 보기</button></div>'
+  +'<div id="docsMount"></div>'
+  +'<div class="res-disclaim" style="margin-top:20px">본 결과는 검수 전(draft) 데이터 기준의 참고용 안내이며 대출 권유·중개가 아닙니다. 최종 자격은 소관기관의 공고 원문과 심사로 확정됩니다. 각 카드의 신청 페이지에서 원문을 반드시 확인하세요.</div>'
+  +'<div style="text-align:center;margin-top:24px"><button class="btn-xl" onclick="resetDiag()">다시 진단하기</button></div>';
+}
+const DOC_WHERE={'사업자등록증':'홈택스','부가가치세 과세표준증명':'홈택스','국세·지방세 완납증명':'홈택스·위택스','소득금액증명':'홈택스','폐업사실증명':'홈택스','폐업사실증명(폐업 완료 시)':'홈택스','임대차계약서':'보관분','4대보험 가입자명부':'사회보험 EDI·정부24','근로계약서':'보관분','급여이체 내역':'거래 은행','사업계획서':'직접 작성','재무제표':'세무대리인','견적서':'업체 발급','철거 견적서':'철거 업체','취업규칙':'보관분','근태 기록':'보관분','유연근무 운영 내역':'보관분','보험료 지원 신청서':'근로복지공단','근로자 보수 자료':'보관분','온라인몰 운영 확인서':'입점 플랫폼','공제 가입증서':'노란우산','공제금 지급 청구서':'노란우산','교육 신청서':'희망리턴 누리집','채무 확인 서류':'각 금융기관','소득 증빙':'홈택스','대표자 신분증':'본인 지참','사업장 사진':'직접 촬영','금융거래확인서':'거래 은행','사업자등록증 또는 폐업사실증명':'홈택스'};
+function showDocs(){
+ const r=diagnose(A);
+ const set=new Set();
+ [...r.eligible,...r.conditional].forEach(p=>(p.docs||[]).forEach(d=>set.add(d)));
+ document.getElementById('docsMount').innerHTML=
+  '<div class="p-card" style="margin-top:14px"><div class="p-name" style="margin-bottom:10px">통합 서류 체크리스트</div>'
+  +[...set].map(d=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px"><span>☐ '+d+'</span><span style="color:var(--faint);font-size:12px;white-space:nowrap">'+(DOC_WHERE[d]||'발급처 확인')+'</span></div>').join('')
+  +'<div style="margin-top:10px;font-size:11.5px;color:var(--faint)">신청 가능·확인 필요 자금의 서류를 합친 목록입니다. 같은 서류는 한 번만 발급받으면 됩니다.</div></div>';}
+
+/* ================= 목록 ================= */
+function renderList(){
+ const q=document.getElementById('q').value.trim();
+ const cat=document.getElementById('fCat').value;
+ let list=PROGRAMS.filter(p=>(!cat||p.category===cat)&&(!q||(p.name+p.agency+(p.summary||'')).includes(q)));
+ document.getElementById('listMount').innerHTML=
+  list.map(p=>card({...p,reasons:p.tier===1?['요건 확인 완료']:[],unknown:[],failed:[]})).join('')
+  ||'<p style="color:var(--faint);padding:26px 0;font-size:14px">검색 결과가 없습니다.</p>';}
+document.getElementById('q').oninput=renderList;
+document.getElementById('fCat').onchange=renderList;
+
+/* ================= 사장님 도구 =================
+   [2026 검증 완료] 최저임금 10,320원(고용부 고시)
+   국민연금 총 9.5%→사업주 4.75% / 건강보험 총 7.19%→사업주 3.595%
+   장기요양 건보료의 13.14% / 고용보험 사업주 0.9%+고안직능 0.25%(150인 미만)
+   산재보험 업종별 상이(전 업종 평균 가정치 1.47%) */
+const RATES={pension:0.0475,health:0.03595,careOfHealth:0.1314,employ:0.0115,accident:0.0147};
+function calcLabor(){
+ const w=+document.getElementById('cWage').value||0;
+ const h=+document.getElementById('cHours').value||0;
+ const base=w*h*4.345;
+ const juhyu=h>=15?w*(h/40*8)*4.345:0;
+ const gross=base+juhyu;
+ const healthAmt=gross*RATES.health;
+ const ins=gross*RATES.pension+healthAmt+healthAmt*RATES.careOfHealth+gross*RATES.employ+gross*RATES.accident;
+ const f=n=>Math.round(n).toLocaleString()+'원';
+ document.getElementById('cOut').innerHTML=
+  '월 기본급 '+f(base)+(juhyu?' + 주휴수당 '+f(juhyu):' (주 15시간 미만, 주휴수당 없음)')
+  +'<br>사업주 4대보험 부담 약 '+f(ins)
+  +'<br><span style="color:var(--blue);font-weight:800">월 총 인건비 약 '+f(gross+ins)+'</span>'
+  +(juhyu?'':'<br><span style="font-size:12px;color:var(--faint)">주 15시간 이상 근무 시 주휴수당이 추가로 발생합니다.</span>');}
+function makeContract(){
+ const g=id=>document.getElementById(id).value||'____________';
+ const html='<html><head><title>근로계약서</title><style>body{font-family:Malgun Gothic;padding:40px;line-height:1.9;font-size:14px}h2{text-align:center;margin-bottom:24px}td{border:1px solid #999;padding:8px}table{border-collapse:collapse;width:100%}</style></head><body>'
+ +'<h2>표준근로계약서 (단시간근로자)</h2>'
+ +'<p>'+g('kBiz')+' (이하 "사업주")와(과) '+g('kWorker')+' (이하 "근로자")는 다음과 같이 근로계약을 체결한다.</p>'
+ +'<table>'
+ +'<tr><td width="140">근로개시일</td><td>'+g('kStart')+'부터</td></tr>'
+ +'<tr><td>근무장소</td><td>'+g('kBiz')+'</td></tr>'
+ +'<tr><td>근로일</td><td>'+g('kDays')+'</td></tr>'
+ +'<tr><td>근로시간</td><td>'+g('kTime')+' (휴게시간은 근로기준법에 따름)</td></tr>'
+ +'<tr><td>임금</td><td>시급 '+g('kWage2')+'원 (주휴수당 등 법정수당 별도 지급)</td></tr>'
+ +'<tr><td>임금지급일</td><td>'+g('kPayday')+' (근로자 명의 계좌 이체)</td></tr>'
+ +'<tr><td>사회보험</td><td>고용보험·산재보험 적용 (요건 충족 시 국민연금·건강보험 가입)</td></tr>'
+ +'</table>'
+ +'<p style="margin-top:30px">본 계약서에 명시되지 않은 사항은 근로기준법에 따른다.</p>'
+ +'<p style="margin-top:40px">사업주: '+g('kOwner')+' (서명) &nbsp;&nbsp;&nbsp; 근로자: '+g('kWorker')+' (서명)</p>'
+ +'</body></html>';
+ const w=window.open('','_blank');w.document.write(html);w.document.close();w.print();}
+
+/* ================= 라우팅 =================
+   go(v): 클릭 즉시 화면 전환 (아티팩트 미리보기 등 hash 이동이 막힌 환경에서도 동작)
+   hash는 가능할 때만 뒤따라 동기화하고, 직접 URL 진입 시에는 route()가 hash를 읽는다. */
+const VIEWS=['home','diagnose','result','list','rates','tools','recovery'];
+function show(v){
+ if(!VIEWS.includes(v))v='home';
+ document.querySelectorAll('section.view').forEach(s=>s.classList.remove('on'));
+ const el=document.getElementById('v-'+v);
+ if(el)el.classList.add('on');
+ document.querySelectorAll('nav.gnb a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));
+ if(v==='list')renderList();
+ if(v==='diagnose'&&!document.querySelector('#steps .q-step'))buildSteps();
+ window.scrollTo(0,0);
+}
+function go(v){
+ show(v);
+ try{if(location.hash!=='#'+v)history.replaceState(null,'','#'+v);}catch(e){}
+ return false;
+}
+function route(){show((location.hash||'#home').slice(1));}
+window.addEventListener('hashchange',route);
+if(DATA_STATUS!=='draft')document.querySelector('.draft-banner').style.display='none';
+buildSteps();showStep(0);route();
+</script>
+</body>
+</html>
