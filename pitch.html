@@ -199,6 +199,31 @@ body{margin:0;background:#fff;color:var(--ink);font-family:var(--sans);word-brea
 </section>
 </div>
 
+<script src="turnstile-client.js"></script>
+<script>
+// 보이지 않는 봇 차단: 리허설 1회당 Turnstile 한 번 → 세션 티켓 발급 → 모든 API 호출에 티켓 첨부.
+// Turnstile 미설정이면 서버가 즉시 티켓을 내주므로 사람은 아무 변화도 못 느낀다.
+(function () {
+  var ticket = null, ticketP = null;
+  async function getTicket() {
+    if (ticket) return ticket;
+    if (ticketP) return ticketP;
+    ticketP = (async function () {
+      var ts = (typeof tsToken === 'function') ? await tsToken() : '';
+      try {
+        var r = await fetch('/api/video-interview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'ticket', turnstile: ts }) });
+        var d = await r.json(); ticket = (d && d.ticket) || '';
+      } catch (e) { ticket = ''; }
+      return ticket;
+    })();
+    return ticketP;
+  }
+  window.tbAuthHeaders = async function () {
+    var t = await getTicket();
+    return { 'Content-Type': 'application/json', 'x-vi-ticket': t };
+  };
+})();
+</script>
 <script src="pitch.js"></script>
 </body>
 </html>

@@ -7,7 +7,8 @@
 //  키: ANTHROPIC_API_KEY / OPENAI_API_KEY (서버 환경변수)
 // ════════════════════════════════════════════════════════════
 import { handleOptions } from './_lib/cors.js';
-import { sameOriginOk, underDailyCap, rateLimit } from './_lib/guards.js';
+import { sameOriginOk, underDailyCap, rateLimit, getIP } from './_lib/guards.js';
+import { turnstileEnabled, verifyTurnstile, issueTicket, verifyTicket } from './_lib/turnstile.js';
 import { buildContentEvalPrompt, attitudeSystemText, normalizeAnswers } from './_lib/prompts/video-interview.js';
 
 // 필요 환경변수: OPENAI_API_KEY, ANTHROPIC_API_KEY.
@@ -195,6 +196,17 @@ export default async function handler(req, res) {
   const openaiKey = process.env.OPENAI_API_KEY;
   const body = req.body || {};
   const action = String(body.action || '');
+
+  // ── 봇 차단(설정 시에만) ── Turnstile 1회 검증 → 세션 티켓 발급 → 이후 호출은 티켓 재사용.
+  if (action === 'ticket') {
+    if (turnstileEnabled() && !(await verifyTurnstile(body.turnstile || req.headers['cf-turnstile-token'] || '', getIP(req)))) {
+      return res.status(403).json({ error: '사람 확인에 실패했어요. 새로고침 후 다시 시도해주세요.' });
+    }
+    return res.status(200).json({ ticket: issueTicket('vi') });
+  }
+  if (turnstileEnabled() && !verifyTicket(req.headers['x-vi-ticket'] || body.ticket || '', 'vi')) {
+    return res.status(403).json({ error: '세션 확인이 필요합니다. 새로고침 후 다시 시도해주세요.' });
+  }
 
   try {
     // ── 0) 질문 음성 합성(TTS) ──
