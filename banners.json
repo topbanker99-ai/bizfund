@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22",
+  "updated": "2026-07-23",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,21 +32,13 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "2026년 7월 서리풀 소상공인 창업 클리닉 모집 공고",
-      "sub": "서울특별시 · 신청 마감 2026.07.22",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123742",
-      "until": "2026-07-22"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
       "title": "[부산] 2026년 청년디자이너-소상공인 협업 디자인 프로젝트 지원 과제 모집 공고",
       "sub": "부산광역시 · 신청 마감 2026.07.23",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124040",
       "until": "2026-07-23"
     },
     {
-      "tag": "마감 D-3",
+      "tag": "마감 D-2",
       "tagType": "urgent",
       "title": "[경북] 영주시 2026년 소상공인 재창업 지원사업 참여자 추가모집 공고",
       "sub": "경상북도 · 신청 마감 2026.07.24",
@@ -54,12 +46,20 @@
       "until": "2026-07-24"
     },
     {
-      "tag": "마감 D-5",
+      "tag": "마감 D-4",
       "tagType": "urgent",
       "title": "2026년 농식품 데이터 활용 컨설팅 및 구매 지원사업 공고",
       "sub": "농림축산식품부 · 신청 마감 2026.07.26",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123759",
       "until": "2026-07-26"
+    },
+    {
+      "tag": "마감 D-7",
+      "tagType": "urgent",
+      "title": "2026년 백년소상공인 모집(재지정) 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.07.29",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124317",
+      "until": "2026-07-29"
     }
   ]
 }
