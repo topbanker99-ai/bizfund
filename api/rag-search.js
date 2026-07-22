@@ -2,7 +2,7 @@
 // 실시간 음성상담의 search_cases 도구가 부르는 사례 검색. 오류가 나도 500을 던지지 않고
 // 항상 200 + 안내 문구를 돌려준다(AI가 도구 실패로 멈추지 않게 하는 설계 — 유지할 것).
 import { handleOptions } from './_lib/cors.js';
-import { checkPw, rateLimit } from './_lib/guards.js';
+import { sameOriginOk, rateLimit } from './_lib/guards.js';
 import { ragEnabled, ragSearch, RAG_NAMESPACE } from './_lib/rag.js';
 import { PERSPECTIVES } from './_lib/voice-consult.js';
 
@@ -10,9 +10,9 @@ export default async function handler(req, res) {
   if (handleOptions(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST만 허용됩니다.' });
   try {
-    // [보안] 진행 중인 상담(비밀번호 보유)만 사례검색을 쓸 수 있다. 인증·레이트리밋 실패 시
-    //        임베딩·Upstash 호출(비용)을 하지 않고 200 + 안내문만 돌려준다(AI가 멈추지 않게).
-    if (!checkPw(req).ok || !rateLimit('rag', req, 20, 60 * 1000)) {
+    // [보안·무마찰] 타 사이트 도용 차단 + IP 레이트리밋. 실패 시 임베딩·Upstash 호출(비용)을
+    //        하지 않고 200 + 안내문만 돌려준다(진행 중인 상담 AI가 멈추지 않게).
+    if (!sameOriginOk(req) || !rateLimit('rag', req, 20, 60 * 1000)) {
       return res.json({ result: '지금은 사례 검색을 사용할 수 없습니다. 일반 기준으로 안내하고 전문가 상담을 권하세요.' });
     }
     if (!ragEnabled()) return res.json({ result: '사례 데이터베이스가 아직 준비되지 않았습니다. 일반 기준으로 안내하고 전문가 상담을 권하세요.' });

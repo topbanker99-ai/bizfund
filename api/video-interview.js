@@ -7,12 +7,12 @@
 //  키: ANTHROPIC_API_KEY / OPENAI_API_KEY (서버 환경변수)
 // ════════════════════════════════════════════════════════════
 import { handleOptions } from './_lib/cors.js';
-import { checkPw, underDailyCap, rateLimit } from './_lib/guards.js';
+import { sameOriginOk, underDailyCap, rateLimit } from './_lib/guards.js';
 import { buildContentEvalPrompt, attitudeSystemText, normalizeAnswers } from './_lib/prompts/video-interview.js';
 
-// 필요 환경변수: OPENAI_API_KEY, ANTHROPIC_API_KEY, REALTIME_PW(공용 상담 비밀번호).
-// [보안] 이 엔드포인트는 Whisper+Claude+비전+TTS 로 호출당 비용이 커서, 음성상담과 동일한
-//        비밀번호 게이트 + IP 레이트리밋 + 일일 상한으로 막는다. (pitch.js가 x-consult-pw 헤더 전송)
+// 필요 환경변수: OPENAI_API_KEY, ANTHROPIC_API_KEY.
+// [보안] 이 엔드포인트는 Whisper+Claude+비전+TTS 로 호출당 비용이 커서, 사용자에게 마찰을 주지 않는
+//        무마찰 방어(타 사이트 도용 차단 + IP 레이트리밋 + 평가 일일 상한 + 월 한도)로 보호한다.
 const MAX_FRAMES = 8;
 
 // ── 견고한 JSON 추출 ──
@@ -187,9 +187,8 @@ export default async function handler(req, res) {
   if (handleOptions(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST 요청만 허용됩니다.' });
 
-  // ── 보안 게이트 (유료 호출 보호) ──
-  const pw = checkPw(req);
-  if (!pw.ok) return res.status(pw.status).json({ error: pw.error });
+  // ── 무마찰 보안 게이트 (유료 호출 보호, 비밀번호 없음) ──
+  if (!sameOriginOk(req)) return res.status(403).json({ error: '허용되지 않은 요청입니다.' });
   // tts/transcribe 는 문항마다 여러 번 → 넉넉히, 하지만 자동화 폭주는 차단.
   if (!rateLimit('vi', req, 40, 60 * 1000)) return res.status(429).json({ error: '요청이 너무 잦습니다. 잠시 후 다시 시도해주세요.' });
 
@@ -239,10 +238,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: '지원하지 않는 action입니다.' });
   } catch (e) {
     const status = e.status || 500;
+    // 내부 오류 원문(detail)은 클라이언트에 노출하지 않고 서버 로그로만 남긴다.
+    console.error('video-interview 오류:', status, String(e && e.message), String(e && e.detail || '').slice(0, 200));
     if (status !== 500) {
-      return res.status(status).json({ error: e.message || '요청을 처리할 수 없습니다.', usage: e.usage || null, detail: e.detail || null });
+      return res.status(status).json({ error: e.message || '요청을 처리할 수 없습니다.', usage: e.usage || null });
     }
-    console.error('video-interview 오류:', String(e && e.message), String(e && e.detail || '').slice(0, 200));
     return res.status(500).json({ error: '처리 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.' });
   }
 }

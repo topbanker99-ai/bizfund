@@ -36,13 +36,6 @@
     box.appendChild(el); box.scrollTop = box.scrollHeight; return el;
   }
 
-  function getPw() {
-    var pw = sessionStorage.getItem('rtpw');
-    if (!pw) { pw = prompt('상담 비밀번호를 입력해주세요'); if (pw) sessionStorage.setItem('rtpw', pw); }
-    return pw || '';
-  }
-  function storedPw() { return sessionStorage.getItem('rtpw') || ''; } // 세션 중 재프롬프트 없이 조회
-
   function setMic(on) { try { if (micStream) micStream.getAudioTracks().forEach(function (t) { t.enabled = on; }); } catch (e) {} }
   function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
   function stopAll() {
@@ -66,12 +59,9 @@
       btn.disabled = false; setStatus(''); alert('마이크 권한이 필요합니다. 브라우저 설정에서 허용 후 다시 시도해주세요.'); return;
     }
     micStream.getAudioTracks().forEach(function (tr) { tr.enabled = false; }); // 첫 인사 끝난 뒤 켠다
-    var pw = getPw();
     try {
-      // 비밀번호는 헤더로 전송(URL 로그 유출 방지). perspective 만 쿼리에 남긴다.
       var url = TOKEN_ENDPOINT + '?perspective=' + encodeURIComponent(PERSP);
-      var tr = await fetch(url, { headers: { 'x-consult-pw': pw } });
-      if (tr.status === 401) { sessionStorage.removeItem('rtpw'); throw new Error('상담 비밀번호가 올바르지 않습니다.'); }
+      var tr = await fetch(url);
       if (tr.status === 503) { throw new Error('음성 상담이 아직 열리지 않았어요. (관리자에게 문의)'); }
       if (tr.status === 429) { throw new Error('연결 시도가 잦거나 오늘 이용량이 소진되었습니다. 잠시 후 다시 시도해주세요.'); }
       if (!tr.ok) throw new Error('연결 준비 실패 (' + tr.status + ')');
@@ -149,7 +139,7 @@
         setStatus('유사 사례 찾는 중…');
         var out = '검색 중 오류가 발생했습니다. 일반 기준으로 안내하세요.';
         try {
-          var r = await fetch(RAG_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-consult-pw': storedPw() }, body: JSON.stringify({ query: args.query || '', perspective: PERSP }) });
+          var r = await fetch(RAG_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: args.query || '', perspective: PERSP }) });
           var j = await r.json(); out = j.result || out;
         } catch (_) {}
         try {

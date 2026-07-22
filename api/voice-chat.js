@@ -1,7 +1,7 @@
 // POST /api/voice-chat  { audioB64?, mime?, history[], greet?, perspective? }
 // 절약형 폴백 — STT(전사) → GPT(답변, RAG 주입) → TTS(음성). Realtime 대비 비용 약 1/10.
 import { handleOptions } from './_lib/cors.js';
-import { checkPw, underDailyCap } from './_lib/guards.js';
+import { sameOriginOk, underDailyCap, rateLimit } from './_lib/guards.js';
 import { ragEnabled, ragSearch, RAG_NAMESPACE } from './_lib/rag.js';
 import { VOICE_PROMPT, perspectiveNote, PERSPECTIVES } from './_lib/voice-consult.js';
 
@@ -15,8 +15,9 @@ export default async function handler(req, res) {
 
   const openaiKey = process.env.OPENAI_API_KEY;
   if (!openaiKey) return res.status(500).json({ error: '서버에 OpenAI 키가 설정되지 않았습니다.' });
-  const pw = checkPw(req);
-  if (!pw.ok) return res.status(pw.status).json({ error: pw.error });
+  // 무마찰 방어(비밀번호 없음): 타 사이트 도용 차단 + IP 레이트리밋 + 일일 상한.
+  if (!sameOriginOk(req)) return res.status(403).json({ error: '허용되지 않은 요청입니다.' });
+  if (!rateLimit('voicechat', req, 20, 60 * 1000)) return res.status(429).json({ error: '요청이 너무 잦습니다. 잠시 후 다시 시도해주세요.' });
   if (!underDailyCap('voicechat')) return res.status(429).json({ error: '오늘 상담 이용량이 모두 소진되었습니다.' });
 
   try {
