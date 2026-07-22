@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사장님 자금 피칭 리허설 — 사장님서랍</title>
+<meta name="description" content="정책자금·대출 상담을 앞두고 카메라 앞에서 사업을 말로 설명하는 연습을 해보는 리허설 도구입니다. 실제 심사가 아니라 연습용이며, 결과로 대출 여부가 정해지지 않습니다.">
+<style>
+:root{
+  --navy:#0F2A4A; --gold:#BA7517; --line:#E4E9F0; --paper:#F6F8FB;
+  --ink:#1f2d3d; --muted:#6b7a8c;
+  --serif:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --sans:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--sans);word-break:keep-all;line-height:1.6}
+.top{background:var(--navy)}
+.top-in{max-width:760px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.top a{color:#fff;text-decoration:none;font-weight:800;font-size:16px}
+.top em{font-style:normal;color:#FFD37E}
+.top .back{font-size:13px;font-weight:700;color:#cdd9ea}
+.page{padding:24px 16px 64px}
+.tab-content{display:block}
+.disclaim{max-width:760px;margin:0 auto 14px;font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ===== 아래는 원본 영상면접 스타일(그대로), #tab-vinterview 스코프 ===== */
+#tab-vinterview .vi-wrap{max-width:760px;margin:0 auto;}
+#tab-vinterview .vi-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 22px;margin-bottom:16px;}
+#tab-vinterview .vi-eyebrow{font-family:var(--sans);font-weight:800;font-size:12px;letter-spacing:.08em;color:var(--gold,#BA7517);text-transform:uppercase;}
+#tab-vinterview .vi-title{font-family:var(--serif);font-weight:800;font-size:24px;color:var(--navy);margin:6px 0 8px;line-height:1.3;}
+#tab-vinterview .vi-title b{color:var(--gold,#BA7517);}
+#tab-vinterview .vi-desc{font-size:14px;color:var(--ink);line-height:1.7;}
+#tab-vinterview .vi-areas{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
+#tab-vinterview .vi-chip{font-size:12.5px;font-weight:700;color:var(--navy);background:var(--paper,#FBF8F1);border:1px solid var(--line);border-radius:999px;padding:6px 12px;}
+#tab-vinterview .vi-note{margin-top:14px;padding:12px 14px;background:var(--paper,#FBF8F1);border-left:3px solid var(--navy);border-radius:8px;font-size:12.5px;color:var(--muted);line-height:1.65;}
+#tab-vinterview .vi-btn{font-family:var(--sans);font-weight:800;font-size:15px;color:#fff;background:var(--navy);border:none;border-radius:10px;padding:13px 22px;cursor:pointer;}
+#tab-vinterview .vi-btn:hover{background:#15314e;}
+#tab-vinterview .vi-btn:disabled{background:#B7C0CC;cursor:not-allowed;}
+#tab-vinterview .vi-btn.ghost{background:#5B6675;}
+#tab-vinterview .vi-btn.ghost:hover{background:#48515e;}
+#tab-vinterview .vi-startbar{margin-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+#tab-vinterview .vi-startbar small{font-size:12px;color:var(--muted);}
+
+/* 진행 화면 — 2단(질문·버튼 | 영상카드) */
+#tab-vinterview .vi-stage2{display:grid;grid-template-columns:0.82fr 1.18fr;gap:22px;align-items:center;margin:0 auto 16px;max-width:760px;}
+#tab-vinterview .vi-left{padding:8px 4px;}
+#tab-vinterview .vi-lead{font-size:14px;color:var(--muted);margin-bottom:12px;}
+#tab-vinterview .vi-question{font-family:var(--serif);font-weight:800;font-size:26px;color:var(--navy);line-height:1.4;margin-bottom:18px;}
+#tab-vinterview .vi-replay{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--navy);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;margin-bottom:20px;}
+#tab-vinterview .vi-replay:hover{background:var(--paper,#FBF8F1);}
+#tab-vinterview .vi-replay:disabled{opacity:.5;cursor:default;}
+#tab-vinterview .vi-actions{display:flex;gap:10px;align-items:center;position:relative;}
+#tab-vinterview .vi-hint{position:absolute;bottom:calc(100% + 8px);left:0;background:#2F6DF6;color:#fff;font-size:12px;font-weight:700;padding:8px 12px;border-radius:8px;white-space:nowrap;display:none;box-shadow:0 4px 12px rgba(47,109,246,.25);}
+#tab-vinterview .vi-hint:after{content:'';position:absolute;top:100%;left:26px;border:6px solid transparent;border-top-color:#2F6DF6;}
+#tab-vinterview .vi-hint.show{display:block;}
+#tab-vinterview .vi-btn#viSubmit{background:#7FD1C6;color:#0d3b34;}
+#tab-vinterview .vi-btn#viSubmit:not(:disabled){background:#2E8B7E;color:#fff;}
+#tab-vinterview .vi-btn#viSubmit:disabled{background:#BfE6Df;color:#5a8c84;cursor:not-allowed;}
+
+/* 오른쪽 영상 카드 */
+#tab-vinterview .vi-right{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;box-shadow:0 8px 28px rgba(20,40,70,.08);}
+#tab-vinterview .vi-cardhd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+#tab-vinterview .vi-cardhd-l{font-size:14px;color:var(--muted);}
+#tab-vinterview .vi-cardhd-l b{color:var(--navy);}
+#tab-vinterview .vi-cardhd-l .vi-sep{color:#cdd6e0;margin:0 4px;}
+#tab-vinterview .vi-remainpill{flex:none;font-size:12.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 13px;}
+#tab-vinterview .vi-camwrap{position:relative;background:#0d1520;border-radius:12px;overflow:hidden;aspect-ratio:16/11;}
+#tab-vinterview .vi-cam{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
+#tab-vinterview .vi-rec{position:absolute;top:12px;left:12px;display:none;align-items:center;gap:6px;background:rgba(163,45,45,.92);color:#fff;font-size:12px;font-weight:800;padding:5px 10px;border-radius:999px;}
+#tab-vinterview .vi-rec.on{display:flex;}
+#tab-vinterview .vi-rec .dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:viBlink 1s infinite;}
+@keyframes viBlink{50%{opacity:.25;}}
+#tab-vinterview .vi-cammsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#cdd6e0;font-size:13px;text-align:center;padding:20px;}
+#tab-vinterview .vi-bar{height:4px;background:#E6ECF3;border-radius:2px;margin:14px 2px 16px;overflow:hidden;}
+#tab-vinterview .vi-barfill{height:100%;width:0;background:#2F6DF6;transition:width .3s linear;}
+#tab-vinterview .vi-timerpill{display:flex;align-items:center;justify-content:center;gap:0;}
+#tab-vinterview .vi-timerpill .vi-phase{font-size:12.5px;font-weight:700;color:#aab3bf;padding:0 16px;}
+#tab-vinterview .vi-timerpill .vi-phase.active{color:var(--navy);}
+#tab-vinterview .vi-clock{font-family:var(--serif);font-weight:800;font-size:22px;color:#2F6DF6;font-variant-numeric:tabular-nums;min-width:96px;text-align:center;border:2px solid #2F6DF6;border-radius:12px;padding:8px 12px;}
+@media(max-width:720px){
+  #tab-vinterview .vi-stage2{grid-template-columns:1fr;gap:16px;}
+  #tab-vinterview .vi-right{order:-1;}
+  #tab-vinterview .vi-question{font-size:21px;margin-bottom:12px;}
+  #tab-vinterview .vi-replay{margin-bottom:14px;}
+}
+
+/* 결과 */
+#tab-vinterview .vi-rhd{font-family:var(--serif);font-weight:800;font-size:16px;color:var(--navy);margin:2px 0 12px;}
+#tab-vinterview .vi-scorehero{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:16px 18px;background:var(--paper,#FBF8F1);border-radius:14px;margin-bottom:18px;}
+#tab-vinterview .vi-bignum{font-family:var(--serif);font-weight:800;font-size:44px;color:var(--navy);line-height:1;}
+#tab-vinterview .vi-bignum small{font-size:18px;color:var(--muted);}
+#tab-vinterview .vi-grade{font-weight:800;font-size:15px;color:#fff;border-radius:999px;padding:6px 14px;}
+#tab-vinterview .vi-arlist{display:flex;flex-direction:column;gap:9px;}
+#tab-vinterview .vi-ar{display:flex;align-items:flex-start;gap:10px;}
+#tab-vinterview .vi-arname{flex:none;width:96px;font-size:13px;font-weight:800;color:var(--navy);padding-top:1px;}
+#tab-vinterview .vi-arbody{flex:1;}
+#tab-vinterview .vi-artk{height:9px;background:#E6ECF3;border-radius:5px;overflow:hidden;margin:3px 0 4px;}
+#tab-vinterview .vi-arfill{height:100%;border-radius:5px;}
+#tab-vinterview .vi-arsc{font-size:12px;font-weight:800;color:var(--muted);}
+#tab-vinterview .vi-arcm{font-size:12.5px;color:var(--ink);line-height:1.55;}
+#tab-vinterview .vi-block{margin-top:20px;}
+#tab-vinterview .vi-attitude{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0;}
+#tab-vinterview .vi-att{flex:1;min-width:120px;background:var(--paper,#FBF8F1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center;}
+#tab-vinterview .vi-attn{font-size:12px;color:var(--muted);font-weight:700;}
+#tab-vinterview .vi-attv{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--navy);}
+#tab-vinterview .vi-verdict{padding:14px 16px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--gold,#BA7517);border-radius:10px;font-size:13.5px;color:var(--ink);line-height:1.7;}
+#tab-vinterview .vi-li{font-size:13px;color:var(--ink);line-height:1.6;padding:7px 0 7px 20px;position:relative;border-bottom:1px dashed var(--line);}
+#tab-vinterview .vi-li:before{content:'▸';position:absolute;left:4px;color:var(--gold,#BA7517);}
+#tab-vinterview .vi-caveat{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.55;}
+#tab-vinterview .vi-sit{padding:12px 14px;border:1px solid var(--line);border-left:3px solid #C0504D;border-radius:10px;margin-bottom:10px;}
+#tab-vinterview .vi-sit.ok{border-left-color:#2E8B6E;}
+#tab-vinterview .vi-sithd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;}
+#tab-vinterview .vi-sitq{font-family:var(--serif);font-weight:800;font-size:14.5px;color:var(--navy);line-height:1.4;}
+#tab-vinterview .vi-sitbadge{flex:none;font-size:12px;font-weight:800;color:#fff;border-radius:999px;padding:4px 11px;background:#C0504D;}
+#tab-vinterview .vi-sitbadge.ok{background:#2E8B6E;}
+@media(max-width:560px){
+  #tab-vinterview .vi-title{font-size:20px;}
+  #tab-vinterview .vi-question{font-size:17px;}
+  #tab-vinterview .vi-arname{width:72px;font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <a href="./">사장님<em>서랍</em></a>
+  <a class="back" href="./">← 홈</a>
+</div></div>
+
+<div class="page">
+<section class="tab-content" id="tab-vinterview">
+<div class="vi-wrap">
+
+  <!-- 인트로 -->
+  <div class="vi-card vi-intro" id="viIntro">
+    <div class="vi-eyebrow">AI 자금 피칭 리허설</div>
+    <h2 class="vi-title">카메라 앞에서 연습하는 <b>자금 피칭·상담</b></h2>
+    <p class="vi-desc">
+      정책자금·대출 상담을 앞두고, 사업을 말로 설명하는 연습을 해보는 도구예요.
+      사업모델·자금계획·상환능력 같은 6가지를 질문하고, 답변을 AI가 정리해 드립니다.
+    </p>
+    <div class="vi-areas">
+      <span class="vi-chip">사업모델</span><span class="vi-chip">자금계획</span><span class="vi-chip">상환능력</span>
+      <span class="vi-chip">신용·재무</span><span class="vi-chip">시장이해</span><span class="vi-chip">고객·매출</span>
+      <span class="vi-chip">리스크 대처</span>
+    </div>
+    <div class="vi-note" id="viFlowNote">
+      진행 방식 — 질문이 <b>음성으로 나오는 순간부터 녹화·답변 60초</b>가 시작돼요. 최소 10초 이상 답변하면 <b>제출하기</b>를 누를 수 있어요.
+      질문 음성이 마이크에 섞이지 않도록 <b>이어폰 사용을 권장</b>합니다.
+      카메라·마이크 권한이 필요하며, <b>영상·음성은 평가에만 쓰이고 서버에 저장되지 않습니다.</b>
+      이 결과는 연습용이며 실제 대출 여부와는 관계가 없습니다.
+    </div>
+    <div class="vi-startbar">
+      <button class="vi-btn" id="viStart">시작하기</button>
+      <small id="viStartMsg">시작을 누르면 카메라·마이크 사용을 요청합니다.</small>
+    </div>
+  </div>
+
+  <!-- 진행 -->
+  <div class="vi-stage2" id="viStage" hidden>
+    <div class="vi-left">
+      <div class="vi-lead">주어진 질문에 답변해 주세요.</div>
+      <div class="vi-question" id="viQuestion">—</div>
+      <button class="vi-replay" id="viReplay" type="button">🔊 질문 다시 듣기</button>
+      <div class="vi-actions">
+        <div class="vi-hint" id="viHint">적어도 10초 이상 답변해야 제출할 수 있어요.</div>
+        <button class="vi-btn" id="viSubmit" disabled>제출하기</button>
+        <button class="vi-btn ghost" id="viRedo">다시하기</button>
+      </div>
+    </div>
+    <div class="vi-right">
+      <div class="vi-cardhd">
+        <div class="vi-cardhd-l"><span id="viAreaName">—</span> <span class="vi-sep">|</span> <b><span id="viQNo">1</span>번 질문</b></div>
+        <div class="vi-remainpill">남은 문항 <b id="viRemain">8</b></div>
+      </div>
+      <div class="vi-camwrap">
+        <video class="vi-cam" id="viCam" autoplay muted playsinline></video>
+        <div class="vi-rec" id="viRec"><span class="dot"></span> REC</div>
+        <div class="vi-cammsg" id="viCamMsg">카메라를 준비하고 있어요…</div>
+      </div>
+      <div class="vi-bar"><div class="vi-barfill" id="viBarFill"></div></div>
+      <div class="vi-timerpill">
+        <span class="vi-clock" id="viClock">01:00</span>
+        <span class="vi-phase active" id="viPhaseAns">답변 시간</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 분석중 -->
+  <div class="vi-card" id="viLoading" hidden style="text-align:center;padding:36px 22px;">
+    <div class="vi-title" style="font-size:19px;">답변을 분석하고 있어요…</div>
+    <p class="vi-desc" id="viLoadingMsg">음성을 텍스트로 변환하고 AI가 평가 중입니다. 잠시만 기다려 주세요.</p>
+  </div>
+
+  <!-- 결과 -->
+  <div class="vi-card" id="viResult" hidden></div>
+
+</div>
+</section>
+</div>
+
+<script src="pitch.js"></script>
+</body>
+</html>

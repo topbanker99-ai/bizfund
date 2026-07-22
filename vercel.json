@@ -6,6 +6,9 @@
   "outputDirectory": ".",
   "cleanUrls": false,
   "trailingSlash": false,
+  "functions": {
+    "api/video-interview.js": { "includeFiles": "api/_lib/prompt-files/**" }
+  },
   "headers": [
     {
       "source": "/banners.json",
