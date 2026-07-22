@@ -1,0 +1,76 @@
+name: data-review-reminder
+
+# 매월 1일, 자금 데이터(자금 14종) 검수 리마인더 이슈를 자동 생성한다.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'   # 매월 1일 00:00 UTC (KST 09:00)
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v5
+
+      - name: open monthly data-review issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+            const ym = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+            const title = `📋 자금 데이터 월간 검수 (${ym})`;
+
+            // 같은 달 이슈가 이미 있으면 중복 생성하지 않는다.
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', per_page: 100,
+            });
+            if (open.some(i => i.title === title)) { core.info('이미 이번 달 이슈가 있습니다.'); return; }
+
+            const rows = [
+              ['sbiz-ilban', '일반경영안정자금(소진공)', 'https://ols.sbiz.or.kr'],
+              ['sbiz-start', '창업기반지원자금(소진공)', 'https://ols.sbiz.or.kr'],
+              ['kosmes-youth', '청년전용창업자금(중진공)', 'https://www.kosmes.or.kr'],
+              ['sgi-guarantee', '소상공인 신용보증(지역신보)', 'https://www.koreg.or.kr'],
+              ['smart-store', '스마트상점 기술보급(소진공)', 'https://www.sbiz.or.kr'],
+              ['online', '온라인 판로지원(소진공)', 'https://fanfandaero.kr'],
+              ['durunuri', '두루누리 사회보험료(근로복지공단)', 'https://insurancesupport.or.kr'],
+              ['flex-work', '유연근무 장려금(고용부)', 'https://www.work24.go.kr'],
+              ['youth-jump', '청년일자리도약장려금(고용부)', 'https://www.work24.go.kr'],
+              ['noran', '노란우산 희망장려금(중기중앙회)', 'https://www.8899.or.kr'],
+              ['hope-cleanup', '희망리턴 점포철거비(소진공)', 'https://sbiz24.kr'],
+              ['hope-restart', '희망리턴 재도전(소진공)', 'https://hope.sbiz.or.kr'],
+              ['fresh-start', '새출발기금 채무조정(캠코)', 'https://www.newstartfund.or.kr'],
+              ['noran-close', '노란우산 폐업공제금(중기중앙회)', 'https://www.8899.or.kr'],
+            ];
+            const checklist = rows.map(r => `- [ ] \`${r[0]}\` ${r[1]} — [공식출처](${r[2]})`).join('\n');
+
+            const body = [
+              `## ${ym} 자금 데이터 월간 검수`,
+              '',
+              '`app.html` 의 `PROGRAMS`(자금 14종)를 공식 출처로 대조하세요.',
+              '각 항목: **① 명칭·소관 ② 한도·금액 ③ 신청 URL ④ 핵심 요건 ⑤ 신청기간·예산소진**',
+              '',
+              '### 먼저 훑기(통합 공고)',
+              '- [기업마당](https://www.bizinfo.go.kr) · [소상공인 정책자금](https://ols.sbiz.or.kr) · [소상공인24](https://sbiz24.kr)',
+              '',
+              '### 프로그램별 체크',
+              checklist,
+              '',
+              '### 마무리',
+              '- [ ] 수정 사항을 `app.html` 에 반영',
+              '- [ ] `DATA_VERIFIED_AT` 을 오늘 날짜로 갱신',
+              '- [ ] `docs/data-review.md` 검수 로그에 한 줄 추가',
+              '- [ ] 중대한 불일치가 있으면 정정 전까지 `DATA_STATUS=\'draft\'` 로 되돌림',
+              '',
+              '> 상세 절차: [docs/data-review.md](../blob/main/docs/data-review.md)',
+            ].join('\n');
+
+            const created = await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo, title, body,
+            });
+            core.info(`생성됨: #${created.data.number}`);
