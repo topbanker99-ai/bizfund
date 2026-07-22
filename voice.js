@@ -60,9 +60,9 @@
     }
     micStream.getAudioTracks().forEach(function (tr) { tr.enabled = false; }); // 첫 인사 끝난 뒤 켠다
     try {
-      var ts = (typeof tsToken === 'function') ? await tsToken() : ''; // 보이지 않는 봇 확인(설정 시)
+      var pow = (typeof powSolve === 'function') ? await powSolve() : ''; // 보이지 않는 봇 확인(작업증명)
       var url = TOKEN_ENDPOINT + '?perspective=' + encodeURIComponent(PERSP);
-      var tr = await fetch(url, { headers: ts ? { 'cf-turnstile-token': ts } : {} });
+      var tr = await fetch(url, { headers: pow ? { 'x-pow': pow } : {} });
       if (tr.status === 503) { throw new Error('음성 상담이 아직 열리지 않았어요. (관리자에게 문의)'); }
       if (tr.status === 429) { throw new Error('연결 시도가 잦거나 오늘 이용량이 소진되었습니다. 잠시 후 다시 시도해주세요.'); }
       if (!tr.ok) throw new Error('연결 준비 실패 (' + tr.status + ')');
