@@ -148,6 +148,15 @@ section.view.on{display:block}
 .rstep .rl.tel{background:#fff;border:1px solid var(--line);color:var(--sub);cursor:default}
 .rstep .rl.tel:hover{text-decoration:none}
 #recoCalc{scroll-margin-top:80px}
+/* --- 간이진단 결과: 실무 다음 단계 (챗봇 지식) --- */
+.nextbox{background:var(--blue-soft);border:1px solid #C5DAF6;border-radius:14px;padding:18px 20px;margin-top:12px}
+.nextbox h4{font-size:13.5px;color:var(--navy);margin-bottom:10px}
+.nextpts{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.nextpts li{font-size:13px;color:var(--ink);line-height:1.55;padding-left:16px;position:relative}
+.nextpts li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.nextdocs{font-size:12.5px;color:var(--sub);line-height:1.6;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.nextdocs b{color:var(--navy)}
+.nextct{font-size:12.5px;font-weight:800;color:var(--blue)}
 footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color:var(--faint);text-align:center;line-height:1.8}
 
 /* ===== 공지 배너 캐러셀 ===== */
@@ -452,23 +461,18 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
     </div>
 
     <div id="recoGuide">
-    <div class="help-card"><b>1. 채무조정 (신용회복위원회)</b>
-      <p>연체 전·후 채무의 이자 감면, 상환기간 연장 등을 조정합니다. 법원 절차 전에 가장 먼저 검토할 단계입니다.</p>
-      <span class="help-tel">☎ 1600-5500</span></div>
+    <div class="rmap-h" style="margin-top:6px">제도 한눈에 비교</div>
+    <p style="font-size:13px;color:var(--sub);margin:4px 0 12px">채무조정 → 개인회생 → 개인파산 순으로 부담이 커집니다. 새출발기금은 소상공인용 채무조정입니다.</p>
+    <div style="overflow-x:auto;border:1px solid var(--line);border-radius:14px">
+    <table class="rate-table" style="margin:0;min-width:600px">
+      <tr><th>제도</th><th>이런 분께</th><th>소득 요건</th><th>결과</th><th>무료 상담</th></tr>
+      <tr><td><b>채무조정</b><br><small style="color:var(--faint)">법원 밖 · 신복위/새출발기금</small></td><td>연체 초기·상환이 버거운 분<br>(금융권·사업자 채무)</td><td>소득 있으면 유리</td><td>이자 감면·상환기간 연장<br>사업자는 원금 조정도</td><td>신복위 1600-5500<br>캠코 1660-1378</td></tr>
+      <tr><td><b>개인회생</b><br><small style="color:var(--faint)">법원</small></td><td>소득은 있으나 빚이 과다한 분<br>(무담보 10억·담보 15억 내)</td><td>계속·반복 소득 필수</td><td>3~5년 갚고 나머지 탕감</td><td>법률구조공단 132</td></tr>
+      <tr><td><b>개인파산·면책</b><br><small style="color:var(--faint)">법원</small></td><td>갚을 능력이 사실상 없는 분</td><td>소득 없음·지급불능</td><td>재산 청산 후 면책</td><td>법률구조공단 132</td></tr>
+    </table>
+    </div>
 
-    <div class="help-card"><b>2. 새출발기금 (한국자산관리공사)</b>
-      <p>부실·부실우려 소상공인 대출의 상환기간 연장, 금리 인하, 심사에 따른 원금 조정을 지원합니다. 폐업 전에도 신청할 수 있습니다.</p>
-      <span class="help-tel">☎ 1660-1378</span></div>
-
-    <div class="help-card"><b>3. 개인회생 (법원)</b>
-      <p>일정 소득이 있는 경우 3~5년간 변제계획을 이행하면 남은 채무를 면책받는 법원 절차입니다.</p>
-      <span class="help-tel">대한법률구조공단 ☎ 132</span></div>
-
-    <div class="help-card"><b>4. 개인파산·면책 (법원)</b>
-      <p>변제 능력이 없는 경우 재산을 청산하고 남은 채무의 면책을 구하는 절차입니다. 법인 폐업 시 대표자 연대보증 채무가 함께 걸려 있는 경우가 많아 반드시 전문가 검토가 필요합니다.</p>
-      <span class="help-tel">대한법률구조공단 ☎ 132</span></div>
-
-    <div class="res-disclaim" style="margin-top:24px">
+    <div class="res-disclaim" style="margin-top:20px">
       본 안내는 일반 정보이며 법률 자문이 아닙니다. 실제 절차는 개인별 채무 구성에 따라 달라지므로,
       신용회복위원회(1600-5500), 대한법률구조공단(132) 또는 변호사·법무사 상담을 통해 확인하세요.</div>
     </div>
@@ -824,7 +828,15 @@ const RECO_DATA={
   laws:[
    {law:'채무자회생법 제579조',point:'개인회생은 무담보 채무 10억원, 담보부 채무 15억원 이하인 개인 채무자가 신청할 수 있습니다.'},
    {law:'채무자회생법 제611조',point:'변제기간은 원칙적으로 3년이며 최장 5년을 초과할 수 없습니다.'},
-   {law:'서울회생법원 안내',point:'급여·영업 등 계속적이고 반복적인 수입이 있어야 하며, 생계비를 제외한 가용소득으로 변제합니다.'}]},
+   {law:'서울회생법원 안내',point:'급여·영업 등 계속적이고 반복적인 수입이 있어야 하며, 생계비를 제외한 가용소득으로 변제합니다.'}],
+  next:{
+   points:[
+    '소득이 있어야 신청할 수 있습니다 — 급여·영업 등 계속·반복 수입이 핵심입니다.',
+    '무담보 10억·담보 15억 한도 안에 드는지 먼저 확인하세요.',
+    '3년(최장 5년) 동안 가용소득으로 갚고 나머지는 면책됩니다. 무리한 고금리 돌려막기는 피하세요.'],
+   docs:['채무 목록(담보·무담보 구분)','소득 증빙(급여명세·소득금액증명)','재산 목록','최근 생계비(가계 수지) 내역'],
+   contact:'대한법률구조공단 132 (무료 법률상담) · 관할 회생법원'
+  }},
  bankruptcy:{
   label:'개인파산·면책',
   resultLabel:'파산 선고·면책 가능성 (참고)',
@@ -852,7 +864,15 @@ const RECO_DATA={
   laws:[
    {law:'채무자회생법 제564조',point:'과다한 낭비·도박으로 재산을 현저히 감소시킨 경우, 재산을 숨기거나 허위 진술한 경우 면책이 불허가될 수 있습니다.'},
    {law:'채무자회생법 제564조 제1항',point:'파산 면책 확정일부터 7년, 개인회생 면책 확정일부터 5년 내에 면책받은 이력이 있으면 면책이 제한됩니다.'},
-   {law:'서울회생법원 안내',point:'면책 불허가 사유가 있어도 법원이 사정을 참작해 재량으로 면책하는 경우가 있습니다.'}]},
+   {law:'서울회생법원 안내',point:'면책 불허가 사유가 있어도 법원이 사정을 참작해 재량으로 면책하는 경우가 있습니다.'}],
+  next:{
+   points:[
+    '갚을 능력이 사실상 없을 때(지급불능) 재산을 청산하고 면책을 구하는 절차입니다.',
+    '도박·낭비, 재산 은닉·편파변제는 면책 불허가 사유 — 채무가 늘어난 경위를 소명할 자료를 준비하세요.',
+    '법인을 폐업한 대표라면 연대보증 채무까지 함께 걸려 있는 경우가 많아 반드시 전문가 검토가 필요합니다.'],
+   docs:['채무 목록','재산 목록(면제재산 확인)','채무 발생 경위 소명자료','소득·가족관계 서류'],
+   contact:'대한법률구조공단 132 (무료 법률상담) · 관할 회생법원'
+  }},
  workout:{
   label:'채무조정 (신복위·새출발기금)',
   resultLabel:'법원 밖 채무조정 적합도 (참고)',
@@ -881,7 +901,15 @@ const RECO_DATA={
   laws:[
    {law:'신용회복위원회 채무조정',point:'연체 기간에 따라 신속채무조정, 프리워크아웃, 개인워크아웃으로 나뉘며 이자 감면과 상환기간 연장이 이루어집니다.'},
    {law:'새출발기금 (캠코)',point:'소상공인·자영업자의 사업자 대출을 대상으로 상환기간 연장, 금리 인하, 심사에 따른 원금 조정을 지원합니다.'},
-   {law:'절차 순서',point:'법원 절차(회생·파산)보다 먼저 검토할 수 있는 단계이며, 조정이 어려울 때 법원 절차로 넘어갑니다.'}]}
+   {law:'절차 순서',point:'법원 절차(회생·파산)보다 먼저 검토할 수 있는 단계이며, 조정이 어려울 때 법원 절차로 넘어갑니다.'}],
+  next:{
+   points:[
+    '금융권 채무는 신용회복위원회, 소상공인 사업자대출은 새출발기금(캠코)이 창구입니다.',
+    '연체를 방치하기 전에 먼저 상담하세요 — 연체가 길어질수록 선택지가 줄어듭니다.',
+    '연체 단계에 따라 신속채무조정(무연체·30일내)·프리워크아웃(31~89일)·개인워크아웃(90일 이상)으로 나뉩니다.'],
+   docs:['채무 목록(어디서 얼마·연체 여부)','월 소득·고정비 내역','사업자라면 사업자등록·매출 자료'],
+   contact:'신용회복위원회 1600-5500 · 새출발기금(캠코) 1660-1378'
+  }}
 };
 let curCase='rehab';
 const recoSel={};
@@ -935,6 +963,12 @@ document.getElementById('runCalc').onclick=()=>{
  const lo=Math.max(5,score-9),hi=Math.min(95,score+9);
  const [band,bc]=bandOf(score);
  const lawHTML=d.laws.map(p=>'<div class="law"><div class="lname">'+p.law+'</div><div class="lpoint">'+p.point+'</div></div>').join('');
+ const nx=d.next;
+ const nextHTML=nx?'<div class="nextbox"><h4>▶ 실무 다음 단계</h4>'
+  +'<ul class="nextpts">'+nx.points.map(p=>'<li>'+p+'</li>').join('')+'</ul>'
+  +(nx.docs&&nx.docs.length?'<div class="nextdocs"><b>미리 준비하면 좋은 것</b> · '+nx.docs.join(' · ')+'</div>':'')
+  +(nx.contact?'<div class="nextct">'+nx.contact+'</div>':'')
+  +'</div>':'';
  const row=(a,cls)=>a.length?a.map(f=>'<div class="frow '+cls+'"><span class="dot"></span><span class="ft">'+f.t+'</span><span class="fw">'+(f.v>0?'+':'')+f.v+'</span></div>').join(''):'<div class="frow"><span class="ft" style="color:var(--faint)">해당 없음</span></div>';
  const blockHTML=blocks.length
   ?'<div class="cwarn" style="margin-top:0;margin-bottom:12px"><b>먼저 확인해야 할 사항이 있습니다</b><br>'+blocks.join('<br>')+'</div>':'';
@@ -946,6 +980,7 @@ document.getElementById('runCalc').onclick=()=>{
   +'<div class="rbreak"><h4>▲ 유리하게 작용하는 요소</h4>'+row(favs,'fav')
   +'<h4 style="margin-top:16px">▼ 불리하게 작용하는 요소</h4>'+row(unfs,'unf')+'</div>'
   +'<div class="laws"><h4>판단 기준 참고 · 법령 근거</h4>'+lawHTML+'</div>'
+  +nextHTML
   +'<div class="cwarn">본 지표는 입력값과 법령상 일반 기준을 바탕으로 한 참고용일 뿐, 실제 인가·면책 결과를 보장하지 않습니다. '
   +'채무 구성과 개별 사정에 따라 결과는 크게 달라지므로 반드시 상담을 통해 확인하세요. '
   +'무료 상담은 신용회복위원회 1600-5500, 대한법률구조공단 132에서 받으실 수 있습니다.<br><br>'
