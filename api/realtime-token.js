@@ -2,7 +2,7 @@
 // OpenAI Realtime ephemeral client secret(ek_...) 발급. 세션 지침·도구를 서버가 박아 넣는다.
 import { handleOptions } from './_lib/cors.js';
 import { sameOriginOk, underDailyCap, rateLimit, getIP } from './_lib/guards.js';
-import { turnstileEnabled, verifyTurnstile } from './_lib/turnstile.js';
+import { botcheckEnabled, verifyPow } from './_lib/botcheck.js';
 import { buildInstructions, TOOLS, PERSPECTIVES } from './_lib/voice-consult.js';
 
 export default async function handler(req, res) {
@@ -14,10 +14,9 @@ export default async function handler(req, res) {
 
   // 무마찰 방어(비밀번호 없음): 타 사이트 도용 차단 + 봇 차단 + IP 분당 제한 + 일일 상한.
   if (!sameOriginOk(req)) return res.status(403).json({ error: '허용되지 않은 요청입니다.' });
-  // 보이지 않는 봇 차단(설정 시에만). 실시간 세션은 가장 비싸므로 연결 직전 사람 확인.
-  if (turnstileEnabled()) {
-    const ts = req.headers['cf-turnstile-token'] || (req.query && req.query.ts) || '';
-    if (!(await verifyTurnstile(ts, getIP(req)))) return res.status(403).json({ error: '사람 확인에 실패했어요. 새로고침 후 다시 시도해주세요.' });
+  // 보이지 않는 봇 차단(작업증명). 실시간 세션은 가장 비싸므로 연결 직전 사람 확인.
+  if (botcheckEnabled() && !verifyPow(req.headers['x-pow'] || (req.query && req.query.pow) || '')) {
+    return res.status(403).json({ error: '사람 확인에 실패했어요. 새로고침 후 다시 시도해주세요.' });
   }
   // 토큰 1개당 실시간 세션 1개(가장 비쌈) → 같은 IP의 대량 발급을 분당 제한으로 막는다.
   if (!rateLimit('rt-mint', req, 4, 10 * 60 * 1000)) return res.status(429).json({ error: '연결 시도가 너무 잦습니다. 잠시 후 다시 시도해주세요.' });
