@@ -8,6 +8,18 @@ export function getIP(req) {
   return String((req.headers['x-forwarded-for'] || '').split(',')[0] || 'unknown').trim() || 'unknown';
 }
 
+// ── 무마찰 출처 검사 ──
+// 다른 웹사이트가 방문자의 브라우저로 이 유료 API를 대신 호출해 요금을 태우는 것을 막는다.
+// Origin 이 있고 우리 배포 호스트와 다르면 차단. Origin 이 없으면(같은 출처 GET·비브라우저) 통과.
+// 실제 사용자에겐 전혀 보이지 않는다(정상 페이지는 항상 같은 출처). curl 위조는 못 막지만,
+// 그 경우는 레이트리밋·일일 상한·월 한도가 상한을 정한다. true=허용.
+export function sameOriginOk(req) {
+  const origin = req.headers && req.headers.origin;
+  if (!origin) return true;
+  try { return new URL(origin).host === (req.headers.host || ''); }
+  catch (e) { return false; }
+}
+
 // ── 비밀번호 게이트 (+ IP별 브루트포스 차단) ──
 // REALTIME_PW 미설정 시 '모두 거부'(기본값 노출 위험 회피 — 안전하게 닫힘).
 // 비번은 헤더(x-consult-pw) 우선, 없으면 쿼리(pw) 폴백. 헤더 사용을 권장(URL 로그 유출 방지).
