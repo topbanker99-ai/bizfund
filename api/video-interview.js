@@ -7,10 +7,12 @@
 //  키: ANTHROPIC_API_KEY / OPENAI_API_KEY (서버 환경변수)
 // ════════════════════════════════════════════════════════════
 import { handleOptions } from './_lib/cors.js';
+import { checkPw, underDailyCap, rateLimit } from './_lib/guards.js';
 import { buildContentEvalPrompt, attitudeSystemText, normalizeAnswers } from './_lib/prompts/video-interview.js';
 
-// [core-only 이식] 인증·사용량·rate-limit·로그(Supabase)는 제거했다.
-// 필요 환경변수는 OPENAI_API_KEY, ANTHROPIC_API_KEY 둘뿐이다.
+// 필요 환경변수: OPENAI_API_KEY, ANTHROPIC_API_KEY, REALTIME_PW(공용 상담 비밀번호).
+// [보안] 이 엔드포인트는 Whisper+Claude+비전+TTS 로 호출당 비용이 커서, 음성상담과 동일한
+//        비밀번호 게이트 + IP 레이트리밋 + 일일 상한으로 막는다. (pitch.js가 x-consult-pw 헤더 전송)
 const MAX_FRAMES = 8;
 
 // ── 견고한 JSON 추출 ──
@@ -185,6 +187,12 @@ export default async function handler(req, res) {
   if (handleOptions(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST 요청만 허용됩니다.' });
 
+  // ── 보안 게이트 (유료 호출 보호) ──
+  const pw = checkPw(req);
+  if (!pw.ok) return res.status(pw.status).json({ error: pw.error });
+  // tts/transcribe 는 문항마다 여러 번 → 넉넉히, 하지만 자동화 폭주는 차단.
+  if (!rateLimit('vi', req, 40, 60 * 1000)) return res.status(429).json({ error: '요청이 너무 잦습니다. 잠시 후 다시 시도해주세요.' });
+
   const openaiKey = process.env.OPENAI_API_KEY;
   const body = req.body || {};
   const action = String(body.action || '');
@@ -208,8 +216,9 @@ export default async function handler(req, res) {
       return res.status(200).json({ text });
     }
 
-    // ── 2) 종합 평가 ──
+    // ── 2) 종합 평가 (가장 비싼 경로 — 일일 상한 적용) ──
     if (action === 'evaluate') {
+      if (!underDailyCap('videointerview')) return res.status(429).json({ error: '오늘 평가 이용량이 모두 소진되었습니다. 내일 다시 시도해주세요.' });
       const anthropicKey = process.env.ANTHROPIC_API_KEY;
       if (!anthropicKey) return res.status(500).json({ error: '서버에 API 키가 설정되지 않았습니다.' });
 

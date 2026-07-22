@@ -199,6 +199,16 @@ body{margin:0;background:#fff;color:var(--ink);font-family:var(--sans);word-brea
 </section>
 </div>
 
+<script>
+// 자금 피칭 리허설도 음성상담과 같은 공용 비밀번호(REALTIME_PW)로 보호한다.
+// pitch.js 가 매 API 호출 전에 tbAuthHeaders()를 부르면, 여기서 비번을 헤더로 주입한다.
+// sessionStorage 'rtpw' 를 voice 화면과 공유 → 한 번 입력하면 이 탭에서 재입력 불필요.
+window.tbAuthHeaders = async function () {
+  var pw = sessionStorage.getItem('rtpw');
+  if (!pw) { pw = prompt('이용 비밀번호를 입력해주세요'); if (pw) sessionStorage.setItem('rtpw', pw); }
+  return { 'Content-Type': 'application/json', 'x-consult-pw': pw || '' };
+};
+</script>
 <script src="pitch.js"></script>
 </body>
 </html>
