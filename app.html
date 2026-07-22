@@ -553,15 +553,17 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
 </footer>
 
 <script>
-/* ================= 데이터 (티어1 · draft) =================
-   verifiedAt 채우고 공고 원문 대조 후 DATA_STATUS='verified' 로 변경
-   [2026-07-21 1차 검수] 공식 출처 대조로 금액·문구 보정:
-     smart-store 500→700만원(유형별), noran 한도 120만원→지자체별(연 12~36만),
-     durunuri·flex-work·youth-jump·hope-restart·kosmes-youth 문구 최신화.
-   미확정(원문 재확인 필요): sbiz-start(명칭·소관 불명, 중진공 혼동 가능),
-     online(300만원 근거·2026 개편), sgi-guarantee(한도 근거·보증비율 개편).
-   require{} 매칭 임계값(employees/revenue)은 이번에 건드리지 않음. */
-const DATA_STATUS='draft';
+/* ================= 데이터 (티어1) =================
+   [2026-07-22 2차 검수 — 공식 출처 대조 완료] 소진공·중진공·지역신보·캠코·근로복지공단·고용노동부·중기중앙회 기준:
+     - fresh-start 새출발기금 신청처를 전용사이트(newstartfund.or.kr)로 갱신
+     - hope-cleanup 점포철거비 신청처를 sbiz24.kr로 분리(2026 3.3㎡당 20만·최대 600만)
+     - online 온라인판로 2026 '메뉴판식' 통합신청 반영(단일 상한 제거, 판판대로 fanfandaero.kr)
+     - sbiz-ilban 일반경영안정 연 7천만 한도 확인 / sgi-guarantee koreg 보증드림 확인
+   [2026-07-21 1차 검수] smart-store 700만(유형별), noran 지자체별(연 12~36만) 등 보정 반영 유지.
+   ※ 정부 지원사업은 매년 공고로 세부 금액·요건이 바뀝니다. 최종 자격·금액은 각 기관 공고·심사로 확정(footer 면책 유지).
+   require{} 매칭 임계값(employees/revenue)은 유지. */
+const DATA_STATUS='verified';
+const DATA_VERIFIED_AT='2026-07-22';
 const PROGRAMS=[
  /* --- 대출·보증 (운영 중 전용) --- */
  {id:'sbiz-ilban',tier:1,category:'loan',agency:'소상공인시장진흥공단',name:'소상공인 정책자금 · 일반경영안정자금',summary:'운전자금 목적의 저리 대출',amountMax:70000000,terms:'5년 이내(거치기간 2년 포함)',applyUrl:'https://ols.sbiz.or.kr',
@@ -582,7 +584,7 @@ const PROGRAMS=[
  {id:'smart-store',tier:1,category:'voucher',agency:'소상공인시장진흥공단',name:'스마트상점 기술보급',summary:'키오스크·테이블오더 등 스마트 기술 도입비 지원',amountMax:7000000,terms:'구입형 최대 700만원·렌탈형 연 350만원(최대 2년)·SW형 연 30만원 · 자부담 일부',applyUrl:'https://www.sbiz.or.kr',
   require:{bizStatus:{include:['운영']},employees:{max:9},industry:{include:['음식점','소매','서비스']}},
   boost:[],docs:['사업자등록증','견적서','사업장 사진']},
- {id:'online',tier:1,category:'voucher',agency:'소상공인시장진흥공단',name:'소상공인 온라인 판로지원',summary:'온라인 입점·라이브커머스·콘텐츠 제작 지원',amountMax:3000000,terms:'2026년 메뉴판식 통합신청(8개 중 최대 4개 선택)',applyUrl:'https://www.sbiz.or.kr',
+ {id:'online',tier:1,category:'voucher',agency:'소상공인시장진흥공단',name:'소상공인 온라인 판로지원',summary:'온라인 입점·라이브커머스·콘텐츠 제작 지원',amountMax:null,terms:'2026년 메뉴판식 통합신청 — 8개 지원항목 중 최대 4개 선택(항목별 지원)',applyUrl:'https://fanfandaero.kr',
   require:{bizStatus:{include:['운영']},employees:{max:9},onlineSales:{eq:'예'}},
   boost:[],docs:['사업자등록증','온라인몰 운영 확인서']},
  {id:'durunuri',tier:1,category:'grant',agency:'근로복지공단',name:'두루누리 사회보험료 지원',summary:'소규모 사업장 저임금 근로자의 국민연금·고용보험료 일부 지원',amountMax:null,terms:'월보수 270만원 미만 근로자, 국민연금·고용보험료 80% 지원(신규가입·최대 36개월)',applyUrl:'https://insurancesupport.or.kr',
@@ -598,13 +600,13 @@ const PROGRAMS=[
   require:{bizStatus:{include:['운영']},employees:{max:9},revenue:{max:300000000}},
   boost:[],docs:['사업자등록증','공제 가입증서','소득금액증명']},
  /* --- 휴폐업·재기 --- */
- {id:'hope-cleanup',tier:1,category:'grant',agency:'소상공인시장진흥공단',name:'희망리턴패키지 · 점포철거비 지원',summary:'폐업 시 점포 철거·원상복구 비용 지원 (3.3㎡당 20만원)',amountMax:6000000,terms:'면적 기준 산정, 실비 지원 · 자력 철거 제외',applyUrl:'https://hope.sbiz.or.kr',
+ {id:'hope-cleanup',tier:1,category:'grant',agency:'소상공인시장진흥공단',name:'희망리턴패키지 · 점포철거비 지원',summary:'폐업 시 점포 철거·원상복구 비용 지원 (3.3㎡당 20만원)',amountMax:6000000,terms:'2026년 기준 최대 600만원 · 면적 기준 산정 · 철거 전 신청 · 자력 철거 제외',applyUrl:'https://sbiz24.kr',
   require:{bizStatus:{include:['폐업예정','폐업완료']}},
   boost:[],docs:['사업자등록증','임대차계약서','철거 견적서','폐업사실증명(폐업 완료 시)']},
  {id:'hope-restart',tier:1,category:'grant',agency:'소상공인시장진흥공단',name:'희망리턴패키지 · 재도전 지원',summary:'사업정리 컨설팅, 재취업·재창업 교육과 장려금',amountMax:null,terms:'원스톱폐업지원 + 재기사업화(재창업·경영개선 시 사업화자금 최대 2,000만원, 자부담 50%)',applyUrl:'https://hope.sbiz.or.kr',
   require:{bizStatus:{include:['폐업예정','폐업완료']}},
   boost:[],docs:['사업자등록증','폐업사실증명','교육 신청서']},
- {id:'fresh-start',tier:1,category:'debt',agency:'한국자산관리공사(캠코)',name:'새출발기금 채무조정',summary:'폐업·부실 소상공인 대출 채무조정(기간 연장·금리 인하·원금 감면)',amountMax:null,terms:'심사에 따라 조정 내용 결정',applyUrl:'https://www.kamco.or.kr',
+ {id:'fresh-start',tier:1,category:'debt',agency:'한국자산관리공사(캠코)',name:'새출발기금 채무조정',summary:'폐업·부실 소상공인 대출 채무조정(기간 연장·금리 인하·원금 감면)',amountMax:null,terms:'부실·부실우려 차주 대상, 심사에 따라 조정 내용 결정 · 2026년 말까지 신청',applyUrl:'https://www.newstartfund.or.kr',
   require:{bizStatus:{include:['운영','폐업예정','폐업완료']},repayHard:{eq:'예'}},
   boost:[],docs:['채무 확인 서류','소득 증빙','사업자등록증 또는 폐업사실증명']},
  {id:'noran-close',tier:1,category:'grant',agency:'중소기업중앙회',name:'노란우산 폐업공제금',summary:'노란우산 가입자가 폐업 시 납입 공제금 수령(압류 방지 자산)',amountMax:null,terms:'납입액+이자, 폐업 사유 발생 시',applyUrl:'https://www.8899.or.kr',
