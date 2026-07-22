@@ -7,7 +7,8 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "functions": {
-    "api/video-interview.js": { "includeFiles": "api/_lib/prompt-files/**" }
+    "api/video-interview.js": { "includeFiles": "api/_lib/prompt-files/**" },
+    "api/ingest-cases.js": { "includeFiles": "data/consult-cases.json" }
   },
   "headers": [
     {
