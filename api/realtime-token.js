@@ -1,7 +1,7 @@
 // GET /api/realtime-token?pw=...&model=mini|&perspective=운영중|폐업·회생
 // OpenAI Realtime ephemeral client secret(ek_...) 발급. 세션 지침·도구를 서버가 박아 넣는다.
 import { handleOptions } from './_lib/cors.js';
-import { checkPw, underDailyCap, getIP } from './_lib/guards.js';
+import { checkPw, underDailyCap, rateLimit, getIP } from './_lib/guards.js';
 import { buildInstructions, TOOLS, PERSPECTIVES } from './_lib/voice-consult.js';
 
 export default async function handler(req, res) {
@@ -13,6 +13,8 @@ export default async function handler(req, res) {
 
   const pw = checkPw(req);
   if (!pw.ok) return res.status(pw.status).json({ error: pw.error });
+  // 토큰 1개당 실시간 세션 1개(가장 비쌈) → 같은 IP의 대량 발급을 분당 제한으로 막는다.
+  if (!rateLimit('rt-mint', req, 4, 10 * 60 * 1000)) return res.status(429).json({ error: '연결 시도가 너무 잦습니다. 잠시 후 다시 시도해주세요.' });
   if (!underDailyCap('realtime')) return res.status(429).json({ error: '오늘 음성 상담 이용량이 모두 소진되었습니다. 잠시 후 다시 시도해주세요.' });
 
   const rtModel = req.query.model === 'mini' ? 'gpt-realtime-mini' : 'gpt-realtime';
