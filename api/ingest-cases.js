@@ -27,8 +27,13 @@ async function upsert(items) {
   });
   const txt = await r.text();
   if (!r.ok) {
-    // 차원 불일치 등 Upstash 설정 오류를 사람이 읽을 수 있게 전달
-    throw new Error('Upstash 적재 실패 (' + r.status + '). 인덱스를 512차원 cosine 으로 만들었는지 확인하세요. 응답: ' + txt.slice(0, 300));
+    // Upstash 오류를 원인별로 사람이 읽을 수 있게 안내
+    let hint;
+    if (r.status === 403) hint = '쓰기 권한이 없는 토큰입니다. Upstash에서 읽기전용(READONLY)이 아닌 "전체권한 REST 토큰"을 UPSTASH_VECTOR_TOKEN 에 넣으세요.';
+    else if (r.status === 422 || /dimension/i.test(txt)) hint = '인덱스 차원이 맞지 않습니다. 512차원 cosine 인덱스인지 확인하세요.';
+    else if (r.status === 401) hint = '토큰이 올바르지 않습니다. UPSTASH_VECTOR_URL·TOKEN 쌍을 확인하세요.';
+    else hint = 'Upstash 인덱스 설정(차원 512·cosine·토큰)을 확인하세요.';
+    throw new Error('Upstash 적재 실패 (' + r.status + '). ' + hint + ' 응답: ' + txt.slice(0, 200));
   }
   return txt;
 }
