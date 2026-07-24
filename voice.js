@@ -189,6 +189,12 @@
     $('btnEnd').onclick = endVoice;
     window.addEventListener('pagehide', stopAll);
     showGate();
+    // 링크로 관점 미리 지정: ?p=recovery(폐업·회생) / ?p=operating(운영중) → 게이트 건너뜀
+    try {
+      var pp = new URLSearchParams(location.search).get('p');
+      var pmap = { recovery: '폐업·회생', operating: '운영중' };
+      if (pp && pmap[pp]) { PERSP = pmap[pp]; showMain(); }
+    } catch (e) {}
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
