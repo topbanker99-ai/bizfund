@@ -166,6 +166,14 @@ section.view.on{display:block}
 .qr-rec-d{font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:12px}
 .qr-rec-note{font-size:11.5px;color:var(--faint);margin-top:10px}
 #ctabs{scroll-margin-top:80px}
+/* --- AI 음성상담 진입 --- */
+.voice-cta{display:flex;gap:14px;align-items:center;text-decoration:none;background:linear-gradient(135deg,#12325a,#1B6FD8);color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:24px;box-shadow:0 8px 24px rgba(27,111,216,.22)}
+.voice-cta .vc-ic{font-size:30px;flex:none;line-height:1}
+.voice-cta .vc-body{flex:1;min-width:0}
+.voice-cta .vc-t{display:block;font-size:16px;font-weight:800;margin-bottom:3px}
+.voice-cta .vc-d{display:block;font-size:12.5px;color:#dbe8fb;line-height:1.55}
+.voice-cta .vc-go{margin-left:auto;flex:none;font-size:13px;font-weight:800;background:rgba(255,255,255,.18);padding:8px 13px;border-radius:999px;white-space:nowrap}
+@media(max-width:520px){.voice-cta .vc-go{display:none}}
 footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color:var(--faint);text-align:center;line-height:1.8}
 
 /* ===== 공지 배너 캐러셀 ===== */
@@ -419,6 +427,15 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
     <p style="font-size:14px;color:var(--sub);margin-bottom:22px">
       감당하기 어려운 채무는 법이 정한 절차로 정리할 수 있습니다. 부끄러운 일이 아니라 재기를 위해 국가가 만들어 둔 제도를 이용하는 것입니다. 상담은 아래 공공기관에서 무료로 시작할 수 있습니다.
     </p>
+
+    <a class="voice-cta" href="https://bizfund-woad.vercel.app/voice.html?p=recovery">
+      <span class="vc-ic">🎙️</span>
+      <span class="vc-body">
+        <span class="vc-t">AI 상담원과 음성으로 상담하기</span>
+        <span class="vc-d">혼자 고민하지 마세요. 폐업·채무·회생 상황을 편하게 말로 물어보면 실제 상담사례를 바탕으로 안내해 드려요.</span>
+      </span>
+      <span class="vc-go">상담 시작 →</span>
+    </a>
 
     <!-- 폐업·재기 로드맵 (AI 상담 지식 반영) -->
     <div class="rmap-h">폐업·재기, 순서대로 챙기기</div>
