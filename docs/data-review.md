@@ -1,6 +1,6 @@
 # 자금 데이터 월간 검수 체크리스트
 
-`app.html` 의 `PROGRAMS`(자금 14종)를 **월 1회** 공식 출처로 대조하는 절차입니다.
+`app.html` 의 `PROGRAMS`(자금 15종)를 **월 1회** 공식 출처로 대조하는 절차입니다.
 매월 1일 GitHub Actions가 이 체크리스트로 이슈를 자동 생성합니다(`.github/workflows/data-review-reminder.yml`).
 
 ## 검수 방법
@@ -29,6 +29,7 @@
 | online | 온라인 판로지원 | 소진공 | https://fanfandaero.kr |
 | durunuri | 두루누리 사회보험료 | 근로복지공단 | https://insurancesupport.or.kr |
 | flex-work | 유연근무 장려금 | 고용노동부 | https://www.work24.go.kr |
+| work45 | 워라밸+4.5 프로젝트(주4.5일제) | 고용노동부 | https://www.work24.go.kr |
 | youth-jump | 청년일자리도약장려금 | 고용노동부 | https://www.work24.go.kr |
 | noran | 노란우산 희망장려금 | 중기중앙회·지자체 | https://www.8899.or.kr |
 | hope-cleanup | 희망리턴 점포철거비 | 소진공 | https://sbiz24.kr |
@@ -40,3 +41,4 @@
 | 검수일 | 검수자 | 변경 내용 |
 |---|---|---|
 | 2026-07-22 | 초기 검수 | 새출발기금·철거비·온라인판로 신청처/문구 최신화, draft→verified |
+| 2026-07-26 | 노동지원금 최신화 | 유연근무 장려금 2026 금액(월 최대 60만)·신청처(고용24) 정정, 워라밸+4.5(주4.5일제) 신규 추가 → 15종 |
