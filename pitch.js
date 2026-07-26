@@ -4,6 +4,8 @@
 //  · 제출 시 답변 음성 → 서버 Whisper 스크립트화 + 캠 스냅샷 1장 수집
 //  · 마지막에 /api/video-interview(evaluate)로 내용+태도 종합 평가
 (function () {
+  // 익명 사용량 집계(Vercel Web Analytics). 답변·영상·평가결과는 전송하지 않고 시작/완료 신호만.
+  function vaTrack(name){ try{ if(window.va) window.va('event', { name: name }); }catch(_){} }
   var CFG = { ansMax: 60, ansMin: 10, frameW: 320 };
   var CONTENT = '/api/content?name=video-interview';
   var API = '/api/video-interview';
@@ -80,6 +82,7 @@
       return;
     }
     hasVideo = stream.getVideoTracks().length > 0;
+    vaTrack('vi_start');   // 인성면접 시작(권한 허용 후)
     recMime = pickMime();
 
     var cam = $('viCam');
@@ -294,6 +297,7 @@
   function barColor(score10) { return score10 >= 7 ? '#2E8B6E' : score10 >= 4 ? '#BA7517' : '#C0504D'; }
 
   function renderResult(content, attitude) {
+    vaTrack('vi_complete');   // 인성면접 평가 완료(점수·내용 미전송)
     var scores = Array.isArray(content.scores) ? content.scores : [];
     var total = Number(content.totalScore) || 0;
     var max = Number(content.maxScore) || (scores.length * 10) || 60;
