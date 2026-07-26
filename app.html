@@ -282,7 +282,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
         <span class="badge">가장 많이 씀</span>
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1B6FD8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h5M9.5 14.5h5"/></svg></div>
         <div class="t">정책자금 진단</div>
-        <div class="s">12개 질문 · 신청 가능한 자금 14종 대조</div>
+        <div class="s">12개 질문 · 신청 가능한 자금 15종 대조</div>
       </a>
       <a class="tcard" href="contract.html">
         <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0F2A4A" stroke-width="2" stroke-linecap="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
@@ -604,7 +604,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:12px;color
    ※ 정부 지원사업은 매년 공고로 세부 금액·요건이 바뀝니다. 최종 자격·금액은 각 기관 공고·심사로 확정(footer 면책 유지).
    require{} 매칭 임계값(employees/revenue)은 유지. */
 const DATA_STATUS='verified';
-const DATA_VERIFIED_AT='2026-07-22';
+const DATA_VERIFIED_AT='2026-07-26';
 const PROGRAMS=[
  /* --- 대출·보증 (운영 중 전용) --- */
  {id:'sbiz-ilban',tier:1,category:'loan',agency:'소상공인시장진흥공단',name:'소상공인 정책자금 · 일반경영안정자금',summary:'운전자금 목적의 저리 대출',amountMax:70000000,terms:'5년 이내(거치기간 2년 포함)',applyUrl:'https://ols.sbiz.or.kr',
@@ -631,9 +631,12 @@ const PROGRAMS=[
  {id:'durunuri',tier:1,category:'grant',agency:'근로복지공단',name:'두루누리 사회보험료 지원',summary:'소규모 사업장 저임금 근로자의 국민연금·고용보험료 일부 지원',amountMax:null,terms:'월보수 270만원 미만 근로자, 국민연금·고용보험료 80% 지원(신규가입·최대 36개월)',applyUrl:'https://insurancesupport.or.kr',
   require:{bizStatus:{include:['운영']},employees:{max:9},hasWorker:{eq:'예'}},
   boost:[],docs:['보험료 지원 신청서','근로자 보수 자료','4대보험 가입자명부']},
- {id:'flex-work',tier:1,category:'grant',agency:'고용노동부',name:'유연근무 장려금',summary:'재택·시차출퇴근 등 유연근무 도입 사업주 장려금',amountMax:null,terms:'유형별 근로자당 월 지원(재택·원격·선택 월 최대 30만원 등, 2026년 개편)',applyUrl:'https://www.ei.go.kr',
+ {id:'flex-work',tier:1,category:'grant',agency:'고용노동부',name:'유연근무 장려금',summary:'재택·원격·선택근무·시차출퇴근 도입 사업주 장려금',amountMax:null,terms:'근로자 1인당 월 최대 60만원·연 최대 720만원(재택·원격 월 20만·선택근무 월 30만, 활용횟수 비례 / 육아기 자녀는 2배). 우선지원대상·중견기업, 전자·기계식 근태관리·주 소정근로 35~40시간 (2026)',applyUrl:'https://www.work24.go.kr',
   require:{bizStatus:{include:['운영']},hasWorker:{eq:'예'}},
   boost:[],docs:['취업규칙','근태 기록','유연근무 운영 내역','근로계약서']},
+ {id:'work45',tier:1,category:'grant',agency:'고용노동부',name:'워라밸+4.5 프로젝트(주4.5일제)',summary:'임금 삭감 없이 주4.5일제 등 실근로시간을 줄인 사업주 지원',amountMax:null,terms:'노사 합의로 임금 감소 없이 실근로시간 단축(단축 전 3개월 대비 주 평균 2시간 이상 감소) 시 근로자 1인당 월 20만~80만원, 최대 1년·3개월 단위 신청. 우선지원대상·중견기업(생명·안전/장시간/교대제는 300인 이상도), 전자·기계식 근태관리 (2026 신설)',applyUrl:'https://www.work24.go.kr',
+  require:{bizStatus:{include:['운영']},hasWorker:{eq:'예'}},
+  boost:[],docs:['노사 합의서','근로시간 단축 추진계획','근태 기록','근로계약서','취업규칙']},
  {id:'youth-jump',tier:1,category:'grant',agency:'고용노동부',name:'청년일자리도약장려금',summary:'취업애로 청년 정규직 채용 시 인건비 지원',amountMax:null,terms:'2026년 수도권형·비수도권형 개편, 근속 기간에 따라 지급',applyUrl:'https://www.work24.go.kr',
   require:{bizStatus:{include:['운영']},hasWorker:{eq:'예'},taxOk:{eq:'예'}},
   boost:[],docs:['사업자등록증','근로계약서','급여이체 내역','4대보험 가입자명부']},
@@ -800,7 +803,7 @@ function renderResult(){
   +'<div class="res-disclaim" style="margin-top:20px">본 결과는 참고용 안내이며 대출 권유·중개가 아닙니다. 최종 자격은 소관기관의 공고 원문과 심사로 확정됩니다. 각 카드의 신청 페이지에서 원문을 반드시 확인하세요.</div>'
   +'<div style="text-align:center;margin-top:24px"><button class="btn-xl" onclick="resetDiag()">다시 진단하기</button></div>';
 }
-const DOC_WHERE={'사업자등록증':'홈택스','부가가치세 과세표준증명':'홈택스','국세·지방세 완납증명':'홈택스·위택스','소득금액증명':'홈택스','폐업사실증명':'홈택스','폐업사실증명(폐업 완료 시)':'홈택스','임대차계약서':'보관분','4대보험 가입자명부':'사회보험 EDI·정부24','근로계약서':'보관분','급여이체 내역':'거래 은행','사업계획서':'직접 작성','재무제표':'세무대리인','견적서':'업체 발급','철거 견적서':'철거 업체','취업규칙':'보관분','근태 기록':'보관분','유연근무 운영 내역':'보관분','보험료 지원 신청서':'근로복지공단','근로자 보수 자료':'보관분','온라인몰 운영 확인서':'입점 플랫폼','공제 가입증서':'노란우산','공제금 지급 청구서':'노란우산','교육 신청서':'희망리턴 누리집','채무 확인 서류':'각 금융기관','소득 증빙':'홈택스','대표자 신분증':'본인 지참','사업장 사진':'직접 촬영','금융거래확인서':'거래 은행','사업자등록증 또는 폐업사실증명':'홈택스'};
+const DOC_WHERE={'사업자등록증':'홈택스','부가가치세 과세표준증명':'홈택스','국세·지방세 완납증명':'홈택스·위택스','소득금액증명':'홈택스','폐업사실증명':'홈택스','폐업사실증명(폐업 완료 시)':'홈택스','임대차계약서':'보관분','4대보험 가입자명부':'사회보험 EDI·정부24','근로계약서':'보관분','급여이체 내역':'거래 은행','사업계획서':'직접 작성','재무제표':'세무대리인','견적서':'업체 발급','철거 견적서':'철거 업체','취업규칙':'보관분','근태 기록':'보관분','유연근무 운영 내역':'보관분','노사 합의서':'직접 작성','근로시간 단축 추진계획':'직접 작성','보험료 지원 신청서':'근로복지공단','근로자 보수 자료':'보관분','온라인몰 운영 확인서':'입점 플랫폼','공제 가입증서':'노란우산','공제금 지급 청구서':'노란우산','교육 신청서':'희망리턴 누리집','채무 확인 서류':'각 금융기관','소득 증빙':'홈택스','대표자 신분증':'본인 지참','사업장 사진':'직접 촬영','금융거래확인서':'거래 은행','사업자등록증 또는 폐업사실증명':'홈택스'};
 function showDocs(){
  const r=diagnose(A);
  const set=new Set();

@@ -1,6 +1,6 @@
 name: data-review-reminder
 
-# 매월 1일, 자금 데이터(자금 14종) 검수 리마인더 이슈를 자동 생성한다.
+# 매월 1일, 자금 데이터(자금 15종) 검수 리마인더 이슈를 자동 생성한다.
 on:
   workflow_dispatch:
   schedule:
@@ -40,6 +40,7 @@ jobs:
               ['online', '온라인 판로지원(소진공)', 'https://fanfandaero.kr'],
               ['durunuri', '두루누리 사회보험료(근로복지공단)', 'https://insurancesupport.or.kr'],
               ['flex-work', '유연근무 장려금(고용부)', 'https://www.work24.go.kr'],
+              ['work45', '워라밸+4.5 프로젝트·주4.5일제(고용부)', 'https://www.work24.go.kr'],
               ['youth-jump', '청년일자리도약장려금(고용부)', 'https://www.work24.go.kr'],
               ['noran', '노란우산 희망장려금(중기중앙회)', 'https://www.8899.or.kr'],
               ['hope-cleanup', '희망리턴 점포철거비(소진공)', 'https://sbiz24.kr'],
@@ -52,7 +53,7 @@ jobs:
             const body = [
               `## ${ym} 자금 데이터 월간 검수`,
               '',
-              '`app.html` 의 `PROGRAMS`(자금 14종)를 공식 출처로 대조하세요.',
+              '`app.html` 의 `PROGRAMS`(자금 15종)를 공식 출처로 대조하세요.',
               '각 항목: **① 명칭·소관 ② 한도·금액 ③ 신청 URL ④ 핵심 요건 ⑤ 신청기간·예산소진**',
               '',
               '### 먼저 훑기(통합 공고)',
