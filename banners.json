@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-26",
+  "updated": "2026-07-27",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,15 +30,7 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "2026년 농식품 데이터 활용 컨설팅 및 구매 지원사업 공고",
-      "sub": "농림축산식품부 · 신청 마감 2026.07.26",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123759",
-      "until": "2026-07-26"
-    },
-    {
-      "tag": "마감 D-4",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "2026년 백년소상공인 모집(재지정) 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.07.29",
@@ -46,7 +38,7 @@
       "until": "2026-07-29"
     },
     {
-      "tag": "마감 D-6",
+      "tag": "마감 D-5",
       "tagType": "urgent",
       "title": "[서울] 종로구 2026년 하반기 중소기업육성기금 융자 지원 계획 공고",
       "sub": "서울특별시 · 신청 마감 2026.07.31",
@@ -54,11 +46,19 @@
       "until": "2026-07-31"
     },
     {
-      "tag": "마감 D-6",
+      "tag": "마감 D-5",
       "tagType": "urgent",
       "title": "[경북] 경주시 2026년 AI라이브커머스 지원기업 추가모집 공고(온라인 플랫폼 판로지원)",
       "sub": "경상북도 · 신청 마감 2026.07.31",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124489",
+      "until": "2026-07-31"
+    },
+    {
+      "tag": "마감 D-5",
+      "tagType": "urgent",
+      "title": "2026년 KSD나눔재단의 장애소상공인 영업환경 개선사업(시설 개ㆍ보수) 모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.07.31",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124426",
       "until": "2026-07-31"
     }
   ]
