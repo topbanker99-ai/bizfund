@@ -250,6 +250,7 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .cut-zone::after{content:'컷 지점';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:800;color:var(--warn);white-space:nowrap}
 .cut-play{position:absolute;top:0;bottom:0;width:3px;background:var(--blue);left:0;box-shadow:0 0 0 1px #fff}
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -375,6 +376,10 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
    - 등급 없이 항목별 사실만 제시 (사장님용 / 지원자용 분리)
    - 전 과정 브라우저 안에서만 실행. 서버 전송 없음.
    ============================================================ */
+
+/* 익명 사용량 집계(Vercel Web Analytics). 개인정보·점수·응답은 전송하지 않고
+   '어떤 직무를 시작/완료했다'는 신호만 보낸다. Analytics 미설정 시 아무 일도 안 함. */
+function vaTrack(name, data){ try{ if(window.va) window.va('event', data ? {name:name, data:data} : {name:name}); }catch(_){} }
 
 /* ---------- 업종 세트 ---------- */
 const SETS = {
@@ -1322,6 +1327,7 @@ function showResult(){
   const mins = S.started ? Math.round((Date.now()-S.started)/60000) : 0;
   $('resTitle').textContent = `${S.who||'지원자'}님 결과`;
   $('resSub').textContent = `${S.company ? S.company+' · ' : ''}${SETS[S.set].name} · 과제 ${S.results.length}개 · 약 ${Math.max(1,mins)}분 소요`;
+  vaTrack('hire_complete', { set: S.set, tasks: S.results.length });   // 익명 집계: 끝까지 완료(점수·이름 미전송)
   renderResult(); go('result');
 }
 function renderResult(){
@@ -1517,6 +1523,7 @@ $('toIntro').onclick = ()=>{
   S.company = $('company').value.trim();
   S.tasks = SETS[S.set].tasks.slice();
   S.ti = 0; S.results = [];
+  vaTrack('hire_start', { set: S.set });   // 익명 집계: 어떤 직무 체험을 시작했는가(이름·회사 미전송)
   showIntro();
 };
 /* 홈에서 직렬을 골라 들어오면(?set=food 등) 선택 화면을 건너뛰고 바로 시작 정보 입력으로 */
