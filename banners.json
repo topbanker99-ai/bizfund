@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-30",
+  "updated": "2026-08-01",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-4",
       "tagType": "urgent",
-      "title": "[서울] 종로구 2026년 하반기 중소기업육성기금 융자 지원 계획 공고",
-      "sub": "서울특별시 · 신청 마감 2026.07.31",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124675",
-      "until": "2026-07-31"
+      "title": "[경북] 경주시 2026년 온라인 플랫폼 판로지원 인플루언서 협업 제품 홍보 참여업체 모집 공고",
+      "sub": "경상북도 · 신청 마감 2026.08.04",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124662",
+      "until": "2026-08-04"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-4",
       "tagType": "urgent",
-      "title": "[경북] 경주시 2026년 AI라이브커머스 지원기업 추가모집 공고(온라인 플랫폼 판로지원)",
-      "sub": "경상북도 · 신청 마감 2026.07.31",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124489",
-      "until": "2026-07-31"
+      "title": "2026년 2차 소상공인 협업활성화 공동사업 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.08.04",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124540",
+      "until": "2026-08-04"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-5",
       "tagType": "urgent",
-      "title": "2026년 KSD나눔재단의 장애소상공인 영업환경 개선사업(시설 개ㆍ보수) 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.07.31",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124426",
-      "until": "2026-07-31"
+      "title": "[경북] 청송군ㆍ영양군 2026년 소상공인 새바람 체인지업 사업 경영환경개선 희망 소상공인 모집 공고",
+      "sub": "경상북도 · 신청 마감 2026.08.05",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124652",
+      "until": "2026-08-05"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-5",
       "tagType": "urgent",
-      "title": "[영남권] 2026년 소상공인협동조합 퍼실리테이션 지원 사업 참가자 모집 공고",
-      "sub": "대구광역시 · 신청 마감 2026.07.31",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123407",
-      "until": "2026-07-31"
+      "title": "[서울] 서대문구 2026년 소상공인 라이브커머스 지원사업 참여자 모집 공고",
+      "sub": "서울특별시 · 신청 마감 2026.08.05",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124628",
+      "until": "2026-08-05"
     }
   ]
 }
