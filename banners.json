@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03",
+  "updated": "2026-08-06",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,34 +32,34 @@
     {
       "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "[경북] 경주시 2026년 온라인 플랫폼 판로지원 인플루언서 협업 제품 홍보 참여업체 모집 공고",
-      "sub": "경상북도 · 신청 마감 2026.08.04",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124662",
-      "until": "2026-08-04"
+      "title": "2026년 해외 온라인 플랫폼 물류지원 사업 참여 소상공인 모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.08.07",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124748",
+      "until": "2026-08-07"
     },
     {
       "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "2026년 2차 소상공인 협업활성화 공동사업 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.08.04",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124540",
-      "until": "2026-08-04"
+      "title": "[울산] 울주군 2026년 2차 소상공인 경영환경개선 및 디지털기기 지원 사업 공고",
+      "sub": "울산광역시 · 신청 마감 2026.08.07",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124563",
+      "until": "2026-08-07"
     },
     {
-      "tag": "마감 D-3",
+      "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "[경북] 청송군ㆍ영양군 2026년 소상공인 새바람 체인지업 사업 경영환경개선 희망 소상공인 모집 공고",
-      "sub": "경상북도 · 신청 마감 2026.08.05",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124652",
-      "until": "2026-08-05"
+      "title": "[부산] 2026년 세일 페스타 온라인 판매기획전 참여 소상공인 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.08.07",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000123633",
+      "until": "2026-08-07"
     },
     {
-      "tag": "마감 D-3",
+      "tag": "마감 D-5",
       "tagType": "urgent",
-      "title": "[서울] 서대문구 2026년 소상공인 라이브커머스 지원사업 참여자 모집 공고",
-      "sub": "서울특별시 · 신청 마감 2026.08.05",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124628",
-      "until": "2026-08-05"
+      "title": "제11회 소상공인 쇼케이스데이 발표 희망기업 모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.08.10",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124326",
+      "until": "2026-08-10"
     }
   ]
 }
