@@ -64,6 +64,8 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .btn.g{background:var(--paper);border:1.5px solid var(--line);color:var(--sub)}
 .btn.g:active{border-color:var(--blue);color:var(--blue)}
 .btn.sm{font-size:14px;padding:12px}
+.backpill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12.5px;font-weight:700;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;line-height:1;letter-spacing:-.01em;-webkit-tap-highlight-color:transparent}
+.backpill:active{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 
 /* 동의 */
@@ -256,6 +258,7 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 
 <div class="app">
 <div class="top"><div class="top-in">
+  <button class="backpill" id="backBtn" onclick="goHome()" style="display:none" aria-label="처음 화면으로">← 메인</button>
   <div class="brand"><a href="./" style="text-decoration:none;color:inherit">사장님<em>서랍</em></a> · 알바 직무체험</div>
   <div class="top-right" id="topRight"></div>
 </div></div>
@@ -1200,10 +1203,20 @@ function sortRun(t, done){
 const S = { set:null, who:'', company:'', ti:0, tasks:[], results:[],
             practice:false, trials:[], idx:0, log:[], tab:'owner', started:null };
 
+var CUR = 'setup';
 function go(id){
+  CUR = id;
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   $('s-'+id).classList.add('on');
+  var bb = $('backBtn'); if(bb) bb.style.display = (id==='setup') ? 'none' : 'inline-flex';
   window.scrollTo(0,0);
+}
+/* 상단 알약 뒤로가기 → 처음(직무 선택) 화면. 진행 중이면 확인 후 이동. */
+function goHome(){
+  var mid = (CUR==='intro' || CUR==='play' || CUR==='ready' || CUR==='between');
+  if(mid && !confirm('진행 중인 체험을 그만두고 처음 화면으로 돌아갈까요? 지금까지의 진행은 저장되지 않습니다.')) return;
+  if(typeof stopTimer === 'function') stopTimer();
+  restart();
 }
 
 /* ---------- 1. 사장님 설정 ---------- */
