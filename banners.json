@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-14",
+  "updated": "2026-08-17",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,23 +30,15 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "[경북] 영주시 2026년 소상공인 재창업 지원사업 참여자 추가모집 재공고",
-      "sub": "경상북도 · 신청 마감 2026.08.14",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124968",
-      "until": "2026-08-14"
+      "title": "[전북] 군산시 전담예술가와 우리가게 핫플레이스 만들기 소상공인 점포 모집 재공고",
+      "sub": "전북특별자치도 · 신청 마감 2026.08.18",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125469",
+      "until": "2026-08-18"
     },
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[충남] 2026년 3차 소상공인ㆍ자영업자 재기지원사업 지원 모집 공고",
-      "sub": "충청남도 · 신청 마감 2026.08.14",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124879",
-      "until": "2026-08-14"
-    },
-    {
-      "tag": "마감 D-5",
+      "tag": "마감 D-2",
       "tagType": "urgent",
       "title": "제11회 소상공인 쇼케이스데이 참가기업 모집 연장 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.08.18",
@@ -54,11 +46,19 @@
       "until": "2026-08-18"
     },
     {
-      "tag": "마감 D-5",
+      "tag": "마감 D-2",
       "tagType": "urgent",
       "title": "2026년 해외 온라인 플랫폼 입점지원 사업 참여 소상공인 모집 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.08.18",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125162",
+      "until": "2026-08-18"
+    },
+    {
+      "tag": "마감 D-2",
+      "tagType": "urgent",
+      "title": "[전남광주] 2026년 우수 소상공인 프랜차이즈화 지원사업 사업화지원 참여업체 모집 공고",
+      "sub": "전남광주통합특별시 · 신청 마감 2026.08.18",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125073",
       "until": "2026-08-18"
     }
   ]
