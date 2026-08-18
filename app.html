@@ -77,6 +77,21 @@ section.view.on{display:block}
 .p-why span{display:inline-block;background:var(--bg2);border:1px solid var(--line);border-radius:7px;padding:3px 9px;margin:2px 4px 2px 0;color:var(--sub)}
 .p-why span.bad{background:#FBEFEF;border-color:#EFD3D3;color:#A34141}
 .p-apply{display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--blue)}
+/* 결과 2탭(지원금/대출) */
+.rt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+.rt-tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:13px 8px;border:1.5px solid var(--line);border-radius:13px;background:#fff;cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s}
+.rt-tab b{font-size:15px;font-weight:800;color:var(--sub);letter-spacing:-.02em}
+.rt-tab span{font-size:12px;color:var(--faint);font-weight:600}
+.rt-tab.on{border-color:var(--blue);background:var(--blue-soft)}
+.rt-tab.on b{color:var(--navy)}
+.rt-tab.on span{color:var(--blue)}
+.rt-sub{font-size:13px;font-weight:800;color:var(--navy);margin:20px 0 11px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.rt-sub:first-child{margin-top:2px}
+.rt-sub.muted{color:var(--faint);font-weight:700}
+.rt-empty{font-size:13.5px;color:var(--faint);padding:16px 0 4px}
+.p-st{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;margin-bottom:7px}
+.p-st.ok{background:var(--ok-bg);color:var(--ok)}
+.p-st.cond{background:var(--cond-bg);color:var(--cond)}
 .res-disclaim{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:12.5px;color:var(--sub)}
 /* 목록/검색 */
 .filter{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
@@ -772,8 +787,9 @@ function resetDiag(){for(const k in A)delete A[k];buildSteps();showStep(0);go('d
 /* ================= 결과 ================= */
 function fmtAmt(n){if(n==null)return '심사·항목별';if(n>=100000000)return '최대 '+(n/100000000)+'억원';return '최대 '+(n/10000).toLocaleString()+'만원';}
 function card(p,dim){
+ const st=(p._st==='ok')?'<span class="p-st ok">신청 가능</span>':(p._st==='cond')?'<span class="p-st cond">확인 필요</span>':'';
  return '<div class="p-card'+(dim?' dim':'')+'">'
-  +'<div class="p-top"><div><div class="p-agency">'+p.agency+'</div>'
+  +'<div class="p-top"><div>'+st+'<div class="p-agency">'+p.agency+'</div>'
   +'<div class="p-name">'+p.name+'</div><div class="p-sum">'+(p.summary||'')+'</div></div>'
   +'<div class="p-amt">'+fmtAmt(p.amountMax)+'</div></div>'
   +'<div class="p-meta">'+(p.terms||'')+'</div>'
@@ -783,17 +799,38 @@ function card(p,dim){
   +'<a class="p-apply" href="'+p.applyUrl+'" target="_blank" rel="noopener">신청 페이지 확인 →</a>'
   +'</div>';
 }
+/* 결과를 지원금/대출 두 탭으로 분리. 대출=loan, 그 외(지원금·바우처·채무조정·폐업재기)=지원금 탭 */
+const SECTION_ORDER=['grant','loan','debt','closure'];
+function tabOf(p){ return p.category==='loan' ? 'loan' : 'grant'; }
+function sectionOf(p){
+ const bs=(p.require&&p.require.bizStatus&&p.require.bizStatus.include)||[];
+ if(bs.length && !bs.includes('운영')) return 'closure'; // 폐업 단계에만 해당(철거비·재도전·폐업공제금)
+ if(p.category==='debt') return 'debt';                   // 채무조정(새출발기금)
+ if(p.category==='loan') return 'loan';                   // 대출·보증
+ return 'grant';                                          // 지원금·바우처
+}
+function fitSort(a,b){
+ const rk={ok:0,cond:1,no:2};
+ if(rk[a._st]!==rk[b._st]) return rk[a._st]-rk[b._st];          // 신청가능 → 확인필요 → 해당없음
+ const ba=(a.reasons&&a.reasons.length)?0:1, bb=(b.reasons&&b.reasons.length)?0:1;
+ if(ba!==bb) return ba-bb;                                       // 우대(나에게 맞는) 먼저
+ return (b.amountMax||0)-(a.amountMax||0);                       // 금액 큰 순
+}
+let RES=[], RES_TAB='grant';
 function renderResult(){
  const r=diagnose(A);
+ RES=[...r.eligible.map(p=>({...p,_st:'ok'})),
+      ...r.conditional.map(p=>({...p,_st:'cond'})),
+      ...r.ineligible.map(p=>({...p,_st:'no'}))];
+ const okCnt=t=>RES.filter(p=>tabOf(p)===t&&p._st==='ok').length;
  document.getElementById('resultMount').innerHTML=
-  '<div class="res-head"><h2>진단 결과</h2><p>답변 기준으로 분류한 결과입니다. 최종 자격은 각 기관 심사로 확정됩니다.</p></div>'
-  +'<div class="res-group"><span class="res-tag tag-ok">신청 가능 '+r.eligible.length+'건</span>'
-  +(r.eligible.map(p=>card(p)).join('')||'<p style="font-size:13.5px;color:var(--faint)">조건이 모두 확인된 자금이 없습니다. 아래 확인 필요 항목을 살펴보세요.</p>')+'</div>'
-  +'<div class="res-group"><span class="res-tag tag-cond">확인 필요 '+r.conditional.length+'건</span>'
-  +(r.conditional.map(p=>card(p)).join('')||'')+'</div>'
-  +'<div class="res-group"><span class="res-tag tag-no">해당 없음 '+r.ineligible.length+'건</span>'
-  +r.ineligible.map(p=>card(p,true)).join('')+'</div>'
-  +'<div style="margin:6px 0 18px"><button class="btn-next" onclick="showDocs()">필요서류 한번에 보기</button></div>'
+  '<div class="res-head"><h2>진단 결과</h2><p>지원금과 대출을 나눠서 보여드립니다. 최종 자격은 각 기관 심사로 확정됩니다.</p></div>'
+  +'<div class="rt-tabs">'
+   +'<button class="rt-tab" data-t="grant" onclick="switchResTab(\'grant\')"><b>지원금 · 지원제도</b><span>신청 가능 '+okCnt('grant')+'건</span></button>'
+   +'<button class="rt-tab" data-t="loan" onclick="switchResTab(\'loan\')"><b>대출 · 보증</b><span>신청 가능 '+okCnt('loan')+'건</span></button>'
+  +'</div>'
+  +'<div id="rtBody"></div>'
+  +'<div style="margin:14px 0 18px"><button class="btn-next" onclick="showDocs()">필요서류 한번에 보기</button></div>'
   +'<div id="docsMount"></div>'
   +'<a class="voice-cta" href="https://bizfund-woad.vercel.app/pitch.html" style="margin-top:20px">'
     +'<span class="vc-ic">🎬</span>'
@@ -802,6 +839,33 @@ function renderResult(){
     +'<span class="vc-go">연습 시작 →</span></a>'
   +'<div class="res-disclaim" style="margin-top:20px">본 결과는 참고용 안내이며 대출 권유·중개가 아닙니다. 최종 자격은 소관기관의 공고 원문과 심사로 확정됩니다. 각 카드의 신청 페이지에서 원문을 반드시 확인하세요.</div>'
   +'<div style="text-align:center;margin-top:24px"><button class="btn-xl" onclick="resetDiag()">다시 진단하기</button></div>';
+ switchResTab(RES_TAB);
+}
+function renderTabBody(t){
+ const items=RES.filter(p=>tabOf(p)===t);
+ const active=items.filter(p=>p._st!=='no');
+ const inel=items.filter(p=>p._st==='no');
+ let h='';
+ if(t==='grant'){
+  const subs=[{key:'grant',label:'지원금 · 바우처'},{key:'debt',label:'채무조정'},{key:'closure',label:'폐업 · 재기 지원'}];
+  subs.forEach(s=>{
+   const list=active.filter(p=>sectionOf(p)===s.key).sort(fitSort);
+   if(list.length) h+='<div class="rt-sub">'+s.label+'</div>'+list.map(p=>card(p)).join('');
+  });
+ }else{
+  h+=active.slice().sort(fitSort).map(p=>card(p)).join('');
+ }
+ if(!active.length) h+='<p class="rt-empty">이 갈래에서 지금 바로 신청 가능한 자금이 없습니다. 아래 “해당 없음”이나 다른 탭을 확인해보세요.</p>';
+ if(inel.length){
+  inel.sort((a,b)=>{const sa=SECTION_ORDER.indexOf(sectionOf(a)),sb=SECTION_ORDER.indexOf(sectionOf(b));return sa-sb||((b.amountMax||0)-(a.amountMax||0));});
+  h+='<div class="rt-sub muted">지금은 해당 없음 '+inel.length+'건</div>'+inel.map(p=>card(p,true)).join('');
+ }
+ return h;
+}
+function switchResTab(t){
+ RES_TAB=t;
+ document.querySelectorAll('.rt-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+ document.getElementById('rtBody').innerHTML=renderTabBody(t);
 }
 const DOC_WHERE={'사업자등록증':'홈택스','부가가치세 과세표준증명':'홈택스','국세·지방세 완납증명':'홈택스·위택스','소득금액증명':'홈택스','폐업사실증명':'홈택스','폐업사실증명(폐업 완료 시)':'홈택스','임대차계약서':'보관분','4대보험 가입자명부':'사회보험 EDI·정부24','근로계약서':'보관분','급여이체 내역':'거래 은행','사업계획서':'직접 작성','재무제표':'세무대리인','견적서':'업체 발급','철거 견적서':'철거 업체','취업규칙':'보관분','근태 기록':'보관분','유연근무 운영 내역':'보관분','노사 합의서':'직접 작성','근로시간 단축 추진계획':'직접 작성','보험료 지원 신청서':'근로복지공단','근로자 보수 자료':'보관분','온라인몰 운영 확인서':'입점 플랫폼','공제 가입증서':'노란우산','공제금 지급 청구서':'노란우산','교육 신청서':'희망리턴 누리집','채무 확인 서류':'각 금융기관','소득 증빙':'홈택스','대표자 신분증':'본인 지참','사업장 사진':'직접 촬영','금융거래확인서':'거래 은행','사업자등록증 또는 폐업사실증명':'홈택스'};
 function showDocs(){
