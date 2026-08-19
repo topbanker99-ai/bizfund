@@ -77,6 +77,26 @@ section.view.on{display:block}
 .p-why span{display:inline-block;background:var(--bg2);border:1px solid var(--line);border-radius:7px;padding:3px 9px;margin:2px 4px 2px 0;color:var(--sub)}
 .p-why span.bad{background:#FBEFEF;border-color:#EFD3D3;color:#A34141}
 .p-apply{display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--blue)}
+/* 결과 카드(요약형) + PC 2열 그리드 */
+.c-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:4px}
+@media(min-width:700px){.c-grid{grid-template-columns:1fr 1fr}}
+.c-card{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fff;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.c-card.dim{opacity:.58}
+.c-hd{display:flex;align-items:center;gap:7px;margin-bottom:4px;min-width:0}
+.c-badge{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--ok-bg);color:var(--ok)}
+.c-badge.cond{background:var(--cond-bg);color:var(--cond)}
+.c-badge.no{background:var(--no-bg);color:var(--no)}
+.c-ag{font-size:11.5px;color:var(--faint);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-nm{font-size:14.5px;font-weight:800;color:var(--navy);line-height:1.32;letter-spacing:-.02em}
+.c-line{display:flex;align-items:baseline;gap:8px;margin-top:5px;min-width:0}
+.c-amt{font-size:13.5px;font-weight:800;color:var(--blue);white-space:nowrap;flex:none}
+.c-term{font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.c-tags{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
+.c-tag{font-size:11px;color:var(--sub);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.c-tag.star{color:#8a5b00;background:#FBF3DE;border-color:#EADFBF}
+.c-tag.bad{color:#A34141;background:#FBEFEF;border-color:#EFD3D3}
+.c-foot{display:flex;justify-content:flex-end;margin-top:auto;padding-top:9px}
+.c-apply{font-size:12.5px;font-weight:700;color:var(--blue)}
 /* 결과 2탭(지원금/대출) */
 .rt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
 .rt-tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:13px 8px;border:1.5px solid var(--line);border-radius:13px;background:#fff;cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s}
@@ -787,16 +807,18 @@ function resetDiag(){for(const k in A)delete A[k];buildSteps();showStep(0);go('d
 /* ================= 결과 ================= */
 function fmtAmt(n){if(n==null)return '심사·항목별';if(n>=100000000)return '최대 '+(n/100000000)+'억원';return '최대 '+(n/10000).toLocaleString()+'만원';}
 function card(p,dim){
- const st=(p._st==='ok')?'<span class="p-st ok">신청 가능</span>':(p._st==='cond')?'<span class="p-st cond">확인 필요</span>':'';
- return '<div class="p-card'+(dim?' dim':'')+'">'
-  +'<div class="p-top"><div>'+st+'<div class="p-agency">'+p.agency+'</div>'
-  +'<div class="p-name">'+p.name+'</div><div class="p-sum">'+(p.summary||'')+'</div></div>'
-  +'<div class="p-amt">'+fmtAmt(p.amountMax)+'</div></div>'
-  +'<div class="p-meta">'+(p.terms||'')+'</div>'
-  +(p.reasons&&p.reasons.length?'<div class="p-why">'+p.reasons.map(r=>'<span>★ '+r+'</span>').join('')+'</div>':'')
-  +(p.unknown&&p.unknown.length?'<div class="p-why">'+p.unknown.map(r=>'<span>확인 필요: '+r+'</span>').join('')+'</div>':'')
-  +(p.failed&&p.failed.length?'<div class="p-why">'+p.failed.map(r=>'<span class="bad">미충족: '+r+'</span>').join('')+'</div>':'')
-  +'<a class="p-apply" href="'+p.applyUrl+'" target="_blank" rel="noopener">신청 페이지 확인 →</a>'
+ const st=(p._st==='ok')?'<span class="c-badge">신청 가능</span>':(p._st==='cond')?'<span class="c-badge cond">확인 필요</span>':(p._st==='no')?'<span class="c-badge no">해당 없음</span>':'';
+ let tags='';
+ (p.reasons||[]).forEach(r=>tags+='<span class="c-tag star">★ '+r+'</span>');
+ (p.unknown||[]).forEach(r=>tags+='<span class="c-tag">확인: '+r+'</span>');
+ (p.failed||[]).forEach(r=>tags+='<span class="c-tag bad">미충족: '+r+'</span>');
+ const term=(p.terms||'');
+ return '<div class="c-card'+(dim?' dim':'')+'">'
+  +'<div class="c-hd">'+st+'<span class="c-ag">'+p.agency+'</span></div>'
+  +'<div class="c-nm">'+p.name+'</div>'
+  +'<div class="c-line"><span class="c-amt">'+fmtAmt(p.amountMax)+'</span>'+(term?'<span class="c-term">'+term+'</span>':'')+'</div>'
+  +(tags?'<div class="c-tags">'+tags+'</div>':'')
+  +'<div class="c-foot"><a class="c-apply" href="'+p.applyUrl+'" target="_blank" rel="noopener">신청 페이지 →</a></div>'
   +'</div>';
 }
 /* 결과를 지원금/대출 두 탭으로 분리. 대출=loan, 그 외(지원금·바우처·채무조정·폐업재기)=지원금 탭 */
@@ -850,15 +872,16 @@ function renderTabBody(t){
   const subs=[{key:'grant',label:'지원금 · 바우처'},{key:'debt',label:'채무조정'},{key:'closure',label:'폐업 · 재기 지원'}];
   subs.forEach(s=>{
    const list=active.filter(p=>sectionOf(p)===s.key).sort(fitSort);
-   if(list.length) h+='<div class="rt-sub">'+s.label+'</div>'+list.map(p=>card(p)).join('');
+   if(list.length) h+='<div class="rt-sub">'+s.label+'</div><div class="c-grid">'+list.map(p=>card(p)).join('')+'</div>';
   });
  }else{
-  h+=active.slice().sort(fitSort).map(p=>card(p)).join('');
+  const list=active.slice().sort(fitSort);
+  if(list.length) h+='<div class="c-grid">'+list.map(p=>card(p)).join('')+'</div>';
  }
  if(!active.length) h+='<p class="rt-empty">이 갈래에서 지금 바로 신청 가능한 자금이 없습니다. 아래 “해당 없음”이나 다른 탭을 확인해보세요.</p>';
  if(inel.length){
   inel.sort((a,b)=>{const sa=SECTION_ORDER.indexOf(sectionOf(a)),sb=SECTION_ORDER.indexOf(sectionOf(b));return sa-sb||((b.amountMax||0)-(a.amountMax||0));});
-  h+='<div class="rt-sub muted">지금은 해당 없음 '+inel.length+'건</div>'+inel.map(p=>card(p,true)).join('');
+  h+='<div class="rt-sub muted">지금은 해당 없음 '+inel.length+'건</div><div class="c-grid">'+inel.map(p=>card(p,true)).join('')+'</div>';
  }
  return h;
 }
@@ -883,8 +906,8 @@ function renderList(){
  const cat=document.getElementById('fCat').value;
  let list=PROGRAMS.filter(p=>(!cat||p.category===cat)&&(!q||(p.name+p.agency+(p.summary||'')).includes(q)));
  document.getElementById('listMount').innerHTML=
-  list.map(p=>card({...p,reasons:p.tier===1?['요건 확인 완료']:[],unknown:[],failed:[]})).join('')
-  ||'<p style="color:var(--faint);padding:26px 0;font-size:14px">검색 결과가 없습니다.</p>';}
+  (list.length?'<div class="c-grid">'+list.map(p=>card({...p,reasons:p.tier===1?['요건 확인 완료']:[],unknown:[],failed:[]})).join('')+'</div>'
+  :'<p style="color:var(--faint);padding:26px 0;font-size:14px">검색 결과가 없습니다.</p>');}
 document.getElementById('q').oninput=renderList;
 document.getElementById('fCat').onchange=renderList;
 
