@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-20",
+  "updated": "2026-08-21",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,21 +32,13 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "[서울] 동작구 2026년 하반기 소상공인 개별간판 개선지원사업 공고",
-      "sub": "서울특별시 · 신청 마감 2026.08.20",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124677",
-      "until": "2026-08-20"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
       "title": "[경기] 시흥시 2026년 명품점포 지원사업 모집 공고(소상공인 지원사업)",
       "sub": "경기도 · 신청 마감 2026.08.21",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125387",
       "until": "2026-08-21"
     },
     {
-      "tag": "마감 D-5",
+      "tag": "마감 D-4",
       "tagType": "urgent",
       "title": "2026년 3차 소상공인 온라인쇼핑몰 판매지원(온라인쇼핑몰ㆍ로컬상품관) 참여기업 모집 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.08.24",
@@ -54,11 +46,19 @@
       "until": "2026-08-24"
     },
     {
-      "tag": "마감 D-6",
+      "tag": "마감 D-5",
       "tagType": "urgent",
       "title": "[경북] 포항시 2026년 온라인 셀러 성장 지원기업 추가 모집 공고(온라인 판로 지원사업)",
       "sub": "경상북도 · 신청 마감 2026.08.25",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125539",
+      "until": "2026-08-25"
+    },
+    {
+      "tag": "마감 D-5",
+      "tagType": "urgent",
+      "title": "[경북] 포항시 2026년 AI라이브커머스 지원기업 추가 모집 공고(온라인 판로 지원사업)",
+      "sub": "경상북도 · 신청 마감 2026.08.25",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125537",
       "until": "2026-08-25"
     }
   ]
