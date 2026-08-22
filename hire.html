@@ -179,6 +179,8 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .rrow .v small{display:block;font-size:11.5px;font-weight:600;color:var(--faint)}
 .codebox{background:var(--bg);border:1.5px dashed var(--line);border-radius:11px;padding:13px;font-size:11.5px;
   color:var(--sub);word-break:break-all;font-family:ui-monospace,Menlo,monospace;line-height:1.5;max-height:110px;overflow:auto}
+.qrbox{display:flex;justify-content:center;margin:14px 0 2px}
+.qrbox svg{width:172px;height:172px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
 
 .foot{margin-top:24px;font-size:11.5px;color:var(--faint);line-height:1.75;text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -271,11 +273,30 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
   <h1 class="t">어떤 일자리인가요?</h1>
   <p class="d">업종을 고르면 그 일에 실제로 필요한 과제 4가지가 준비됩니다. 지원자는 5분 정도 걸립니다.</p>
   <div class="sets" id="setList"></div>
-  <button class="btn p" style="margin-top:18px" id="toConsent" disabled>지원자에게 넘기기 →</button>
+  <button class="btn p" style="margin-top:18px" id="toShare" disabled>지원 링크·QR 만들기 →</button>
+  <button class="btn g" style="margin-top:9px" id="toConsent" disabled>이 기기에서 바로 하기</button>
   <div class="note warn" style="margin-top:16px">
     <b>이 테스트만으로 채용을 결정하지 마세요.</b> 게임에 익숙한 정도가 점수에 영향을 줍니다.
     면접에서 무엇을 더 물어볼지 정하는 참고 자료로만 쓰시길 권합니다.
   </div>
+</section>
+
+<!-- 1b. 사장님: 지원 링크·QR 만들기 -->
+<section class="scr" id="s-share">
+  <span class="eyebrow" id="shareEye">지원 링크</span>
+  <h1 class="t">지원 링크를 만들었어요</h1>
+  <p class="d">아래 링크·QR을 카톡·문자·공고에 올리면, 지원자가 <b>자기 폰에서 바로</b> 직무체험을 합니다.</p>
+  <div class="fld"><label>지원 회사·매장명 (지원자 화면에 표시)</label>
+    <input id="shareCo" placeholder="예: 행복치킨 강남점" maxlength="30" oninput="updateShare()"></div>
+  <div class="fld"><label>지원 링크</label>
+    <div class="codebox" id="shareLink"></div></div>
+  <div id="shareQr" class="qrbox"></div>
+  <div class="foot" style="text-align:center;margin-top:0">QR을 매장·공고에 붙여도 됩니다</div>
+  <button class="btn p" style="margin-top:14px" onclick="shareLink()">링크 공유하기 (카톡·문자)</button>
+  <button class="btn g" style="margin-top:9px" onclick="copyLink()">링크 복사</button>
+  <div class="note info" style="margin-top:16px">지원자가 체험을 마치면 <b>결과 코드</b>가 만들어집니다. 지원자가 그 코드를 사장님께 보내면, 아래 <b>‘지원자 코드 열기’</b>에서 결과지를 볼 수 있어요.</div>
+  <button class="btn g sm" style="margin-top:9px" onclick="go('load')">지원자 코드 열기</button>
+  <button class="btn g sm" style="margin-top:9px" onclick="go('setup')">← 직무 다시 고르기</button>
 </section>
 
 <!-- 2. 지원자: 정보 입력 · 시작 -->
@@ -283,8 +304,8 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
   <img class="hero" id="startHero" alt="" onerror="this.style.display='none'">
   <span class="eyebrow" id="startEye">지원자 정보</span>
   <h1 class="t" id="startTitle">직무 체험을 시작합니다</h1>
-  <p class="d">지원하는 곳과 이름을 적어주세요. 결과지 구분에만 쓰입니다.</p>
-  <div class="fld"><label>지원 회사 · 매장</label>
+  <p class="d" id="startDesc">지원하는 곳과 이름을 적어주세요. 결과지 구분에만 쓰입니다.</p>
+  <div class="fld" id="coField"><label>지원 회사 · 매장</label>
     <input id="company" placeholder="예: 행복치킨 강남점" maxlength="30"></div>
   <div class="fld"><label>지원자 이름</label>
     <input id="who" placeholder="예: 김민수" maxlength="20"></div>
@@ -293,7 +314,7 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
     결과는 이 화면에만 표시되고 저장·전송되지 않습니다. 채용을 결정하는 검사가 아니라 면접 참고용입니다.
   </div>
   <button class="btn p" id="toIntro" disabled>시작하기</button>
-  <button class="btn g sm" style="margin-top:9px" onclick="go('setup')">← 직무 다시 고르기</button>
+  <button class="btn g sm" id="backSetup" style="margin-top:9px" onclick="go('setup')">← 직무 다시 고르기</button>
 </section>
 
 <!-- 3. 과제 안내 -->
@@ -372,6 +393,7 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 
 </div>
 </div>
+<script src="assets/qrcode.min.js"></script>
 <script>
 /* ============================================================
    알바 직무체험 테스트
@@ -1201,14 +1223,14 @@ function sortRun(t, done){
 
 /* ---------- 상태 ---------- */
 const S = { set:null, who:'', company:'', ti:0, tasks:[], results:[],
-            practice:false, trials:[], idx:0, log:[], tab:'owner', started:null };
+            practice:false, trials:[], idx:0, log:[], tab:'owner', started:null, applyMode:false };
 
 var CUR = 'setup';
 function go(id){
   CUR = id;
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   $('s-'+id).classList.add('on');
-  var bb = $('backBtn'); if(bb) bb.style.display = (id==='setup') ? 'none' : 'inline-flex';
+  var bb = $('backBtn'); if(bb) bb.style.display = (id==='setup' || S.applyMode) ? 'none' : 'inline-flex';
   window.scrollTo(0,0);
 }
 /* 상단 알약 뒤로가기 → 처음(직무 선택) 화면. 진행 중이면 확인 후 이동. */
@@ -1228,14 +1250,25 @@ function renderSets(){
       <span class="games">${v.tasks.map(t=>`<i>${TASKS[t].name}</i>`).join('')}</span></span>
     </button>`).join('');
   $('toConsent').disabled = !S.set;
+  if($('toShare')) $('toShare').disabled = !S.set;
 }
 function pickSet(k){ S.set = k; renderSets(); }
 
 /* ---------- 2. 지원자 정보 · 시작 ---------- */
 function renderStart(){
   const v = SETS[S.set];
-  $('startEye').textContent = v.name + ' 직무체험';
-  $('startTitle').textContent = v.name + ' 체험을 시작합니다';
+  const apply = S.applyMode;
+  // 지원자 링크 모드: 회사명 고정·숨김, 뒤로가기 숨김, 이름만 입력
+  if($('coField')) $('coField').style.display = apply ? 'none' : '';
+  if($('backSetup')) $('backSetup').style.display = apply ? 'none' : '';
+  if(apply) $('company').value = S.company || '';
+  $('startEye').textContent = apply ? (S.company || v.name) : (v.name + ' 직무체험');
+  $('startTitle').textContent = apply
+    ? `${S.company ? S.company+' ' : ''}${v.name} 직무체험`
+    : v.name + ' 체험을 시작합니다';
+  $('startDesc').textContent = apply
+    ? '이름만 적고 시작하세요. 실제 업무를 짧게 옮긴 과제이며, 게임 점수로 합격을 정하지 않습니다.'
+    : '지원하는 곳과 이름을 적어주세요. 결과지 구분에만 쓰입니다.';
   const hero = $('startHero');
   hero.style.display = '';
   hero.alt = v.name + ' 대표 이미지';
@@ -1341,6 +1374,12 @@ function showResult(){
   $('resTitle').textContent = `${S.who||'지원자'}님 결과`;
   $('resSub').textContent = `${S.company ? S.company+' · ' : ''}${SETS[S.set].name} · 과제 ${S.results.length}개 · 약 ${Math.max(1,mins)}분 소요`;
   vaTrack('hire_complete', { set: S.set, tasks: S.results.length });   // 익명 집계: 끝까지 완료(점수·이름 미전송)
+  // 지원자 링크 모드: '지원자용' 탭을 기본으로, '사장님용' 탭은 지원자에게 숨김
+  if(S.applyMode){
+    S.tab='cand';
+    $('tabCand').classList.add('on'); $('tabOwner').classList.remove('on');
+    $('tabOwner').style.display='none';
+  }
   renderResult(); go('result');
 }
 function renderResult(){
@@ -1375,15 +1414,27 @@ function renderResult(){
     ? '이 결과는 참고 자료입니다. 채용 여부는 면접과 경력, 근무 조건을 함께 보고 판단하세요.'
     : '수고하셨습니다. 결과는 이 화면에만 있고 어디에도 저장되지 않았습니다.';
   if(owner) $('codeOut').textContent = makeCode();
-  $('resBody').innerHTML += `<div class="noprint">
-    <div class="btn-row" style="margin-top:18px">
-      <button class="btn p sm" onclick="savePNG()">이미지로 저장</button>
-      <button class="btn p sm" onclick="savePDF()">PDF로 저장</button>
-    </div>
-    <div class="btn-row">
-      <button class="btn g sm" onclick="restart()">처음부터 다시</button>
-      <button class="btn g sm" onclick="go('load')">코드 열기</button>
-    </div></div>`;
+  // 지원자 링크 모드: 결과 코드를 사장님께 보내는 버튼을 크게
+  if(S.applyMode && !owner){
+    $('resBody').innerHTML += `<div class="card noprint" style="margin-top:16px;border-color:var(--blue-line);background:var(--blue-soft)">
+      <h3 style="color:var(--navy)">결과를 사장님께 보내세요</h3>
+      <p style="margin-bottom:10px">아래 버튼을 누르면 결과 코드가 만들어집니다. 카톡·문자로 사장님께 보내면 결과지를 확인하실 수 있어요.</p>
+      <button class="btn p" onclick="sendCode()">결과 코드 사장님께 보내기</button></div>`;
+  }
+  const savers = S.applyMode
+    ? `<div class="btn-row" style="margin-top:18px">
+         <button class="btn g sm" onclick="savePNG()">이미지로 저장</button>
+         <button class="btn g sm" onclick="savePDF()">PDF로 저장</button>
+       </div>`
+    : `<div class="btn-row" style="margin-top:18px">
+         <button class="btn p sm" onclick="savePNG()">이미지로 저장</button>
+         <button class="btn p sm" onclick="savePDF()">PDF로 저장</button>
+       </div>
+       <div class="btn-row">
+         <button class="btn g sm" onclick="restart()">처음부터 다시</button>
+         <button class="btn g sm" onclick="go('load')">코드 열기</button>
+       </div>`;
+  $('resBody').innerHTML += `<div class="noprint">${savers}</div>`;
 }
 
 
@@ -1499,20 +1550,56 @@ function makeCode(){
   const b = btoa(unescape(encodeURIComponent(JSON.stringify(p))));
   return 'AB-' + b.replace(/=+$/,'');
 }
-function copyCode(){
-  const t = makeCode();
+function copyToClip(t, msg){
   (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject())
-    .then(()=>alert('복사했습니다. 카카오톡 등으로 보내세요.'))
+    .then(()=>alert(msg))
     .catch(()=>{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a);
-      a.select(); try{document.execCommand('copy'); alert('복사했습니다.');}catch(e){alert('복사가 안 됩니다. 코드를 길게 눌러 직접 복사해 주세요.');}
+      a.select(); try{document.execCommand('copy'); alert(msg);}catch(e){alert('복사가 안 됩니다. 길게 눌러 직접 복사해 주세요.');}
       a.remove(); });
+}
+function copyCode(){ copyToClip(makeCode(), '복사했습니다. 카카오톡 등으로 보내세요.'); }
+
+/* ---------- 지원 링크·QR (사장님) ---------- */
+function buildApplyUrl(){
+  const co = encodeURIComponent((($('shareCo')&&$('shareCo').value)||'').trim());
+  return location.origin + location.pathname + '?apply=1&set=' + S.set + (co ? '&co=' + co : '');
+}
+function renderShare(){
+  const v = SETS[S.set];
+  $('shareEye').textContent = v.name + ' 직무';
+  $('shareCo').value = S.company || '';
+  updateShare();
+}
+function updateShare(){
+  const url = buildApplyUrl();
+  $('shareLink').textContent = url;
+  try{
+    const qr = qrcode(0, 'M'); qr.addData(url); qr.make();
+    $('shareQr').innerHTML = qr.createSvgTag({ cellSize:4, margin:2, scalable:true });
+  }catch(e){ $('shareQr').innerHTML = '<div class="foot">QR을 만들지 못했습니다. 링크를 복사해 보내세요.</div>'; }
+}
+function shareLink(){
+  const url = buildApplyUrl();
+  const co = (($('shareCo')&&$('shareCo').value)||'').trim();
+  const msg = (co ? co + ' ' : '') + '알바 직무체험입니다. 폰에서 약 5분이면 끝나요.\n' + url;
+  if(navigator.share){ navigator.share({ title:'알바 직무체험 지원', text:msg, url:url }).catch(()=>{}); }
+  else copyToClip(url, '지원 링크를 복사했습니다. 카톡·문자로 보내세요.');
+}
+function copyLink(){ copyToClip(buildApplyUrl(), '지원 링크를 복사했습니다.'); }
+/* 지원자: 결과 코드 사장님께 보내기 */
+function sendCode(){
+  const t = makeCode();
+  const msg = '['+(S.company||'')+' 직무체험 결과] 지원자 '+(S.who||'')+'\n'
+    + '아래 코드를 사장님서랍 알바채용 화면의 “코드 열기”에 붙여넣으면 결과가 열립니다.\n' + t;
+  if(navigator.share){ navigator.share({ title:'직무체험 결과 코드', text:msg }).catch(()=>{}); }
+  else copyToClip(t, '결과 코드를 복사했습니다. 사장님께 보내주세요.');
 }
 function loadCode(){
   const raw = $('codeIn').value.trim();
   try{
     if(!raw.startsWith('AB-')) throw 0;
     const j = JSON.parse(decodeURIComponent(escape(atob(raw.slice(3)))));
-    S.set = j.s; S.who = j.w||''; S.company = j.c||'';
+    S.set = j.s; S.who = j.w||''; S.company = j.c||''; S.applyMode = false;
     S.results = j.r.map(x=>({ key:x[0], name:TASKS[x[0]].name, job:TASKS[x[0]].job, ok:x[1], n:x[2], avg:x[3] }));
     S.started = null; S.tab='owner';
     $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
@@ -1529,19 +1616,32 @@ function restart(){
 
 /* ---------- 부팅 ---------- */
 renderSets();
-$('toConsent').onclick = ()=>{ renderStart(); go('start'); };
+$('toShare').onclick   = ()=>{ renderShare(); go('share'); };   // 사장님: 지원 링크·QR 만들기
+$('toConsent').onclick = ()=>{ S.applyMode=false; renderStart(); go('start'); }; // 이 기기에서 바로
 $('who').addEventListener('input', updateStartBtn);
 $('toIntro').onclick = ()=>{
   S.who = $('who').value.trim();
-  S.company = $('company').value.trim();
+  if(!S.applyMode) S.company = $('company').value.trim();
   S.tasks = SETS[S.set].tasks.slice();
   S.ti = 0; S.results = [];
   vaTrack('hire_start', { set: S.set });   // 익명 집계: 어떤 직무 체험을 시작했는가(이름·회사 미전송)
   showIntro();
 };
-/* 홈에서 직렬을 골라 들어오면(?set=food 등) 선택 화면을 건너뛰고 바로 시작 정보 입력으로 */
-(()=>{ const s=new URLSearchParams(location.search).get('set');
-  if(s && SETS[s]){ S.set=s; renderSets(); renderStart(); go('start'); } })();
+/* 진입 링크 처리
+   · ?apply=1&set=food&co=... → 지원자 링크 모드(회사 고정, 이름만 입력, 바로 시작)
+   · ?set=food               → (홈 등에서) 직무 선택 건너뛰고 시작 정보 입력으로 */
+(()=>{ const q=new URLSearchParams(location.search);
+  const s=q.get('set');
+  if(!(s && SETS[s])) return;
+  S.set=s; renderSets();
+  if(q.get('apply')==='1'){
+    S.applyMode=true;
+    S.company=(q.get('co')||'').slice(0,30);
+    renderStart(); go('start');
+  } else {
+    renderStart(); go('start');
+  }
+})();
 </script>
 </body>
 </html>
