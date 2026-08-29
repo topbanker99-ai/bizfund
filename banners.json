@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25",
+  "updated": "2026-08-30",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,34 +32,34 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "[경북] 포항시 2026년 온라인 셀러 성장 지원기업 추가 모집 공고(온라인 판로 지원사업)",
-      "sub": "경상북도 · 신청 마감 2026.08.25",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125539",
-      "until": "2026-08-25"
-    },
-    {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[경북] 포항시 2026년 AI라이브커머스 지원기업 추가 모집 공고(온라인 판로 지원사업)",
-      "sub": "경상북도 · 신청 마감 2026.08.25",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125537",
-      "until": "2026-08-25"
+      "title": "2026년 판로확대 지원 참여 소상공인 모집(쇼핑몰 통합관리ㆍ입점ㆍ판매대행 지원(셀러허브)) 공고",
+      "sub": "과학기술정보통신부 · 신청 마감 2026.08.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125324",
+      "until": "2026-08-30"
     },
     {
       "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "[서울] 마포구 2026년 하반기 중소기업육성기금 융자 추가모집 공고",
-      "sub": "서울특별시 · 신청 마감 2026.08.26",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125558",
-      "until": "2026-08-26"
+      "title": "[경기] 하남시 2026년 소상공인 마케팅 판로 지원사업(경영환경개선 지원사업) 소상공인 모집공고",
+      "sub": "경기도 · 신청 마감 2026.08.31",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125604",
+      "until": "2026-08-31"
     },
     {
-      "tag": "마감 D-3",
+      "tag": "마감 D-2",
       "tagType": "urgent",
-      "title": "[경기] 광주시 2026년 소상공인 경영환경개선사업 신청자 모집 공고",
-      "sub": "경기도 · 신청 마감 2026.08.27",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125652",
-      "until": "2026-08-27"
+      "title": "[전남광주] 2026년 전남광주통합특별시 소재 소상공인ㆍ사회적경제기업 판로 확대 지원기업 모집 공고",
+      "sub": "전남광주통합특별시 · 신청 마감 2026.08.31",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125579",
+      "until": "2026-08-31"
+    },
+    {
+      "tag": "마감 D-2",
+      "tagType": "urgent",
+      "title": "[강원] 홍천군 2026년 3차 소상공인 시설개선 및 경영지원사업 공고",
+      "sub": "강원특별자치도 · 신청 마감 2026.08.31",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125404",
+      "until": "2026-08-31"
     }
   ]
 }
