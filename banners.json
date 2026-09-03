@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-03",
+  "updated": "2026-09-04",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,21 +32,13 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "[강원] 원주시ㆍ횡성군ㆍ영월군 2026년 소상공인 건강검진(대장내시경) 지원사업 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.09.03",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125822",
-      "until": "2026-09-03"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
       "title": "[충남] 2026년 4차 소상공인ㆍ자영업자 재기지원사업 모집 공고",
       "sub": "충청남도 · 신청 마감 2026.09.04",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126009",
       "until": "2026-09-04"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-1",
       "tagType": "urgent",
       "title": "[전남광주] 장성군 2026년 하반기 소상공인 지원사업 공고",
       "sub": "전남광주통합특별시 · 신청 마감 2026.09.04",
@@ -54,11 +46,19 @@
       "until": "2026-09-04"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-1",
       "tagType": "urgent",
       "title": "[전남광주] 곡성군 2026년 2차 소상공인 카드수수료 지원사업 공고",
       "sub": "전남광주통합특별시 · 신청 마감 2026.09.04",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125980",
+      "until": "2026-09-04"
+    },
+    {
+      "tag": "마감 D-1",
+      "tagType": "urgent",
+      "title": "[울산] 2026년 2차 소상공인 경영환경개선사업 공고",
+      "sub": "울산광역시 · 신청 마감 2026.09.04",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125726",
       "until": "2026-09-04"
     }
   ]
