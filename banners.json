@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-08",
+  "updated": "2026-09-09",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,21 +32,13 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "2026년 2차 해외 온라인 플랫폼 물류지원 사업 참여 소상공인 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.09.08",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125751",
-      "until": "2026-09-08"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
       "title": "[경북] 구미시 2026년 소상공인 로컬팩(Local Pack) 지원사업 로컬 크리에이터 팝업전 참여자 모집 공고",
       "sub": "경상북도 · 신청 마감 2026.09.09",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126003",
       "until": "2026-09-09"
     },
     {
-      "tag": "마감 D-4",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "[경북] 2026년 흥해라 신라난전 참여 소상공인 모집 공고",
       "sub": "경상북도 · 신청 마감 2026.09.11",
@@ -54,12 +46,20 @@
       "until": "2026-09-11"
     },
     {
-      "tag": "마감 D-4",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "[전남광주] 구례군 2026년 소상공인 카드수수료 지원사업 신청자 모집 공고",
       "sub": "전남광주통합특별시 · 신청 마감 2026.09.11",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124699",
       "until": "2026-09-11"
+    },
+    {
+      "tag": "마감 D-9",
+      "tagType": "",
+      "title": "2026년 2차 모두의 창업 프로젝트 모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.09.17",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125611",
+      "until": "2026-09-17"
     }
   ]
 }
