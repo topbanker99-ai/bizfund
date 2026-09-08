@@ -134,6 +134,13 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .opt.right{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
 .opt.wrong{border-color:var(--stop);background:var(--stop-bg);color:var(--stop)}
 .opt.left{text-align:left}
+/* 게임 일러스트(SVG) */
+.ocard-img{width:104px;height:104px;object-fit:contain;display:block;margin:2px auto 8px}
+.opts.imgopts{grid-template-columns:1fr 1fr}
+.opt.imgopt{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 8px}
+.optimg{width:58px;height:58px;object-fit:contain}
+.cellimg{width:100%;height:100%;object-fit:contain;padding:3px}
+.qimg{width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:7px}
 
 /* 진열대 그리드 */
 .shelf{display:grid;gap:7px;justify-content:center}
@@ -659,7 +666,7 @@ order:{
   async run(t, done){
     hideTimer();
     for(const pr of t.pairs){
-      $('stage').innerHTML = `<div class="ocard"><div class="tb">${esc(pr.p)}</div><div class="mn">${esc(pr.m)}</div></div>`;
+      $('stage').innerHTML = `<div class="ocard">${imgTag(pr.m,'ocard-img')}<div class="tb">${esc(pr.p)}</div><div class="mn">${esc(pr.m)}</div></div>`;
       await sleep(t.showMs);
       $('stage').innerHTML = '';
       await sleep(260);
@@ -667,7 +674,7 @@ order:{
     showTimer();
     const p = t.pairs[t.askIdx];
     $('stage').innerHTML = `<div class="q">${esc(p.p)}<span class="sm">무엇을 주문했나요?</span></div>`;
-    choose(t.opts, t.ans, done, 12000);
+    chooseImg(t.opts, t.ans, done, 12000);
   }
 },
 
@@ -795,13 +802,13 @@ stock:{
     hideTimer();
     const cols = 5;
     $('stage').innerHTML = `<div class="shelf" style="grid-template-columns:repeat(${cols},52px)">`
-      + t.cells.map(x=>`<div class="item" style="background:${x[1]}22;border-color:${x[1]}">${esc(x[0])}</div>`).join('')
+      + t.cells.map(x=>`<div class="item" style="background:${x[1]}18;border-color:${x[1]}">${cellInner(x)}</div>`).join('')
       + '</div>';
     await sleep(t.showMs);
     $('stage').innerHTML='';
     await sleep(250);
     showTimer();
-    $('stage').innerHTML = `<div class="q">${esc(t.target[0])}<span class="sm">몇 개였나요?</span></div>`;
+    $('stage').innerHTML = `<div class="q">${imgTag(t.target[0],'qimg')}${esc(t.target[0])}<span class="sm">몇 개였나요?</span></div>`;
     choose(t.opts.map(v=>v+'개'), t.ans+'개', done, 10000, 'two');
   }
 },
@@ -829,9 +836,9 @@ find:{
     const draw = () => {
       $('stage').innerHTML =
         `<div class="q" style="font-size:15px;margin-bottom:14px">순서대로 누르세요<span class="sm">`
-        + t.seq.map((s,j)=>`<b style="color:${j<step?'var(--ok)':j===step?'var(--blue)':'var(--faint)'}">${esc(s[0])}</b>`).join(' → ')
+        + t.seq.map((s,j)=>`<b style="color:${j<step?'var(--ok)':j===step?'var(--blue)':'var(--faint)'}">${imgTag(s[0],'qimg')}${esc(s[0])}</b>`).join(' → ')
         + `</span></div><div class="shelf" style="grid-template-columns:repeat(5,52px)">`
-        + t.cells.map((x,idx)=>`<button class="item" data-i="${idx}" style="background:${x[1]}22;border-color:${x[1]}">${esc(x[0])}</button>`).join('')
+        + t.cells.map((x,idx)=>`<button class="item" data-i="${idx}" style="background:${x[1]}18;border-color:${x[1]}">${cellInner(x)}</button>`).join('')
         + '</div>';
       $('stage').querySelectorAll('.item').forEach(b=>b.onclick=()=>{
         const cell = t.cells[+b.dataset.i];
@@ -1153,6 +1160,36 @@ cut:{
 };
 
 /* ---------- 공용 선택지 ---------- */
+/* ---------- 게임 일러스트(Higgsfield SVG) 매핑 ---------- */
+/* 이름에 키워드가 포함되면 해당 그림. 구체적인 것(비빔냉면 등)을 먼저 둔다. 없으면 텍스트로 폴백. */
+const ITEM_IMG_MAP = [
+  ['비빔냉면','bibimnm'],['냉면','naengmyeon'],['삼겹','samgyup'],['목살','moksal'],['된장','doenjang'],
+  ['공기','gonggibap'],['김치','kimchi'],['계란','gyeranjjim'],['소주','soju'],['맥주','beer'],['사이다','cider'],['콜라','cola'],
+  ['아메리카노','americano'],['바닐라','vanilla'],['카페라떼','latte'],['콜드브루','coldbrew'],['아이스티','icedtea'],
+  ['자몽','grapefruit'],['치즈케이크','cheesecake'],['크루아상','croissant'],['아포가토','affogato'],['플랫화이트','flatwhite'],
+  ['딸기','strawberry'],['에스프레소','espresso'],
+  ['삼각김밥','gimbap'],['김밥','gimbap'],['컵라면','ramen'],['라면','ramen'],['우유','milk'],['생수','water'],['커피','cancoffee'],['과자','snack'],
+];
+function imgKey(name){ const s=String(name==null?'':name); for(const [kw,k] of ITEM_IMG_MAP) if(s.includes(kw)) return k; return ''; }
+function imgTag(name, cls){ const k=imgKey(name); return k ? `<img class="${cls||'gimg'}" src="assets/hire/img/${k}.svg" alt="" loading="lazy">` : ''; }
+function cellInner(x){ const nm = Array.isArray(x)?x[0]:x; return imgTag(nm,'cellimg') || esc(nm); }
+
+/* 그림 선택지 — 옵션마다 그림+이름. 그림 없으면 이름만(안전 폴백) */
+function chooseImg(opts, ans, done, limit){
+  const t0 = performance.now(); let answered = false;
+  $('controls').innerHTML = `<div class="opts imgopts">`
+    + opts.map((o,i)=>`<button class="opt imgopt" data-i="${i}">${imgTag(o,'optimg')}<span>${esc(o)}</span></button>`).join('') + '</div>';
+  const finish = (ok, el) => {
+    if(answered) return; answered = true; stopTimer();
+    $('controls').querySelectorAll('.opt').forEach(b=>{ b.disabled=true; if(opts[+b.dataset.i]===ans) b.classList.add('right'); });
+    if(el && !ok) el.classList.add('wrong');
+    $('feedback').innerHTML = `<div class="fb ${ok?'o':'x'}">${ok?'맞았습니다':'아쉽습니다'}</div>`;
+    setTimeout(()=> done({ok, ms: performance.now()-t0}), ok ? 620 : 1150);
+  };
+  $('controls').querySelectorAll('.opt').forEach(b=> b.onclick = ()=> finish(opts[+b.dataset.i]===ans, b));
+  runTimer(limit, ()=> finish(false, null));
+}
+
 function choose(opts, ans, done, limit, cls){
   const t0 = performance.now();
   let answered = false;
