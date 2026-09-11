@@ -42,6 +42,11 @@ export default async function handler(req, res) {
       const results = Array.isArray(b.results) ? b.results.slice(0, 12).map((r) => ({
         key: clip(r.key, 24), ok: +r.ok || 0, n: +r.n || 0, avg: +r.avg || 0,
       })) : [];
+      // 영상면접 답변(질문/전사 텍스트). 오디오는 저장하지 않는다.
+      const answers = Array.isArray(b.answers) ? b.answers.slice(0, 10).map((a) => ({
+        q: clip(a.q, 120), a: clip(a.a, 600),
+      })) : [];
+      const kind = b.kind === 'interview' ? 'interview' : 'game';
       const ts = Date.now();
       const id = `${board}.${ts}.${Math.random().toString(36).slice(2, 8)}`;
       await up(`upsert/${NS}`, {
@@ -49,10 +54,12 @@ export default async function handler(req, res) {
         vector: DUMMY,
         metadata: {
           board,
+          kind,
           who: clip(b.who, 20),
           set: clip(b.set, 24),
           company: clip(b.company, 30),
           results: JSON.stringify(results),
+          answers: JSON.stringify(answers),
           ts,
         },
       });
@@ -74,9 +81,13 @@ export default async function handler(req, res) {
       for (const m of rows) {
         const md = m.metadata || {};
         if (now - (md.ts || 0) > TTL_MS) { stale.push(m.id); continue; }
-        let results = [];
+        let results = [], answers = [];
         try { results = JSON.parse(md.results || '[]'); } catch (e) {}
-        applicants.push({ who: md.who || '', set: md.set || '', company: md.company || '', ts: md.ts || 0, results });
+        try { answers = JSON.parse(md.answers || '[]'); } catch (e) {}
+        applicants.push({
+          who: md.who || '', set: md.set || '', company: md.company || '',
+          kind: md.kind || 'game', ts: md.ts || 0, results, answers,
+        });
       }
       // 만료 항목 지우기(best-effort)
       if (stale.length) { up(`delete/${NS}`, { ids: stale }).catch(() => {}); }
