@@ -1705,6 +1705,15 @@ function renderBoard(list){
   window._boardCache = list;
   if(!list.length){ $('boardList').innerHTML = '<div class="bd-empty">아직 들어온 지원자가 없습니다.<br>지원 링크를 더 보내보세요.</div>'; return; }
   $('boardList').innerHTML = list.map((a,i)=>{
+    if(a.kind === 'empathy'){
+      const s = (a.answers && a.answers[0] && a.answers[0].a) || '';
+      return '<div class="bd-row" style="border-color:#EADFBF"><div class="bd-top">'
+        + '<span class="bd-nm">🙂 '+esc(a.who||'지원자')+'</span>'
+        + '<span class="bd-when">'+relTime(a.ts)+'</span></div>'
+        + '<div class="bd-meta">공감능력 테스트 · '+esc(s)+'</div>'
+        + ((a.results&&a.results.length)? '<span class="bd-see" onclick="viewEmpathy('+i+')">감정별 정확도 보기 →</span>':'')
+        + '</div>';
+    }
     if(a.kind === 'interview'){
       const n = (a.answers||[]).filter(x=>x && x.a).length;
       return '<div class="bd-row" style="border-color:var(--blue-line)"><div class="bd-top">'
@@ -1728,6 +1737,25 @@ function renderBoardPicker(){
   $('boardPick').innerHTML = '<div style="font-size:11.5px;color:var(--faint);margin:8px 0 2px">다른 지원 링크의 현황</div>'
     + a.map(b=> b.board===S.board ? '' :
       '<div class="bd-pick" onclick="openBoard(\''+b.board+'\')">'+(esc(b.company||'')||'(이름 없음)')+' · '+(SETS[b.set]?esc(SETS[b.set].name):'')+'</div>').join('');
+}
+/* 공감능력 테스트 결과 펼쳐 보기 */
+function viewEmpathy(i){
+  const a = window._boardCache[i]; if(!a) return;
+  const rows = (a.results||[]).map(r=>{
+    const pct = r.n ? Math.round(r.ok/r.n*100) : 0;
+    return '<div class="bd-row" style="padding:9px 12px"><div class="bd-top">'
+      + '<span style="font-size:13px;font-weight:800;color:var(--navy)">'+esc(r.key)+'</span>'
+      + '<span class="bd-when">'+r.ok+'/'+r.n+' · 평균 '+r.avg+'초</span></div>'
+      + '<div style="height:7px;background:#EDF1F6;border-radius:99px;margin-top:6px;overflow:hidden">'
+      + '<i style="display:block;height:100%;width:'+pct+'%;background:var(--blue);border-radius:99px"></i></div></div>';
+  }).join('');
+  $('boardList').innerHTML =
+    '<div class="bd-row" style="background:var(--warn-bg);border-color:#EADFBF">'
+    + '<div class="bd-nm">🙂 '+esc(a.who||'지원자')+' 공감능력 결과</div>'
+    + '<div class="bd-meta">'+esc((a.answers&&a.answers[0]&&a.answers[0].a)||'')+' · '+new Date(a.ts).toISOString().slice(0,10)+'</div></div>'
+    + rows
+    + '<div class="note warn" style="margin-top:8px;font-size:12px">등급이 아닌 참고 자료입니다. 사진으로 보는 표정은 실제 대면과 다를 수 있습니다.</div>'
+    + '<button class="btn g sm" style="margin-top:8px" onclick="openBoard(S.board)">← 현황판으로</button>';
 }
 /* 면접 답변 펼쳐 보기(현황판 안에서) */
 function viewAnswers(i){

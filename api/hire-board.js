@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       const answers = Array.isArray(b.answers) ? b.answers.slice(0, 10).map((a) => ({
         q: clip(a.q, 120), a: clip(a.a, 600),
       })) : [];
-      const kind = b.kind === 'interview' ? 'interview' : 'game';
+      const kind = (b.kind === 'interview' || b.kind === 'empathy') ? b.kind : 'game';
       const ts = Date.now();
       const id = `${board}.${ts}.${Math.random().toString(36).slice(2, 8)}`;
       await up(`upsert/${NS}`, {
