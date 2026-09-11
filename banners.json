@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-10",
+  "updated": "2026-09-12",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,35 +30,35 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-6",
       "tagType": "urgent",
-      "title": "[경북] 2026년 흥해라 신라난전 참여 소상공인 모집 공고",
-      "sub": "경상북도 · 신청 마감 2026.09.11",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125481",
-      "until": "2026-09-11"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
-      "title": "[전남광주] 구례군 2026년 소상공인 카드수수료 지원사업 신청자 모집 공고",
-      "sub": "전남광주통합특별시 · 신청 마감 2026.09.11",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124699",
-      "until": "2026-09-11"
-    },
-    {
-      "tag": "마감 D-8",
-      "tagType": "",
       "title": "2026년 2차 모두의 창업 프로젝트 모집 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.09.17",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000125611",
       "until": "2026-09-17"
     },
     {
-      "tag": "마감 D-9",
-      "tagType": "",
+      "tag": "마감 D-7",
+      "tagType": "urgent",
+      "title": "[울산] 중구 2026년 소상공인 카드수수료 지원사업 추가모집 공고",
+      "sub": "울산광역시 · 신청 마감 2026.09.18",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126419",
+      "until": "2026-09-18"
+    },
+    {
+      "tag": "마감 D-7",
+      "tagType": "urgent",
       "title": "2026년 4차 소상공인 물류 서비스 지원사업 참여기업 모집 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.09.18",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126201",
+      "until": "2026-09-18"
+    },
+    {
+      "tag": "마감 D-7",
+      "tagType": "urgent",
+      "title": "[서울] 2026년 4차 소상공인 등 민간아이돌봄서비스 이용자 모집 공고",
+      "sub": "서울특별시 · 신청 마감 2026.09.18",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126148",
       "until": "2026-09-18"
     }
   ]
