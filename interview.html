@@ -139,7 +139,9 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
   <p class="d" id="doneSub">답변을 정리했습니다.</p>
   <div class="note info" id="sendStat" style="display:none"></div>
   <div id="qaList" style="margin-top:14px"></div>
-  <button class="btn g" style="margin-top:6px" onclick="copyAll()">답변 전체 복사</button>
+  <div class="note info" style="margin-top:14px">이어서 <b>공감능력 테스트</b>(약 3분)도 해보실 수 있어요. 표정을 보고 감정을 맞히는 짧은 테스트입니다.</div>
+  <a class="btn p" id="toEmpathy" style="text-decoration:none;margin-top:8px" href="empathy.html">공감능력 테스트 하러 가기</a>
+  <button class="btn g" style="margin-top:9px" onclick="copyAll()">답변 전체 복사</button>
   <button class="btn g sm" style="margin-top:9px" onclick="location.href=location.pathname">다시 면접 보기</button>
   <button class="btn g sm" style="margin-top:9px" onclick="location.href='./'">사장님서랍 홈으로</button>
 </section>
@@ -262,6 +264,9 @@ function intro(){
     ? '답변은 <b>글로 옮겨져 지원하신 곳의 사장님께 전달</b>되며 30일 후 자동 삭제됩니다. 목소리 녹음 파일은 저장하지 않습니다.'
     : '답변은 <b>글로 옮겨 이 화면에만</b> 보여드립니다. 목소리 녹음 파일은 저장하지 않습니다.';
   $('topRight').textContent = S.who ? S.who : '';
+  const eb=$('toEmpathy');
+  if(eb) eb.href = 'empathy.html' + (S.board ? '?board='+encodeURIComponent(S.board)
+      + (S.who?'&who='+encodeURIComponent(S.who):'') + (S.company?'&co='+encodeURIComponent(S.company):'') : '');
   go('intro');
 }
 

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>공감능력 테스트 · 사장님서랍</title>
+<meta name="description" content="표정을 보고 감정을 맞히는 공감능력 테스트. 정서 지능·표정 인식을 참고 자료로 확인합니다.">
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+:root{
+ --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC; --blue-line:#C5DAF6;
+ --ink:#161C25; --sub:#56616E; --faint:#8B95A3;
+ --bg:#F3F6F9; --paper:#FFFFFF; --line:#E2E7EE;
+ --ok:#0E7A4D; --ok-bg:#E8F5EE; --warn:#9A6B00; --warn-bg:#FBF3DE; --warn-line:#EADFBF;
+ --stop:#C0392B; --stop-bg:#FBEDEC;
+ --shadow:0 6px 18px rgba(15,42,74,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Pretendard','Malgun Gothic',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-text-size-adjust:100%}
+.top{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.top-in{max-width:600px;margin:0 auto;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:14.5px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.brand em{font-style:normal;color:var(--blue)}
+.top-right{font-size:12px;color:var(--faint);font-weight:600}
+.backpill{display:inline-flex;align-items:center;gap:4px;flex:none;font-size:12.5px;font-weight:700;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:600px;margin:0 auto;padding:22px 18px 60px}
+.scr{display:none}.scr.on{display:block}
+.eyebrow{display:inline-block;background:var(--blue-soft);color:var(--blue);font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+h1.t{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.025em;line-height:1.35;margin:0}
+p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
+.btn{display:block;width:100%;border-radius:12px;font-weight:800;font-size:16px;padding:16px;text-align:center;transition:.12s;border:none;font-family:inherit;cursor:pointer}
+.btn.p{background:var(--blue);color:#fff}
+.btn.g{background:var(--paper);border:1.5px solid var(--line);color:var(--sub)}
+.btn.sm{font-size:14px;padding:12px}
+.note{border-radius:12px;padding:13px 15px;font-size:13.5px;margin-top:12px}
+.note.info{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--navy)}
+.note.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn)}
+.note.stop{background:var(--stop-bg);border:1px solid #EECFCA;color:var(--stop)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:12px;box-shadow:var(--shadow)}
+.card h3{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 8px}
+.card p{font-size:13.5px;color:var(--sub);margin:0}
+/* 진행 */
+.gbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.gbar .nm{font-size:15px;font-weight:800;color:var(--navy)}
+.gbar .st{font-size:12.5px;color:var(--faint);font-weight:600}
+.tbar{height:6px;background:#E6ECF3;border-radius:99px;overflow:hidden;margin-bottom:14px}
+.tfill{height:100%;background:var(--blue);border-radius:99px}
+.tfill.low{background:var(--stop)}
+.face-wrap{display:flex;justify-content:center}
+.face{width:100%;max-width:280px;aspect-ratio:1;object-fit:cover;border-radius:20px;border:1px solid var(--line);background:#E6ECF3;box-shadow:var(--shadow)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.opt{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:15px 10px;font-size:16px;font-weight:800;color:var(--navy);box-shadow:var(--shadow);font-family:inherit;cursor:pointer}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.opt.wrong{border-color:var(--stop);background:var(--stop-bg);color:var(--stop)}
+.fb{text-align:center;font-size:14px;font-weight:800;margin-top:12px;min-height:22px}
+.fb.o{color:var(--ok)} .fb.x{color:var(--stop)}
+/* 결과 */
+.big{text-align:center;padding:20px 0 6px}
+.big .pct{font-size:44px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1}
+.big .lbl{font-size:13px;color:var(--faint);font-weight:700;margin-top:4px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .e{font-size:13.5px;font-weight:800;color:var(--navy);width:52px;flex:none}
+.row .bar{flex:1;height:8px;background:#EDF1F6;border-radius:99px;overflow:hidden}
+.row .bar i{display:block;height:100%;background:var(--blue);border-radius:99px}
+.row .v{font-size:12.5px;color:var(--sub);font-weight:700;width:52px;text-align:right;flex:none}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <button class="backpill" id="backBtn" onclick="goHome()" style="display:none">← 처음</button>
+  <div class="brand"><a href="./" style="text-decoration:none;color:inherit">사장님<em>서랍</em></a> · 공감능력 테스트</div>
+  <div class="top-right" id="topRight"></div>
+</div></div>
+
+<div class="wrap">
+
+<!-- 1. 안내 -->
+<section class="scr on" id="s-intro">
+  <span class="eyebrow">정서 지능 · 표정 인식</span>
+  <h1 class="t">표정을 보고 감정을 맞혀보세요</h1>
+  <p class="d">사람의 표정에서 감정을 얼마나 빠르고 정확하게 읽는지 확인합니다. 손님을 대하는 일에서 특히 도움이 되는 능력입니다.</p>
+  <div class="card">
+    <h3>이렇게 진행됩니다</h3>
+    <p>사진이 잠깐 나타나면 그 사람의 감정을 고르면 됩니다.<br>
+    · 1라운드 — 기쁨·슬픔·분노·놀람 4가지 (보기 4개)<br>
+    · 2~3라운드 — 두려움·혐오까지 6가지 (보기 6개), 시간이 조금씩 짧아집니다<br>
+    · 라운드마다 8문항, 모두 24문항 (약 3분)</p>
+  </div>
+  <div class="note warn">
+    <b>이 결과만으로 사람을 판단하지 마세요.</b> 사진과 화면으로 보는 표정은 실제 대면과 다릅니다.
+    면접에서 무엇을 더 볼지 정하는 참고 자료로만 쓰시길 권합니다.
+  </div>
+  <div class="note" style="background:var(--bg);border:1px solid var(--line);color:var(--sub)" id="privacy"></div>
+  <button class="btn p" style="margin-top:4px" onclick="startTest()">테스트 시작</button>
+  <button class="btn g sm" style="margin-top:9px" onclick="location.href='./'">← 사장님서랍 홈</button>
+</section>
+
+<!-- 2. 진행 -->
+<section class="scr" id="s-play">
+  <div class="gbar"><span class="nm" id="qNo">1라운드 · 1 / 8</span><span class="st" id="qSt"></span></div>
+  <div class="tbar"><div class="tfill" id="fill" style="width:100%"></div></div>
+  <div class="face-wrap"><img class="face" id="face" alt="표정 사진"></div>
+  <div class="opts" id="opts"></div>
+  <div class="fb" id="fb"></div>
+</section>
+
+<!-- 3. 라운드 사이 -->
+<section class="scr" id="s-mid">
+  <span class="eyebrow" id="midEye">라운드 완료</span>
+  <h1 class="t" id="midT"></h1>
+  <p class="d" id="midD"></p>
+  <button class="btn p" style="margin-top:16px" onclick="nextRound()">다음 라운드 시작</button>
+</section>
+
+<!-- 4. 결과 -->
+<section class="scr" id="s-done">
+  <span class="eyebrow">결과</span>
+  <h1 class="t">공감능력 테스트 결과</h1>
+  <div class="big"><div class="pct" id="pct">0%</div><div class="lbl" id="pctSub">24문항 정답률</div></div>
+  <div class="card"><h3>감정별 정확도</h3><div id="byEmo"></div></div>
+  <div class="card"><h3>참고 코멘트</h3><p id="comment"></p></div>
+  <div class="note info" id="sendStat" style="display:none"></div>
+  <div class="note warn">등급이나 합격 여부를 매기지 않습니다. 면접에서 무엇을 더 물어볼지 정하는 참고 자료입니다.</div>
+  <button class="btn g" style="margin-top:6px" onclick="location.href=location.pathname+location.search">다시 해보기</button>
+  <button class="btn g sm" style="margin-top:9px" onclick="location.href='./'">사장님서랍 홈으로</button>
+  <div style="font-size:11.5px;color:var(--faint);margin-top:14px;text-align:center">사진은 AI로 만든 가상 인물입니다. 실존 인물이 아닙니다.</div>
+</section>
+
+</div>
+
+<script>
+/* ============================================================
+   공감능력 테스트 — 표정 사진으로 감정 맞히기 (정서 지능·표정 인식)
+   · 라운드1: 기본 4감정/보기 4개 · 라운드2~3: 6감정/보기 6개, 제한시간 단축
+   · 라운드당 8문항 × 3라운드 = 24문항, 감정·인물(1~3번) 무작위
+   · 등급(S/A/B/C)은 매기지 않는다 — 정답률과 감정별 정확도만 참고로 제시
+   · 사진은 AI 생성 가상 인물(docs/empathy-images.md 참고)
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const rnd = n => Math.floor(Math.random()*n);
+const shuf = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+
+const EMO = {
+  joy:'기쁨', sad:'슬픔', anger:'분노', surprise:'놀람', fear:'두려움', disgust:'혐오'
+};
+const BASE4 = ['joy','sad','anger','surprise'];
+const ALL6  = ['joy','sad','anger','surprise','fear','disgust'];
+const PER_ROUND = 8, ROUNDS = 3;
+const LIMIT = [4500, 3800, 3100];   // 라운드별 제한시간(ms)
+
+const S = { r:0, i:0, log:[], board:'', who:'', company:'' };
+let timer=null, raf=null, answered=false, qStart=0, cur=null;
+
+function go(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  $('s-'+id).classList.add('on');
+  const bb=$('backBtn'); if(bb) bb.style.display = (id==='intro') ? 'none' : 'inline-flex';
+  window.scrollTo(0,0);
+}
+function goHome(){
+  if($('s-play').classList.contains('on') && !confirm('진행 중인 테스트를 그만둘까요?')) return;
+  stopTimer(); location.href = location.pathname;
+}
+
+/* ---------- 문항 만들기 ---------- */
+function makeQ(round){
+  const pool = round === 0 ? BASE4 : ALL6;
+  const ans = pool[rnd(pool.length)];
+  const person = 1 + rnd(3);
+  const wrong = shuf(pool.filter(e=>e!==ans)).slice(0, pool.length-1);
+  return { ans, src:`assets/empathy/${ans}-${person}.webp`, opts: shuf([ans, ...wrong]) };
+}
+/* 이미지 미리 받아두기(문항 전환이 끊기지 않게) */
+function preload(){ ALL6.forEach(e=>{ for(let i=1;i<=3;i++){ const im=new Image(); im.src=`assets/empathy/${e}-${i}.webp`; } }); }
+
+/* ---------- 진행 ---------- */
+function startTest(){ S.r=0; S.i=0; S.log=[]; go('play'); showQ(); }
+function showQ(){
+  answered = false;
+  cur = makeQ(S.r);
+  $('qNo').textContent = `${S.r+1}라운드 · ${S.i+1} / ${PER_ROUND}`;
+  $('qSt').textContent = (S.r===0 ? '4가지 감정' : '6가지 감정');
+  $('face').src = cur.src;
+  $('fb').textContent = ''; $('fb').className='fb';
+  $('opts').innerHTML = cur.opts.map((e,i)=>`<button class="opt" data-e="${e}" onclick="pick(this)">${esc(EMO[e])}</button>`).join('');
+  qStart = performance.now();
+  runTimer(LIMIT[S.r]);
+}
+function runTimer(ms){
+  stopTimer();
+  const t0 = performance.now();
+  const tick = () => {
+    const left = Math.max(0, ms - (performance.now()-t0));
+    const f = $('fill');
+    f.style.width = (left/ms*100)+'%';
+    f.classList.toggle('low', left < ms*0.3);
+    if(left>0) raf = requestAnimationFrame(tick);
+  };
+  tick();
+  timer = setTimeout(()=>{ if(!answered) settle(null); }, ms);
+}
+function stopTimer(){ clearTimeout(timer); cancelAnimationFrame(raf); timer=null; raf=null; }
+function pick(btn){ if(answered) return; settle(btn.dataset.e, btn); }
+function settle(chosen, btn){
+  answered = true; stopTimer();
+  const ok = chosen === cur.ans;
+  const ms = performance.now() - qStart;
+  S.log.push({ emo: cur.ans, chosen: chosen || '', ok, ms });
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true;
+    if(b.dataset.e === cur.ans) b.classList.add('right');
+  });
+  if(btn && !ok) btn.classList.add('wrong');
+  $('fb').className = 'fb ' + (ok?'o':'x');
+  $('fb').textContent = ok ? '맞았습니다' : (chosen ? `아쉽습니다 · 정답은 ${EMO[cur.ans]}` : `시간 초과 · 정답은 ${EMO[cur.ans]}`);
+  setTimeout(advance, ok ? 620 : 1150);
+}
+function advance(){
+  S.i++;
+  if(S.i >= PER_ROUND){
+    S.r++; S.i = 0;
+    if(S.r >= ROUNDS){ finish(); return; }
+    const got = S.log.slice(-PER_ROUND).filter(x=>x.ok).length;
+    $('midEye').textContent = `${S.r}라운드 완료`;
+    $('midT').textContent = `${PER_ROUND}문항 중 ${got}개 맞히셨어요`;
+    $('midD').textContent = S.r===1
+      ? '다음 라운드부터 두려움·혐오가 더해져 보기가 6개가 되고, 시간도 조금 짧아집니다.'
+      : '마지막 라운드입니다. 시간이 조금 더 짧아집니다.';
+    go('mid');
+    return;
+  }
+  showQ();
+}
+function nextRound(){ go('play'); showQ(); }
+
+/* ---------- 결과 ---------- */
+function finish(){
+  stopTimer();
+  const n = S.log.length, okN = S.log.filter(x=>x.ok).length;
+  const pct = n ? Math.round(okN/n*100) : 0;
+  $('pct').textContent = pct + '%';
+  $('pctSub').textContent = `${n}문항 중 ${okN}개 정답`;
+
+  // 감정별 정확도
+  const per = {};
+  ALL6.forEach(e=> per[e] = {ok:0, n:0, ms:0});
+  S.log.forEach(x=>{ const p=per[x.emo]; p.n++; if(x.ok) p.ok++; p.ms += x.ms; });
+  $('byEmo').innerHTML = ALL6.filter(e=>per[e].n).map(e=>{
+    const p = per[e], r = Math.round(p.ok/p.n*100);
+    return `<div class="row"><span class="e">${esc(EMO[e])}</span>`
+      + `<span class="bar"><i style="width:${r}%"></i></span>`
+      + `<span class="v">${p.ok}/${p.n}</span></div>`;
+  }).join('');
+
+  // 참고 코멘트 — 등급 없이 사실 위주
+  const weak = ALL6.filter(e=>per[e].n>=2 && per[e].ok/per[e].n < 0.5).map(e=>EMO[e]);
+  const strong = ALL6.filter(e=>per[e].n>=2 && per[e].ok/per[e].n === 1).map(e=>EMO[e]);
+  const avgMs = n ? Math.round(S.log.reduce((s,x)=>s+x.ms,0)/n/100)/10 : 0;
+  // 자주 헷갈린 조합
+  const mix = {};
+  S.log.filter(x=>!x.ok && x.chosen).forEach(x=>{ const k=EMO[x.emo]+'→'+EMO[x.chosen]; mix[k]=(mix[k]||0)+1; });
+  const topMix = Object.entries(mix).sort((a,b)=>b[1]-a[1])[0];
+  let c = `평균 ${avgMs}초 안에 답했습니다. `;
+  c += pct>=85 ? '표정에서 감정을 빠르고 정확하게 읽는 편입니다. '
+     : pct>=65 ? '대체로 감정을 잘 읽지만 몇몇 표정에서 갈렸습니다. '
+     : '표정만으로 감정을 읽는 데 시간이 걸리는 편입니다. ';
+  if(strong.length) c += `${strong.join('·')}은(는) 모두 맞혔습니다. `;
+  if(weak.length) c += `${weak.join('·')} 표정은 절반 이하로 맞혔습니다. `;
+  if(topMix) c += `${topMix[0].replace('→',' 표정을 ')}(으)로 본 경우가 가장 많았습니다. `;
+  c += '실제 손님 응대는 목소리와 상황이 함께 있어 화면 결과와 다를 수 있습니다.';
+  $('comment').textContent = c;
+
+  go('done');
+  if(S.board) send(per, pct, okN, n);
+}
+function send(per, pct, okN, n){
+  const el = $('sendStat'); el.style.display=''; el.textContent = '사장님께 전달하는 중…';
+  const results = ALL6.filter(e=>per[e].n).map(e=>({
+    key: EMO[e], ok: per[e].ok, n: per[e].n, avg: Math.round(per[e].ms/per[e].n/100)/10
+  }));
+  fetch('/api/hire-board', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ kind:'empathy', board:S.board, who:S.who, set:'empathy', company:S.company,
+      answers:[{ q:'공감능력 테스트 정답률', a:`${pct}% (${n}문항 중 ${okN}개)` }], results }) })
+   .then(r=>r.ok?r.json():Promise.reject())
+   .then(()=>{ el.innerHTML = '<b style="color:var(--ok)">✓ 결과가 사장님께 전달됐습니다.</b>'; })
+   .catch(()=>{ el.className='note stop'; el.textContent='전달에 실패했습니다. 화면을 사장님께 보여주세요.'; });
+}
+
+/* ---------- 부팅 ---------- */
+(()=>{ const p=new URLSearchParams(location.search);
+  S.board=(p.get('board')||'').trim(); S.who=(p.get('who')||'').slice(0,20); S.company=(p.get('co')||'').slice(0,30);
+  $('topRight').textContent = S.who || '';
+  $('privacy').innerHTML = S.board
+    ? '결과(정답률·감정별 정확도)는 <b>지원하신 곳의 사장님께 전달</b>되며 30일 후 자동 삭제됩니다.'
+    : '결과는 <b>이 화면에만</b> 표시되고 저장·전송되지 않습니다.';
+  preload();
+})();
+window.addEventListener('pagehide', stopTimer);
+</script>
+</body>
+</html>
