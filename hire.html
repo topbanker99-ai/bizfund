@@ -1768,7 +1768,8 @@ function viewAnswers(i){
     + '<div class="bd-nm">🎥 '+esc(a.who||'지원자')+' 면접 답변</div>'
     + '<div class="bd-meta">'+(SETS[a.set]?esc(SETS[a.set].name):'')+' · '+new Date(a.ts).toISOString().slice(0,10)+'</div></div>'
     + (rows || '<div class="bd-empty">답변이 없습니다.</div>')
-    + '<button class="btn g sm" style="margin-top:6px" onclick="openBoard(S.board)">← 현황판으로</button>';
+    + '<div class="note warn" style="margin-top:8px;font-size:12px">등급이 아닌 참고 자료입니다. 긴장 정도나 말솜씨가 답변에 영향을 줍니다.</div>'
+    + '<button class="btn g sm" style="margin-top:8px" onclick="openBoard(S.board)">← 현황판으로</button>';
 }
 function viewApplicant(i){
   const a = window._boardCache[i]; if(!a) return;
