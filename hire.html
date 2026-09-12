@@ -416,7 +416,7 @@ p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
   <h1 class="t" id="resTitle"></h1>
   <p class="d" id="resSub"></p>
   <div id="sdNext" style="margin-top:16px"></div>
-  <div class="tabs" style="margin-top:18px">
+  <div class="tabs" id="resTabs" style="margin-top:18px">
     <button class="tab on" id="tabOwner" onclick="showTab('owner')">사장님용</button>
     <button class="tab" id="tabCand" onclick="showTab('cand')">지원자용</button>
   </div>
@@ -1457,7 +1457,7 @@ function showResult(){
   if(S.applyMode){
     S.tab='cand';
     $('tabCand').classList.add('on'); $('tabOwner').classList.remove('on');
-    $('tabOwner').style.display='none';
+    $('resTabs').style.display='none';   // 지원자에게는 탭이 하나뿐이라 줄 자체를 숨깁니다
     // 결과를 사장님 현황판으로 자동 전송(보드가 있을 때)
     if(S.board){
       S.submitState='sending';
@@ -1814,7 +1814,7 @@ function viewApplicant(i){
   if(!SETS[a.set]){ alert('직무 정보를 찾을 수 없습니다.'); return; }
   S.set=a.set; S.who=a.who||''; S.company=a.company||''; S.applyMode=false; S.tab='owner'; S.started=null;
   S.results = (a.results||[]).filter(x=>TASKS[x.key]).map(x=>({ key:x.key, name:TASKS[x.key].name, job:TASKS[x.key].job, ok:x.ok, n:x.n, avg:x.avg }));
-  $('tabOwner').style.display=''; $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
+  $('resTabs').style.display=''; $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
   $('resTitle').textContent = (a.who||'지원자')+'님 결과';
   $('resSub').textContent = (a.company? a.company+' · ':'') + SETS[a.set].name + ' · ' + new Date(a.ts).toISOString().slice(0,10) + ' 응시';
   renderResult(); go('result');
@@ -1858,7 +1858,7 @@ function loadCode(){
     S.set = j.s; S.who = j.w||''; S.company = j.c||''; S.applyMode = false;
     S.results = j.r.map(x=>({ key:x[0], name:TASKS[x[0]].name, job:TASKS[x[0]].job, ok:x[1], n:x[2], avg:x[3] }));
     S.started = null; S.tab='owner';
-    $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
+    $('resTabs').style.display=''; $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
     $('resTitle').textContent = `${S.who||'지원자'}님 결과`;
     $('resSub').textContent = `${S.company ? S.company+' · ' : ''}${SETS[S.set].name} · ${j.d} 응시`;
     renderResult(); go('result');
@@ -1866,7 +1866,7 @@ function loadCode(){
 }
 function restart(){
   Object.assign(S, { ti:0, results:[], practice:false, trials:[], idx:0, log:[], tab:'owner', started:null });
-  $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
+  $('resTabs').style.display=''; $('tabOwner').classList.add('on'); $('tabCand').classList.remove('on');
   renderSets(); go('setup');
 }
 
