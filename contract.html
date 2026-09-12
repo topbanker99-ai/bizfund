@@ -8,7 +8,7 @@
 <style>
 :root{
   --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC; --blue-line:#C5DAF6;
-  --ink:#151B24; --sub:#57626F; --faint:#8A94A2;
+  --ink:#151B24; --sub:#57626F; --faint:#6B7684;
   --bg:#F4F6F9; --paper:#FFFFFF; --line:#E1E6EE; --line-soft:#EDF1F6;
   --seal:#B23A2E; --seal-bg:#FBEDEB;
   --caution:#8A6100; --caution-bg:#FBF3DE; --caution-line:#EBDBB0;
@@ -24,11 +24,12 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 /* 헤더 */
 header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
-.hd{max-width:1240px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.hd{max-width:1240px;margin:0 auto;padding:8px 22px;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{font-size:16.5px;font-weight:800;color:var(--navy);letter-spacing:-.02em;white-space:nowrap}
 .brand em{font-style:normal;color:var(--blue)}
 .hd-note{font-size:12px;color:var(--faint);text-align:right}
-.hd-acts{display:flex;gap:8px;align-items:center}
+.hd-acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+.hd-note{min-width:0}
 .verbar{background:var(--paper);border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint);text-align:center;padding:6px 22px}
 .verbar .rev{color:var(--ok);font-weight:700}
 .filebtn{font-size:12.5px;font-weight:700;color:var(--blue);border:1.5px solid var(--blue-line);background:var(--blue-soft);border-radius:8px;padding:7px 13px;white-space:nowrap}
@@ -96,7 +97,7 @@ p.step-d{font-size:13.5px;color:var(--sub);margin-top:7px;margin-bottom:22px}
 .vhint.bad{color:var(--seal);font-weight:700}
 
 /* 알림 */
-.note{border-radius:11px;padding:13px 15px;font-size:12.5px;line-height:1.6;margin-bottom:12px}
+.note{border-radius:11px;padding:14px 16px;font-size:13.5px;line-height:1.72;margin-bottom:12px}
 .note.info{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--navy)}
 .note.warn{background:var(--caution-bg);border:1px solid var(--caution-line);color:var(--caution)}
 .note.bad{background:var(--seal-bg);border:1px solid #EECFCA;color:var(--seal)}
@@ -161,6 +162,18 @@ p.step-d{font-size:13.5px;color:var(--sub);margin-top:7px;margin-bottom:22px}
   .doc-sec-t{page-break-after:avoid}
   .doc-sec-b .blank{background:none;color:#000;border-bottom:1px solid #000}
 }
+
+  /* ── 한글 가독성 (읽기 편하게) ── */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body,h1,h2,h3,h4,p,li,td,th,label,button,a,span,div{word-break:keep-all;overflow-wrap:break-word}
+  .codebox,code,pre,.mono{word-break:break-all}
+
+  @media(max-width:560px){
+    .hd{flex-wrap:wrap;row-gap:8px}
+    .hd-acts{width:100%;justify-content:space-between}
+    .hd-note{text-align:left;flex:1 1 auto}
+    .filebtn{flex:none}
+  }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>

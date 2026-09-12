@@ -9,7 +9,7 @@
 <style>
 :root{
  --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC; --blue-line:#C5DAF6;
- --ink:#161C25; --sub:#56616E; --faint:#8B95A3;
+ --ink:#161C25; --sub:#56616E; --faint:#6B7684;
  --bg:#F3F6F9; --paper:#FFFFFF; --line:#E2E7EE;
  --ok:#0E7A4D; --ok-bg:#E8F5EE; --warn:#9A6B00; --warn-bg:#FBF3DE; --warn-line:#EADFBF;
  --stop:#C0392B; --stop-bg:#FBEDEC;
@@ -27,12 +27,12 @@ body{margin:0;font-family:'Pretendard','Malgun Gothic',-apple-system,sans-serif;
 .scr{display:none}.scr.on{display:block}
 .eyebrow{display:inline-block;background:var(--blue-soft);color:var(--blue);font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;margin-bottom:14px}
 h1.t{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.025em;line-height:1.35;margin:0}
-p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
+p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
 .btn{display:block;width:100%;border-radius:12px;font-weight:800;font-size:16px;padding:16px;text-align:center;transition:.12s;border:none;font-family:inherit;cursor:pointer}
 .btn.p{background:var(--blue);color:#fff}
 .btn.g{background:var(--paper);border:1.5px solid var(--line);color:var(--sub)}
 .btn.sm{font-size:14px;padding:12px}
-.note{border-radius:12px;padding:13px 15px;font-size:13.5px;margin-top:12px}
+.note{border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.72;margin-top:12px}
 .note.info{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--navy)}
 .note.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn)}
 .note.stop{background:var(--stop-bg);border:1px solid #EECFCA;color:var(--stop)}
@@ -65,6 +65,11 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .row .bar{flex:1;height:8px;background:#EDF1F6;border-radius:99px;overflow:hidden}
 .row .bar i{display:block;height:100%;background:var(--blue);border-radius:99px}
 .row .v{font-size:12.5px;color:var(--sub);font-weight:700;width:52px;text-align:right;flex:none}
+
+  /* ── 한글 가독성 (읽기 편하게) ── */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body,h1,h2,h3,h4,p,li,td,th,label,button,a,span,div{word-break:keep-all;overflow-wrap:break-word}
+  .codebox,code,pre,.mono{word-break:break-all}
 </style>
 </head>
 <body>

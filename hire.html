@@ -8,7 +8,7 @@
 <style>
 :root{
   --navy:#0F2A4A; --blue:#1B6FD8; --blue-soft:#EAF2FC; --blue-line:#C5DAF6;
-  --ink:#161C25; --sub:#56616E; --faint:#8B95A3;
+  --ink:#161C25; --sub:#56616E; --faint:#6B7684;
   --bg:#F3F6F9; --paper:#FFFFFF; --line:#E2E7EE;
   --ok:#0E7A4D; --ok-bg:#E7F4EE;
   --warn:#8A6100; --warn-bg:#FBF3DE; --warn-line:#EBDBB0;
@@ -43,13 +43,13 @@ input,select{font-family:inherit;font-size:16px}
   padding:5px 12px;border-radius:999px;margin-bottom:13px;letter-spacing:.01em}
 h1.t{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.025em;line-height:1.35}
 h2.t2{font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
-p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
+p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
 
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow)}
 .card h3{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:8px}
 .card p{font-size:13.5px;color:var(--sub)}
 
-.note{border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.65;margin-bottom:12px}
+.note{border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.72;margin-bottom:12px}
 .note.info{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--navy)}
 .note.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn)}
 .note.ok{background:var(--ok-bg);border:1px solid #C6E6D6;color:var(--ok)}
@@ -197,7 +197,7 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .bd-empty{border:1.5px dashed var(--line);border-radius:12px;padding:22px 14px;text-align:center;color:var(--faint);font-size:13px}
 .bd-pick{font-size:12px;color:var(--sub);padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
 
-.foot{margin-top:24px;font-size:11.5px;color:var(--faint);line-height:1.75;text-align:center}
+.foot{margin-top:24px;font-size:12.5px;color:var(--faint);line-height:1.75;text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 /* 인쇄 · PDF */
@@ -268,6 +268,11 @@ p.d{font-size:14.5px;color:var(--sub);margin-top:10px}
 .cut-zone{position:absolute;top:0;bottom:0;background:var(--warn-bg);border-left:2px solid var(--warn);border-right:2px solid var(--warn)}
 .cut-zone::after{content:'컷 지점';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:800;color:var(--warn);white-space:nowrap}
 .cut-play{position:absolute;top:0;bottom:0;width:3px;background:var(--blue);left:0;box-shadow:0 0 0 1px #fff}
+
+  /* ── 한글 가독성 (읽기 편하게) ── */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body,h1,h2,h3,h4,p,li,td,th,label,button,a,span,div{word-break:keep-all;overflow-wrap:break-word}
+  .codebox,code,pre,.mono{word-break:break-all}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
