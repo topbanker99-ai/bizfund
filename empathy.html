@@ -71,8 +71,10 @@ p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
   body,h1,h2,h3,h4,p,li,td,th,label,button,a,span,div{word-break:keep-all;overflow-wrap:break-word}
   .codebox,code,pre,.mono{word-break:break-all}
 </style>
+<link rel="stylesheet" href="assets/shell.css">
+<script defer src="assets/shell.js"></script>
 </head>
-<body>
+<body data-sd="empathy">
 
 <div class="top"><div class="top-in">
   <button class="backpill" id="backBtn" onclick="goHome()" style="display:none">← 처음</button>
@@ -124,6 +126,7 @@ p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
 <section class="scr" id="s-done">
   <span class="eyebrow">결과</span>
   <h1 class="t">공감능력 테스트 결과</h1>
+  <div id="sdNext" style="margin-top:16px"></div>
   <div class="big"><div class="pct" id="pct">0%</div><div class="lbl" id="pctSub">24문항 정답률</div></div>
   <div class="card"><h3>감정별 정확도</h3><div id="byEmo"></div></div>
   <div class="card"><h3>참고 코멘트</h3><p id="comment"></p></div>
@@ -280,6 +283,7 @@ function finish(){
   $('comment').textContent = c;
 
   go('done');
+  if(window.SD) SD.mountNext('sdNext');
   if(S.board) send(per, pct, okN, n);
 }
 function send(per, pct, okN, n){

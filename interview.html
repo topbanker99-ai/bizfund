@@ -79,8 +79,10 @@ p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
   body,h1,h2,h3,h4,p,li,td,th,label,button,a,span,div{word-break:keep-all;overflow-wrap:break-word}
   .codebox,code,pre,.mono{word-break:break-all}
 </style>
+<link rel="stylesheet" href="assets/shell.css">
+<script defer src="assets/shell.js"></script>
 </head>
-<body>
+<body data-sd="interview">
 
 <div class="app">
 <div class="top"><div class="top-in">
@@ -144,6 +146,7 @@ p.d{font-size:15.5px;line-height:1.7;color:var(--sub);margin-top:10px}
   <span class="eyebrow">면접 종료</span>
   <h1 class="t">수고하셨습니다</h1>
   <p class="d" id="doneSub">답변을 정리했습니다.</p>
+  <div id="sdNext" style="margin-top:16px"></div>
   <div class="note info" id="sendStat" style="display:none"></div>
   <div id="qaList" style="margin-top:14px"></div>
   <div class="note warn" style="margin-top:14px">등급이나 합격 여부를 매기지 않습니다. 답변을 그대로 옮겨 전해드릴 뿐이며, 면접에서 무엇을 더 물어볼지 정하는 참고 자료입니다.</div>
@@ -409,6 +412,7 @@ async function finish(quit){
   }
   stopCam();
   go('done');
+  if(window.SD) SD.mountNext('sdNext');
   const qs = Q[S.set] || Q.food;
   $('doneSub').textContent = S.rec ? '답변을 글로 옮기는 중입니다…' : '오늘 받은 질문입니다.';
   render();

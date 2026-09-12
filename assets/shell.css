@@ -1,0 +1,60 @@
+/* ─────────────────────────────────────────────
+   사장님서랍 공통 셸
+   · 사장님 모드 — 모바일 하단 탭 / PC 왼쪽 사이드바
+   · 지원자 모드 — 탭 없이 진행 막대 + 다음 단계 버튼
+   ───────────────────────────────────────────── */
+:root{
+  --sd-blue:#1B6FD8; --sd-blue-soft:#EAF2FC; --sd-blue-line:#C5DAF6;
+  --sd-ink:#161C25; --sd-sub:#56616E; --sd-faint:#6B7684;
+  --sd-line:#E2E7EE; --sd-paper:#fff; --sd-ok:#0E7A4D;
+}
+
+/* ── 사장님 탭 ── */
+.sd-tab{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--sd-paper);
+  border-top:1px solid var(--sd-line);display:flex;
+  padding:6px 2px calc(7px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -2px 14px rgba(15,42,74,.05)}
+.sd-tab a{flex:1;text-align:center;font-size:10.5px;font-weight:700;color:var(--sd-faint);
+  text-decoration:none;padding:5px 2px;letter-spacing:-.03em;line-height:1.2;
+  -webkit-tap-highlight-color:transparent}
+.sd-tab a.on{color:var(--sd-blue)}
+.sd-tab .ic{display:block;width:23px;height:23px;margin:0 auto 4px;stroke:currentColor;fill:none;
+  stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+body.sd-on{padding-bottom:78px}
+
+@media(min-width:900px){
+  .sd-tab{top:0;bottom:0;right:auto;width:216px;border-top:none;border-right:1px solid var(--sd-line);
+    flex-direction:column;padding:20px 12px;gap:2px;box-shadow:none;background:#FCFDFE}
+  .sd-tab .sd-brand{font-size:16px;font-weight:800;color:#0F2A4A;letter-spacing:-.03em;
+    padding:4px 12px 16px;text-decoration:none;display:block}
+  .sd-tab .sd-brand em{font-style:normal;color:var(--sd-blue)}
+  .sd-tab .sd-grp{font-size:10.5px;font-weight:800;color:var(--sd-faint);padding:14px 12px 6px;letter-spacing:.02em}
+  .sd-tab a{flex:none;text-align:left;display:flex;align-items:center;gap:11px;font-size:14.5px;
+    padding:11px 12px;border-radius:11px}
+  .sd-tab a.on{background:var(--sd-blue-soft)}
+  .sd-tab .ic{margin:0;width:20px;height:20px;flex:none}
+  body.sd-on{padding-bottom:0;padding-left:216px}
+}
+
+/* ── 지원자 진행 막대 ── */
+.sd-rail{background:var(--sd-paper);border-bottom:1px solid var(--sd-line);padding:11px 18px 13px}
+.sd-rail .sd-in{max-width:600px;margin:0 auto}
+.sd-rail .sd-bars{display:flex;gap:6px}
+.sd-rail .sd-bars i{flex:1;height:5px;border-radius:99px;background:var(--sd-line);transition:.3s}
+.sd-rail .sd-bars i.dn{background:var(--sd-ok)}
+.sd-rail .sd-bars i.on{background:var(--sd-blue)}
+.sd-rail .sd-lb{display:flex;justify-content:space-between;gap:8px;margin-top:8px;
+  font-size:11.5px;font-weight:700;color:var(--sd-faint);letter-spacing:-.02em}
+.sd-rail .sd-lb span{flex:1;text-align:center}
+.sd-rail .sd-lb span:first-child{text-align:left}
+.sd-rail .sd-lb span:last-child{text-align:right}
+.sd-rail .sd-lb b{color:var(--sd-blue)}
+.sd-rail .sd-lb s{text-decoration:none;color:var(--sd-ok)}
+
+/* ── 다음 단계 버튼 ── */
+.sd-next{display:block;width:100%;border:none;border-radius:12px;background:var(--sd-blue);color:#fff;
+  font-family:inherit;font-weight:800;font-size:16px;padding:16px;text-align:center;cursor:pointer;
+  text-decoration:none;margin-bottom:10px;box-shadow:0 8px 20px rgba(27,111,216,.24)}
+.sd-next small{display:block;font-size:12px;font-weight:600;opacity:.82;margin-top:3px}
+.sd-done{border-radius:12px;background:#E8F5EE;border:1px solid #C6E6D6;color:var(--sd-ok);
+  font-weight:800;font-size:14.5px;padding:14px 16px;text-align:center;margin-bottom:10px;line-height:1.6}
