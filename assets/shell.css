@@ -18,6 +18,8 @@
   text-decoration:none;padding:5px 2px;letter-spacing:-.03em;line-height:1.2;
   -webkit-tap-highlight-color:transparent}
 .sd-tab a.on{color:var(--sd-blue)}
+/* 브랜드·그룹 제목은 PC 사이드바에서만 보입니다 */
+.sd-tab .sd-brand,.sd-tab .sd-grp{display:none}
 .sd-tab .ic{display:block;width:23px;height:23px;margin:0 auto 4px;stroke:currentColor;fill:none;
   stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 body.sd-on{padding-bottom:78px}
@@ -25,10 +27,10 @@ body.sd-on{padding-bottom:78px}
 @media(min-width:900px){
   .sd-tab{top:0;bottom:0;right:auto;width:216px;border-top:none;border-right:1px solid var(--sd-line);
     flex-direction:column;padding:20px 12px;gap:2px;box-shadow:none;background:#FCFDFE}
-  .sd-tab .sd-brand{font-size:16px;font-weight:800;color:#0F2A4A;letter-spacing:-.03em;
+  .sd-tab .sd-brand{display:block;font-size:16px;font-weight:800;color:#0F2A4A;letter-spacing:-.03em;
     padding:4px 12px 16px;text-decoration:none;display:block}
   .sd-tab .sd-brand em{font-style:normal;color:var(--sd-blue)}
-  .sd-tab .sd-grp{font-size:10.5px;font-weight:800;color:var(--sd-faint);padding:14px 12px 6px;letter-spacing:.02em}
+  .sd-tab .sd-grp{display:block;font-size:10.5px;font-weight:800;color:var(--sd-faint);padding:14px 12px 6px;letter-spacing:.02em}
   .sd-tab a{flex:none;text-align:left;display:flex;align-items:center;gap:11px;font-size:14.5px;
     padding:11px 12px;border-radius:11px}
   .sd-tab a.on{background:var(--sd-blue-soft)}
