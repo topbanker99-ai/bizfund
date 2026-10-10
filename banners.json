@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-08",
+  "updated": "2026-10-10",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,23 +30,7 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[전북] 코리아 그랜드 페스티벌 연계 우수 소상공인 제품 현장 라이브커머스 참여 소상공인 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.08",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126771",
-      "until": "2026-10-08"
-    },
-    {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[서울] 관악구 2026년 소상공인 원스톱 지원사업 소상공인 모집 공고",
-      "sub": "서울특별시 · 신청 마감 2026.10.08",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126720",
-      "until": "2026-10-08"
-    },
-    {
-      "tag": "마감 D-5",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "2026년 농식품 데이터 활용 컨설팅 지원사업 추가모집 공고",
       "sub": "농림축산식품부 · 신청 마감 2026.10.12",
@@ -54,11 +38,27 @@
       "until": "2026-10-12"
     },
     {
-      "tag": "마감 D-5",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "[경남] 창원시 2026년 하반기 소상공인 소규모 경영환경 개선지원 사업 공고",
       "sub": "경상남도 · 신청 마감 2026.10.12",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126813",
+      "until": "2026-10-12"
+    },
+    {
+      "tag": "마감 D-3",
+      "tagType": "urgent",
+      "title": "[경기] 광명시 2026년 상권친화형 도시조성 지원사업 사업 소상공인 분야 공고",
+      "sub": "경기도 · 신청 마감 2026.10.12",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126769",
+      "until": "2026-10-12"
+    },
+    {
+      "tag": "마감 D-3",
+      "tagType": "urgent",
+      "title": "[인천] 2026년 하반기 코리아그랜드페스티벌(동행축제) 현장 라이브커머스 참여 소상공인 모집 공고",
+      "sub": "인천광역시 · 신청 마감 2026.10.12",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126749",
       "until": "2026-10-12"
     }
   ]
