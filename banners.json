@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-16",
+  "updated": "2026-10-17",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-4",
       "tagType": "urgent",
-      "title": "[부산] 2026년 코리아 그랜드 페스티벌 연계 우수 소상공인 제품 현장 라이브커머스 참여 소상공인 모집 연장 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.16",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127063",
-      "until": "2026-10-16"
+      "title": "[부산] 2026년 부산스러운 K-bath 소상공인 동반성장 지원사업 관광코스 개발 및 굿즈 상품화 참여기업 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.10.20",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127105",
+      "until": "2026-10-20"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-5",
       "tagType": "urgent",
-      "title": "[전남광주ㆍ제주] 2026년 10월 동행축제 우수 소상공인 제품 현장 라이브커머스 참가기업 모집 연장 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.16",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127062",
-      "until": "2026-10-16"
+      "title": "2026년 10월 서리풀 소상공인 창업 클리닉 모집 공고",
+      "sub": "서울특별시 · 신청 마감 2026.10.21",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126865",
+      "until": "2026-10-21"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-6",
       "tagType": "urgent",
-      "title": "[경기] 2026년 10월 동행축제 소상공인 라이브커머스 참가기업 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.16",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127023",
-      "until": "2026-10-16"
+      "title": "[부산] 남구 2026년 소상공인 홍보 장터(너와마켓) 참여상인 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.10.22",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127245",
+      "until": "2026-10-22"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-6",
       "tagType": "urgent",
-      "title": "[경북] 2026년 푸드테크 로봇 플래그쉽 지역거점 구축 지원사업 통합 모집 공고(식품로봇 도입 바우처 지원ㆍ식품로봇 특화 NSF시험평가 지원)",
-      "sub": "경상북도 · 신청 마감 2026.10.16",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126987",
-      "until": "2026-10-16"
+      "title": "[대전ㆍ세종] 2026년 코리아 그랜드 페스티벌 지역 소상공인 라이브커머스 참여기업 추가 모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.10.22",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127228",
+      "until": "2026-10-22"
     }
   ]
 }
