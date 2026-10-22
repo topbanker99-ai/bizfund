@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-22",
+  "updated": "2026-10-23",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,33 +32,33 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "[부산] 남구 2026년 소상공인 홍보 장터(너와마켓) 참여상인 모집 공고",
-      "sub": "부산광역시 · 신청 마감 2026.10.22",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127245",
-      "until": "2026-10-22"
-    },
-    {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[대전ㆍ세종] 2026년 코리아 그랜드 페스티벌 지역 소상공인 라이브커머스 참여기업 추가 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.22",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127228",
-      "until": "2026-10-22"
-    },
-    {
-      "tag": "마감 D-2",
-      "tagType": "urgent",
       "title": "[경남] 통영시 강구안 동네상권 컨설팅 (점포환경개선ㆍVMD)사업 참가자 모집 공고",
       "sub": "경상남도 · 신청 마감 2026.10.23",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127289",
       "until": "2026-10-23"
     },
     {
-      "tag": "마감 D-2",
+      "tag": "마감 D-1",
       "tagType": "urgent",
       "title": "[전북] 김제시 2026년 김제전통시장 청년몰 입점 모집 공고",
       "sub": "전북특별자치도 · 신청 마감 2026.10.23",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127173",
+      "until": "2026-10-23"
+    },
+    {
+      "tag": "마감 D-1",
+      "tagType": "urgent",
+      "title": "[서울] 은평구 2026년 4분기 중소기업육성기금 융자지원 계획 수정 공고",
+      "sub": "서울특별시 · 신청 마감 2026.10.23",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127044",
+      "until": "2026-10-23"
+    },
+    {
+      "tag": "마감 D-1",
+      "tagType": "urgent",
+      "title": "[충북] 음성군 소상공인 충북신용보증 보증료 지원 공고",
+      "sub": "충청북도 · 신청 마감 2026.10.23",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126895",
       "until": "2026-10-23"
     }
   ]
