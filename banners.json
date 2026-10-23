@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-24",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-5",
       "tagType": "urgent",
-      "title": "[경남] 통영시 강구안 동네상권 컨설팅 (점포환경개선ㆍVMD)사업 참가자 모집 공고",
-      "sub": "경상남도 · 신청 마감 2026.10.23",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127289",
-      "until": "2026-10-23"
+      "title": "[서울] 광진구 2026년 우리동네 소상공인 경영주치의(시설개선) 참여업체 모집 공고",
+      "sub": "서울특별시 · 신청 마감 2026.10.28",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127250",
+      "until": "2026-10-28"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-7",
       "tagType": "urgent",
-      "title": "[전북] 김제시 2026년 김제전통시장 청년몰 입점 모집 공고",
-      "sub": "전북특별자치도 · 신청 마감 2026.10.23",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127173",
-      "until": "2026-10-23"
+      "title": "[전남광주ㆍ제주] 2026년 2차 10월 동행축제 우수 소상공인 제품 현장 라이브커머스 참가기업 모집 연장 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.10.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127185",
+      "until": "2026-10-30"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-7",
       "tagType": "urgent",
-      "title": "[서울] 은평구 2026년 4분기 중소기업육성기금 융자지원 계획 수정 공고",
-      "sub": "서울특별시 · 신청 마감 2026.10.23",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127044",
-      "until": "2026-10-23"
+      "title": "[충남] 공주시 2026년 하반기 소상공인 카드가맹점 카드수수료 지원사업 공고",
+      "sub": "충청남도 · 신청 마감 2026.10.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127171",
+      "until": "2026-10-30"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-7",
       "tagType": "urgent",
-      "title": "[충북] 음성군 소상공인 충북신용보증 보증료 지원 공고",
-      "sub": "충청북도 · 신청 마감 2026.10.23",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126895",
-      "until": "2026-10-23"
+      "title": "[전북] 김제시 소상공인 1인 점포 안심벨 지원사업 3차 추가모집 공고",
+      "sub": "전북특별자치도 · 신청 마감 2026.10.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127157",
+      "until": "2026-10-30"
     }
   ]
 }
