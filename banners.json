@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -32,34 +32,34 @@
     {
       "tag": "마감 D-1",
       "tagType": "urgent",
-      "title": "[충남] 공주시 2026년 하반기 소상공인 카드가맹점 카드수수료 지원사업 공고",
-      "sub": "충청남도 · 신청 마감 2026.10.30",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127171",
-      "until": "2026-10-30"
+      "title": "[부산] 2026년 소상공인 온라인마케팅 활성화 지원 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.10.31",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126548",
+      "until": "2026-10-31"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-4",
       "tagType": "urgent",
-      "title": "[전북] 김제시 소상공인 1인 점포 안심벨 지원사업 3차 추가모집 공고",
-      "sub": "전북특별자치도 · 신청 마감 2026.10.30",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127157",
-      "until": "2026-10-30"
+      "title": "[경북] 2026년 소담스타(SODAM STAR) 육성사업 참여 소상공인 모집 공고",
+      "sub": "경상북도 · 신청 마감 2026.11.03",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127590",
+      "until": "2026-11-03"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-6",
       "tagType": "urgent",
-      "title": "[울산] 2026년 2차 디지털커머스 전문기관(소담스퀘어 in 울산) 소상공인 디지털커머스 온라인 판로 지원사업 모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.10.30",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127101",
-      "until": "2026-10-30"
+      "title": "[전남광주ㆍ제주] 2026년 10월 동행축제 우수 소상공인 제품 현장 라이브커머스 참가기업 추가모집 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.11.05",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127568",
+      "until": "2026-11-05"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-6",
       "tagType": "urgent",
-      "title": "[충남] 2026년 3분기분 소상공인 사회보험료 지원사업 공고",
-      "sub": "충청남도 · 신청 마감 2026.10.30",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127005",
-      "until": "2026-10-30"
+      "title": "[부산] 1만원 임대료 빈 점포 다시채움 프로젝트 임차인 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.11.05",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127443",
+      "until": "2026-11-05"
     }
   ]
 }
