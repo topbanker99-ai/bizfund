@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,15 +30,7 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[경북] 2026년 소담스타(SODAM STAR) 육성사업 참여 소상공인 모집 공고",
-      "sub": "경상북도 · 신청 마감 2026.11.03",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127590",
-      "until": "2026-11-03"
-    },
-    {
-      "tag": "마감 D-3",
+      "tag": "마감 D-2",
       "tagType": "urgent",
       "title": "[전남광주ㆍ제주] 2026년 10월 동행축제 우수 소상공인 제품 현장 라이브커머스 참가기업 추가모집 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.11.05",
@@ -46,7 +38,7 @@
       "until": "2026-11-05"
     },
     {
-      "tag": "마감 D-3",
+      "tag": "마감 D-2",
       "tagType": "urgent",
       "title": "[부산] 1만원 임대료 빈 점포 다시채움 프로젝트 임차인 모집 공고",
       "sub": "부산광역시 · 신청 마감 2026.11.05",
@@ -54,12 +46,20 @@
       "until": "2026-11-05"
     },
     {
-      "tag": "마감 D-4",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "[부산] 소상공인 에너지바우처 지급 시행 공고",
       "sub": "부산광역시 · 신청 마감 2026.11.06",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126650",
       "until": "2026-11-06"
+    },
+    {
+      "tag": "마감 D-10",
+      "tagType": "",
+      "title": "[강원] 동해시 2026년 소상공인 카드수수료 지원사업 공고",
+      "sub": "강원특별자치도 · 신청 마감 2026.11.13",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127480",
+      "until": "2026-11-13"
     }
   ]
 }
