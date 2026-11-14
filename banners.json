@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-14",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[경기] 남양주시 소상공인 냉난방기 청소 지원사업 신청 공고",
-      "sub": "경기도 · 신청 마감 2026.11.13",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127688",
-      "until": "2026-11-13"
-    },
-    {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[강원] 동해시 2026년 소상공인 카드수수료 지원사업 공고",
-      "sub": "강원특별자치도 · 신청 마감 2026.11.13",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127480",
-      "until": "2026-11-13"
-    },
-    {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "[서울] 2026년 소상공인 온라인 유통 MD 상담 참여 소상공인 모집 공고",
-      "sub": "서울특별시 · 신청 마감 2026.11.13",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124107",
-      "until": "2026-11-13"
-    },
-    {
-      "tag": "마감 D-4",
+      "tag": "마감 D-3",
       "tagType": "urgent",
       "title": "2027년 전통시장 및 상점가 활성화 지원사업 수정 공고",
       "sub": "중소벤처기업부 · 신청 마감 2026.11.16",
       "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127417",
       "until": "2026-11-16"
+    },
+    {
+      "tag": "마감 D-6",
+      "tagType": "urgent",
+      "title": "[경기] 하남시 2026년 소상공인 마케팅 판로 지원사업 소상공인 경영환경개선 지원사업 추가모집 공고",
+      "sub": "경기도 · 신청 마감 2026.11.19",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127885",
+      "until": "2026-11-19"
+    },
+    {
+      "tag": "마감 D-7",
+      "tagType": "urgent",
+      "title": "[부산] 소상공인 위기대응 특별 컨설팅 모집 공고",
+      "sub": "부산광역시 · 신청 마감 2026.11.20",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127760",
+      "until": "2026-11-20"
+    },
+    {
+      "tag": "마감 D-7",
+      "tagType": "urgent",
+      "title": "2026년 백년소상공인 유공 포상 공고",
+      "sub": "중소벤처기업부 · 신청 마감 2026.11.20",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127752",
+      "until": "2026-11-20"
     }
   ]
 }
