@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "source": "bizinfo",
   "note": "pinned는 손으로 관리하는 고정 배너입니다. feed는 GitHub Actions가 기업마당 API에서 매일 갱신합니다. 화면에는 pinned 먼저, 그다음 feed 순으로 최대 5개를 보여줍니다.",
   "pinned": [
@@ -30,36 +30,36 @@
   ],
   "feed": [
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-3",
       "tagType": "urgent",
-      "title": "[부산] 소상공인 위기대응 특별 컨설팅 모집 공고",
-      "sub": "부산광역시 · 신청 마감 2026.11.20",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127760",
-      "until": "2026-11-20"
+      "title": "[강원] 동해시 2026년 소상공인 카드수수료 지원사업 추가 접수 공고",
+      "sub": "강원특별자치도 · 신청 마감 2026.11.23",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127955",
+      "until": "2026-11-23"
     },
     {
-      "tag": "마감 D-1",
+      "tag": "마감 D-3",
       "tagType": "urgent",
-      "title": "2026년 백년소상공인 유공 포상 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.11.20",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127752",
-      "until": "2026-11-20"
+      "title": "[충북] 보은군 2026년 4분기 청년 소상공인 점포 임차료 지원사업 참여자 모집 공고",
+      "sub": "충청북도 · 신청 마감 2026.11.23",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127864",
+      "until": "2026-11-23"
     },
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "한국수력원자력 원전지역 소상공인 노후점포 친환경개선 지원과제 참여모집 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.11.20",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127702",
-      "until": "2026-11-20"
+      "tag": "마감 D-10",
+      "tagType": "",
+      "title": "[경북] 포항시 2026년 소상공인 대상 무료 택시지붕광고 참여업체 추가모집 공고",
+      "sub": "경상북도 · 신청 마감 2026.11.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127287",
+      "until": "2026-11-30"
     },
     {
-      "tag": "마감 D-1",
-      "tagType": "urgent",
-      "title": "2026년 해외 온라인 플랫폼 판로지원 사업 참여 소상공인 통합 공고",
-      "sub": "중소벤처기업부 · 신청 마감 2026.11.20",
-      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127664",
-      "until": "2026-11-20"
+      "tag": "마감 D-10",
+      "tagType": "",
+      "title": "[경북] 봉화군 2026년 소상공인 카드수수료 지원사업 참여점포 모집 변경 공고",
+      "sub": "경상북도 · 신청 마감 2026.11.30",
+      "url": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000126215",
+      "until": "2026-11-30"
     }
   ]
 }
